@@ -76,7 +76,12 @@ function App() {
     </g>
   </svg>
 </div>
-
+<p id="loadingText" class="text-xl font-semibold text-gray-800 leading-tight">
+      <span class="dots"></span> بارېږي
+    </p>
+    <p class="text-sm text-gray-500 leading-relaxed mt-1">
+      مهرباني وکړئ انتظار وکړئ، موږ ستاسو مینځپانګه چمتو کوو
+    </p>
       </div>
     );
   }
