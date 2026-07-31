@@ -39,7 +39,7 @@ const getBrandName = () => {
           <a href="#lessons" className="hover:text-cloudwhite transition" data-i18n="nav.lessons">Lesson plans</a>
           <a href="#features" className="hover:text-cloudwhite transition" data-i18n="nav.features">Features</a>
           <a href="#contact" className="hover:text-cloudwhite transition" data-i18n="nav.contact">Contact</a>
-          <a href="https://fazlahmadhotaki.github.io/Type-Speed-Project/" className="hover:text-cloudwhite transition" data-i18n="nav.test">TypeTest</a>
+          <a href="https://fazlahmadhotaki.github.io/Type-Speed-Project/" className="hover:text-cloudwhite transition" data-i18n="nav.TypeTest_TypeTone">TypeTest</a>
         </nav>
         <div className="flex items-center gap-3">
           <div className="relative" ref={menuRef}>

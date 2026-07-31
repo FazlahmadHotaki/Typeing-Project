@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import translations from '../data/translations';
 
+
 const TypingVideoSection = () => {
   const videoRef_TypeTone = useRef(null);
   const [language_TypeTone, setLanguage_TypeTone] = useState('ps'); // 'en', 'ps', 'da'

@@ -2,6 +2,7 @@
 const translations = {
   en: {
     "brand.name": "TypeTone",
+    "nav.TypeTest_TypeTone":"Testing Type",
     "nav.how":"How it works", 
     "nav.techniques":"Typing Techniques",
     "nav.lessons":"Lesson plans", 
@@ -116,6 +117,7 @@ const translations = {
     "brand.name": "ټایپټون", // Pashto translation
     "nav.how":"دا څنګه کار کوي", 
     "nav.techniques":"د ټایپ کولو تخنیکونه",
+    "nav.TypeTest_TypeTone":"د ټایپ ازموینه",
     "nav.lessons":"د درسونو پلانونه", 
     "nav.features":"ځانګړتیاوې", 
     "nav.contact":"اړیکه", 
@@ -225,6 +227,7 @@ const translations = {
       'footer_TypeTone': '© ۲۰۲۴ د ټایپ کولو تخنیکونه'
   },
   da: {
+    "nav.TypeTest_TypeTone":"آزمون تایپ",
     "brand.name": "TypeTone",
     "nav.how":"چگونه کار می‌کند", 
     "nav.techniques":"تکنیک‌های تایپ",
