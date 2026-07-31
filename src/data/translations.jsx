@@ -98,6 +98,19 @@ const translations = {
     "footer.privacy":"Privacy Policy", 
     "footer.terms":"Terms of Service", 
     "footer.about":"About us",
+    'title_TypeTone': 'Typing in Action',
+      'subtitle_TypeTone': 'Watch professionals master the art of fast and efficient typing',
+      'card1Title_TypeTone': 'Typing Animation',
+      'card1Desc_TypeTone': 'Hand-drawn animated scenes featuring abstract characters typing',
+      'card2Title_TypeTone': 'Laptop Keyboard',
+      'card2Desc_TypeTone': 'Detailed focus on keyboard interaction and typing mechanics',
+      'card3Title_TypeTone': 'Motion Graphics',
+      'card3Desc_TypeTone': '4 hand-drawn animated scenes in Full HD resolution',
+      'cta_TypeTone': 'Explore Typing Techniques',
+      'hd_TypeTone': 'HD',
+      'fullHd_TypeTone': 'Full HD',
+      'seconds_TypeTone': '12s',
+      'footer_TypeTone': '© 2024 Typing Techniques'
   },
   ps: {
     "brand.name": "ټایپټون", // Pashto translation
@@ -197,6 +210,19 @@ const translations = {
     "footer.privacy":"د محرمیت تګلاره", 
     "footer.terms":"د خدماتو شرایط", 
     "footer.about":"زموږ په اړه",
+     'title_TypeTone': 'په عمل کې ټایپ کول',
+      'subtitle_TypeTone': 'د چټک او موثر ټایپ کولو هنر کې مسلکیان وګورئ',
+      'card1Title_TypeTone': 'د ټایپ کولو انیمیشن',
+      'card1Desc_TypeTone': 'د لاسي رسم شوي انیمیشن صحنې چې لنډیز کرکټرونه ټایپ کوي',
+      'card2Title_TypeTone': 'د لپټاپ کیبورډ',
+      'card2Desc_TypeTone': 'په کیبورډ تعامل او ټایپ کولو میکانیکونو باندې مفصل تمرکز',
+      'card3Title_TypeTone': 'حرکتي ګرافیک',
+      'card3Desc_TypeTone': '۴ د لاسي رسم شوي انیمیشن صحنې په بشپړ HD ریزولوشن کې',
+      'cta_TypeTone': 'د ټایپ کولو تخنیکونه وپلټئ',
+      'hd_TypeTone': 'لوړ کیفیت',
+      'fullHd_TypeTone': 'بشپړ لوړ کیفیت',
+      'seconds_TypeTone': '۱۲ ثانیې',
+      'footer_TypeTone': '© ۲۰۲۴ د ټایپ کولو تخنیکونه'
   },
   da: {
     "brand.name": "TypeTone",
@@ -296,6 +322,19 @@ const translations = {
     "footer.privacy":"سیاست حریم خصوصی", 
     "footer.terms":"شرایط خدمات", 
     "footer.about":"درباره ما",
+    'title_TypeTone': 'تایپ کردن در عمل',
+      'subtitle_TypeTone': 'حرفه‌ای‌ها را در حال تسلط بر هنر تایپ کردن سریع و موثر ببینید',
+      'card1Title_TypeTone': 'انیمیشن تایپ کردن',
+      'card1Desc_TypeTone': 'صحنه‌های انیمیشن دست‌کشیده با شخصیت‌های انتزاعی که تایپ می‌کنند',
+      'card2Title_TypeTone': 'کیبورد لپ‌تاپ',
+      'card2Desc_TypeTone': 'تمرکز دقیق بر تعامل با کیبورد و مکانیک‌های تایپ کردن',
+      'card3Title_TypeTone': 'گرافیک حرکتی',
+      'card3Desc_TypeTone': '۴ صحنه انیمیشن دست‌کشیده با رزولوشن Full HD',
+      'cta_TypeTone': 'تکنیک‌های تایپ کردن را کشف کنید',
+      'hd_TypeTone': 'کیفیت بالا',
+      'fullHd_TypeTone': 'کیفیت کامل',
+      'seconds_TypeTone': '۱۲ ثانیه',
+      'footer_TypeTone': '© ۲۰۲۴ تکنیک‌های تایپ کردن'
   }
 };
 

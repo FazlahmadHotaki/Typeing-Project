@@ -59,7 +59,7 @@ const getBrandName = () => {
               </div>
             )}
           </div>
-          <button onClick={onStartTyping } className="hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800" >Get started</button>
+          <button onClick={onStartTyping } className="hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800" data-i18n="nav.getStarted" >Get started</button>
         </div>
       </div>
     </header>
