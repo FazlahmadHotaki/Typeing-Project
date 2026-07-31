@@ -12,6 +12,7 @@ import Contact from './components/Contact';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Footer from './components/Footer';
+import KeyTrackDashboard from './components/KeyTrackDashboard'; // ADD THIS
 import { LanguageProvider } from './context/LanguageContext';
 import './styles/globals.css';
 
@@ -19,6 +20,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // ADD THIS
+  const [userData, setUserData] = useState(null); // ADD THIS
 
   const handleStartTyping = () => {
     setShowLogin(true);
@@ -37,6 +40,19 @@ function App() {
   const handleSwitchToLogin = () => {
     setShowSignup(false);
     setShowLogin(true);
+  };
+
+  // ADD THIS: Handle successful signup
+  const handleSignupSuccess = (user) => {
+    setUserData(user);
+    setIsAuthenticated(true);
+    setShowSignup(false);
+  };
+
+  // ADD THIS: Handle logout
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUserData(null);
   };
 
   useEffect(() => {
@@ -116,6 +132,18 @@ function App() {
     );
   }
 
+  // ADD THIS: If authenticated, show Dashboard
+  if (isAuthenticated) {
+    return (
+      <LanguageProvider>
+        <KeyTrackDashboard 
+          user={userData?.name || "Fazl Ahmad"}
+          onLogout={handleLogout}
+        />
+      </LanguageProvider>
+    );
+  }
+
   return (
     <LanguageProvider>
       <div className="app">
@@ -143,6 +171,7 @@ function App() {
           <Signup 
             onClose={handleCloseLogin}
             onSwitchToLogin={handleSwitchToLogin}
+            onSignupSuccess={handleSignupSuccess} // ADD THIS
           />
         )}
       </div>

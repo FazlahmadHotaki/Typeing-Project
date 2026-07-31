@@ -1,123 +1,134 @@
 // components/Signup.jsx
 import React, { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
-const Signup = ({ onClose, onSwitchToLogin }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [agreeTerms, setAgreeTerms] = useState(false);
+export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
+  const { t } = useLanguage();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Signup:', { name, email, password, agreeTerms });
-    alert('Account created successfully!');
-    onClose();
+    
+    // Basic validation
+    const newErrors = {};
+    if (!formData.name) newErrors.name = 'Name is required';
+    if (!formData.email) newErrors.email = 'Email is required';
+    if (!formData.password) newErrors.password = 'Password is required';
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Here you would normally make an API call to register the user
+    // For demo, we'll just call the success callback
+    onSignupSuccess({
+      name: formData.name,
+      email: formData.email
+    });
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-md mx-4 bg-night3 rounded-2xl border border-white/10 p-8 shadow-2xl">
-        <button 
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-[#1D212C] border border-[#2E3444] rounded-2xl w-full max-w-md p-6 relative animate-fadeIn">
+        {/* Close button */}
+        <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slateink hover:text-cloudwhite transition"
+          className="absolute top-3 right-3 text-[#9AA1B4] hover:text-[#ECEEF3] transition-colors"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
-        <div className="text-center mb-8">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gold text-night font-mono font-bold text-xl">
-            ⌨
-          </div>
-          <h2 className="font-display font-bold text-2xl mt-3" data-i18n="signup.title">Create Account</h2>
-          <p className="text-slateink text-sm mt-1" data-i18n="signup.subtitle">Start your typing journey today</p>
-        </div>
+        <h2 className="text-2xl font-bold text-[#ECEEF3] mb-2">Create Account</h2>
+        <p className="text-[#9AA1B4] text-sm mb-6">Start your typing journey today</p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slateink mb-1.5" data-i18n="signup.nameLabel">
-              Full Name
-            </label>
+            <label className="block text-[#9AA1B4] text-sm mb-2">Full Name</label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="contact-input"
-              placeholder="Your name"
-              data-i18n-placeholder="signup.namePlaceholder"
-              required
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className={`w-full bg-[#0f1218] border ${errors.name ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
+              placeholder="John Doe"
             />
+            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slateink mb-1.5" data-i18n="signup.emailLabel">
-              Email Address
-            </label>
+            <label className="block text-[#9AA1B4] text-sm mb-2">Email</label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="contact-input"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`w-full bg-[#0f1218] border ${errors.email ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
               placeholder="you@example.com"
-              data-i18n-placeholder="signup.emailPlaceholder"
-              required
             />
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slateink mb-1.5" data-i18n="signup.passwordLabel">
-              Password
-            </label>
+            <label className="block text-[#9AA1B4] text-sm mb-2">Password</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="contact-input"
-              placeholder="Create a password"
-              data-i18n-placeholder="signup.passwordPlaceholder"
-              required
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className={`w-full bg-[#0f1218] border ${errors.password ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
+              placeholder="••••••••"
             />
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div>
+            <label className="block text-[#9AA1B4] text-sm mb-2">Confirm Password</label>
             <input
-              type="checkbox"
-              checked={agreeTerms}
-              onChange={(e) => setAgreeTerms(e.target.checked)}
-              className="rounded border-white/10 bg-white/5 text-gold focus:ring-gold"
-              required
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className={`w-full bg-[#0f1218] border ${errors.confirmPassword ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
+              placeholder="••••••••"
             />
-            <label className="text-sm text-slateink">
-              <span data-i18n="signup.agreeTerms">I agree to the</span>{' '}
-              <a href="#" className="text-gold hover:underline" data-i18n="signup.terms">Terms of Service</a>
-              <span data-i18n="signup.and"> and </span>
-              <a href="#" className="text-gold hover:underline" data-i18n="signup.privacy">Privacy Policy</a>
-            </label>
+            {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
 
           <button
             type="submit"
-            className="contact-submit"
-            data-i18n="signup.submitBtn"
+            className="w-full bg-[#E8A33D] text-[#1a1508] font-bold py-2.5 rounded-lg hover:bg-[#C9832A] transition-colors"
           >
-            Create Account
+            Sign Up
           </button>
         </form>
 
-        <p className="text-center text-sm text-slateink mt-6">
-          <span data-i18n="signup.hasAccount">Already have an account?</span>{' '}
+        <p className="text-[#9AA1B4] text-sm text-center mt-4">
+          Already have an account?{' '}
           <button 
             onClick={onSwitchToLogin}
-            className="text-gold hover:underline font-medium"
-            data-i18n="signup.loginLink"
+            className="text-[#E8A33D] hover:underline font-medium"
           >
-            Sign in
+            Login
           </button>
         </p>
       </div>
     </div>
   );
-};
-
-export default Signup;
+}
