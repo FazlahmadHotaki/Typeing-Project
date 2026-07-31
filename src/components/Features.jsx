@@ -1,5 +1,6 @@
 // components/Features.js
 import React from 'react';
+import TypingVideoSection from './TypingVideoSection';
 
 const features = [
   { icon: 'M8 12V6a2 2 0 1 1 4 0v5M12 11V4a2 2 0 1 1 4 0v7M16 11V6a2 2 0 1 1 4 0v7c0 4-2 7-7 7s-7-3-7-6l-1.5-3a1.4 1.4 0 0 1 2.3-1.6L8 14', key: 'f1' },
@@ -12,6 +13,7 @@ const features = [
 
 const Features = () => {
   return (
+    <>
     <section id="features" className="bg-night2 border-y border-white/5">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="max-w-2xl mb-14">
@@ -31,6 +33,11 @@ const Features = () => {
         </div>
       </div>
     </section>
+    <section>
+          <TypingVideoSection />
+
+    </section>
+    </>
   );
 };
 

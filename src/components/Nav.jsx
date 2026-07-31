@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
-const Nav = () => {
+const Nav = ({ onStartTyping }) => {
   const { lang, changeLanguage, langNames } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
@@ -59,7 +59,7 @@ const getBrandName = () => {
               </div>
             )}
           </div>
-          <a href="#lessons" className="hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition" data-i18n="nav.getStarted">Get started</a>
+          <button onClick={onStartTyping } className="hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800" >Get started</button>
         </div>
       </div>
     </header>

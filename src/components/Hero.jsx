@@ -1,7 +1,7 @@
 // components/Hero.js
 import React, { useEffect } from 'react';
 
-const Hero = () => {
+const Hero = ({ onStartTyping }) => {
   useEffect(() => {
     const container = document.getElementById('stars');
     if (!container) return;
@@ -45,13 +45,15 @@ const Hero = () => {
           <h1 className="font-display titleofthe-page font-semibold leading-24 text-4xl sm:text-5xl lg:text-6xl mb-6 tracking-tight " data-i18n="hero.title">Type with confidence, in your own language.</h1>
           <p className="text-slateink text-lg leading-20 max-w-xl mx-auto mb-10" data-i18n="hero.subtitle">Free, interactive touch-typing lessons in English, Pashto, and Dari. Practice a few minutes a day and watch your speed and accuracy grow.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a href="#lessons" className="bg-gold hover:bg-goldsoft text-night font-semibold px-7 py-3.5 rounded-full transition shadow-lg shadow-black/20" data-i18n="hero.ctaPrimary">Start typing free</a>
+          <button  onClick={onStartTyping} className="bg-gold border-gray-800 border hover:text-gray-600 hover:bg-white text-night font-semibold px-7 py-3.5 rounded-full transition shadow-lg shadow-black/20" >Start typing free
+</button>
             <a href="#how" className="border border-white/15 hover:border-white/30 text-cloudwhite font-medium px-7 py-3.5 rounded-full transition" data-i18n="hero.ctaSecondary">See how it works</a>
           </div>
         </div>
       </div>
       <div className="scroll-down">⌄</div>
     </section>
+    
   );
 };
 
