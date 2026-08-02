@@ -3,7 +3,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+{
+  background:white;
+  color:black;
+}
 /* Your custom styles here */
 .hero-sky {
   position: relative;

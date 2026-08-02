@@ -1,9 +1,16 @@
 // components/Signup.jsx
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import translations from '../data/translations';
 
 export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  
+  // Translation function
+  const t = (key) => {
+    return translations[language]?.[key] || key;
+  };
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,13 +27,13 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Basic validation
+    // Basic validation with translated error messages
     const newErrors = {};
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.password) newErrors.password = 'Password is required';
+    if (!formData.name) newErrors.name = t('signup.nameRequired');
+    if (!formData.email) newErrors.email = t('signup.emailRequired');
+    if (!formData.password) newErrors.password = t('signup.passwordRequired');
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = t('signup.passwordMismatch');
     }
     
     if (Object.keys(newErrors).length > 0) {
@@ -42,9 +49,15 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
     });
   };
 
+  // Determine text direction based on language
+  const isRTL = language === 'fa' || language === 'ps';
+
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#1D212C] border border-[#2E3444] rounded-2xl w-full max-w-md p-6 relative animate-fadeIn">
+      <div 
+        className="bg-[#1D212C] border border-[#2E3444] rounded-2xl w-full max-w-md p-6 relative animate-fadeIn"
+        dir={isRTL ? 'rtl' : 'ltr'}
+      >
         {/* Close button */}
         <button
           onClick={onClose}
@@ -55,58 +68,70 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
           </svg>
         </button>
 
-        <h2 className="text-2xl font-bold text-[#ECEEF3] mb-2">Create Account</h2>
-        <p className="text-[#9AA1B4] text-sm mb-6">Start your typing journey today</p>
+        <h2 className="text-2xl font-bold text-[#ECEEF3] mb-2" data-i18n="signup.title">
+          Create Account
+        </h2>
+        <p className="text-[#9AA1B4] text-sm mb-6" data-i18n="signup.subtitle">
+          Start your typing journey today
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-[#9AA1B4] text-sm mb-2">Full Name</label>
+            <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.fullName">
+              Full Name
+            </label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               className={`w-full bg-[#0f1218] border ${errors.name ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
-              placeholder="John Doe"
+              placeholder={t('signup.namePlaceholder')}
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
 
           <div>
-            <label className="block text-[#9AA1B4] text-sm mb-2">Email</label>
+            <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.email">
+              Email
+            </label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               className={`w-full bg-[#0f1218] border ${errors.email ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
-              placeholder="you@example.com"
+              placeholder={t('signup.emailPlaceholder')}
             />
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
           <div>
-            <label className="block text-[#9AA1B4] text-sm mb-2">Password</label>
+            <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.password">
+              Password
+            </label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               className={`w-full bg-[#0f1218] border ${errors.password ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
-              placeholder="••••••••"
+              placeholder={t('signup.passwordPlaceholder')}
             />
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
 
           <div>
-            <label className="block text-[#9AA1B4] text-sm mb-2">Confirm Password</label>
+            <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.confirmPassword">
+              Confirm Password
+            </label>
             <input
               type="password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               className={`w-full bg-[#0f1218] border ${errors.confirmPassword ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
-              placeholder="••••••••"
+              placeholder={t('signup.confirmPasswordPlaceholder')}
             />
             {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
@@ -114,16 +139,18 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
           <button
             type="submit"
             className="w-full bg-[#E8A33D] text-[#1a1508] font-bold py-2.5 rounded-lg hover:bg-[#C9832A] transition-colors"
+            data-i18n="signup.submitButton"
           >
             Sign Up
           </button>
         </form>
 
         <p className="text-[#9AA1B4] text-sm text-center mt-4">
-          Already have an account?{' '}
+          <span data-i18n="signup.alreadyHaveAccount">Already have an account?</span>{' '}
           <button 
             onClick={onSwitchToLogin}
             className="text-[#E8A33D] hover:underline font-medium"
+            data-i18n="signup.loginLink"
           >
             Login
           </button>

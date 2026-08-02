@@ -140,9 +140,13 @@ const translations = {
     "keyboardCoverage_Dashboard": "Keyboard coverage",
     "accuracy_Dashboard": "Accuracy",
     "totalActive_Dashboard": "Total active practice time",
+    "Create_Account_Dashboard": "Create Account",
+        "signup.title": "Create Account",
+
   },
   
   ps: {
+    "signup.title": "حساب جوړول",
     "brand.name": "ټایپټون",
     "nav.TypeTest_TypeTone":"د ټایپ ازموینه",
     "nav.how":"دا څنګه کار کوي", 
@@ -285,6 +289,7 @@ const translations = {
   },
   
   da: {
+    "signup.title": "ایجاد حساب کاربری",
     "brand.name": "TypeTone",
     "nav.TypeTest_TypeTone":"آزمون تایپ",
     "nav.how":"چگونه کار می‌کند", 
