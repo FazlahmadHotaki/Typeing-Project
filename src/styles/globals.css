@@ -3,9 +3,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-{
-  background:white;
-  color:black;
+#top{
+  color: #feffff;
+}
+body{
+  background-color:#00a8970c;
+  color: #2A3439;
 }
 /* Your custom styles here */
 .hero-sky {
@@ -127,9 +130,14 @@
   font-family: 'JetBrains Mono', monospace;
 }
 .keycap.lit {
-  background: rgba(201,161,94,0.1);
-  color: #C9A15E;
-  border-color: rgba(201,161,94,0.45);
+  background: #ffb035;
+  color: #eeebe6;
+  border-color: (201,161,94,0.45);
+}
+.keycap.blik{
+  background: #018d8d3d;
+  color: rgba(0, 0, 0, 0.616);
+  animation: blink 1s infinite;
 }
 .fade-up { animation: fadeUp .8s ease both; }
 @keyframes fadeUp { from { opacity:0; transform: translateY(18px);} to { opacity:1; transform: translateY(0);} }
@@ -138,7 +146,8 @@
 ::selection { background: #E8B84B; color: #0B1A33; }
 
 /* nav & base */
-body { font-family: 'Inter', sans-serif; background:#0A1424; color:#EEF1F6; }
+/* body { font-family: 'Inter', sans-serif; background:#0A1424; color:#EEF1F6; } */
+
 .font-display { font-family: 'Sora', sans-serif; }
 
 /* New Typing Techniques styling */
@@ -163,7 +172,7 @@ body { font-family: 'Inter', sans-serif; background:#0A1424; color:#EEF1F6; }
 
 /* ===== NEW CONTACT STYLE ===== */
 .contact-section {
-  background: linear-gradient(135deg, #0D1B30 0%, #11223B 50%, #0A1424 100%);
+  background:#34a0a48c;
   position: relative;
   overflow: hidden;
 }
@@ -175,20 +184,20 @@ body { font-family: 'Inter', sans-serif; background:#0A1424; color:#EEF1F6; }
   pointer-events: none;
 }
 .contact-card {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.8);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.06);
   transition: all 0.3s ease;
 }
 .contact-card:hover {
-  border-color: rgba(201,161,94,0.3);
-  background: rgba(255,255,255,0.05);
+  border-color: rgba(201,161,94,0.5);
+  background: #ebf4ff85;
   transform: translateY(-2px);
 }
 .contact-input {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #EEF1F6;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(134, 132, 132, 0.3);
+  color: #313338;
   transition: all 0.3s ease;
   border-radius: 12px;
   padding: 0.75rem 1rem;
@@ -197,8 +206,8 @@ body { font-family: 'Inter', sans-serif; background:#0A1424; color:#EEF1F6; }
 }
 .contact-input:focus {
   outline: none;
-  border-color: rgba(201,161,94,0.5);
-  background: rgba(255,255,255,0.06);
+  border-color: rgba(201,161,94,0.6);
+  background: rgba(255,255,255,0.5);
   box-shadow: 0 0 0 4px rgba(201,161,94,0.08);
 }
 .contact-input::placeholder {
@@ -239,8 +248,8 @@ body { font-family: 'Inter', sans-serif; background:#0A1424; color:#EEF1F6; }
   width: 44px;
   height: 44px;
   border-radius: 9999px;
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #8592AC;
+  border: 1px solid #d0dee070;
+  color: rgba(255, 255, 255, 0.733);
   transition: all 0.3s ease;
   background: rgba(255,255,255,0.03);
 }
@@ -313,3 +322,11 @@ body { font-family: 'Inter', sans-serif; background:#0A1424; color:#EEF1F6; }
     opacity: 1;
   }
 }
+.firsttechniques-page{
+  border-radius: 8px;
+  line-height: 2.5rem;
+  background: linear-gradient(135deg, #eed7c5 0%, #fff1e6 50%,  #f5f5f5 100%);
+}
+
+
+

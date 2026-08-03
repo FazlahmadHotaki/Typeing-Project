@@ -25,15 +25,15 @@ const TypingVideoSection = () => {
     <section className="typing-video-section_TypeTone py-20 px-4" style={{ background: 'inherit' }}>
       <div className="container_TypeTone mx-auto max-w-6xl">
         {/* Language Switcher */}
-        <div className="flex justify-end mb-8 gap-2">
+        <div className="flex justify-end bg-[#00a8970c] mb-8 gap-2">
           {['en', 'ps', 'da'].map((lang_TypeTone) => (
             <button
               key={lang_TypeTone}
               onClick={() => setLanguage_TypeTone(lang_TypeTone)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-lg  text-black text-sm font-medium transition-all ${
                 language_TypeTone === lang_TypeTone
-                  ? 'bg-[#C9A15E] text-black'
-                  : 'bg-white/10 text-white hover:bg-white/20'
+                  ? 'bg-[#f6aa1c] text-black'
+                  : 'bg-[#d3d3d3] text-white hover:bg-white/20'
               }`}
             >
               {languageNames_TypeTone[lang_TypeTone]}
@@ -52,7 +52,7 @@ const TypingVideoSection = () => {
         </div>
 
         {/* Video Container */}
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-black border border-gray-800">
+        <div className="relative rounded-xl overflow-hidden ">
           <div className="relative" style={{ paddingBottom: '56.25%' }}>
             <video
               ref={videoRef_TypeTone}

@@ -4,8 +4,8 @@ import React from 'react';
 const TypingTechniques = () => {
   return (
     <section id="techniques" className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-      <div className="max-w-2xl mb-14">
-        <p className="font-mono text-gold text-xs tracking-[0.25em] uppercase mb-3" data-i18n="techniques.eyebrow">Know your typing style</p>
+      <div className="firsttechniques-page max-w-2xl mb-14">
+        <p className="font-mono text-gold text-xs tracking-[0.25em] uppercase mb-3 text-[#ffb035]" data-i18n="techniques.eyebrow">Know your typing style</p>
         <h2 className="font-display font-semibold text-3xl sm:text-4xl" data-i18n="techniques.title">Hunt and Peck vs. 10-Finger Method</h2>
       </div>
 
@@ -45,7 +45,7 @@ const TypingTechniques = () => {
         </div>
       </div>
 
-      <div className="mt-16 rounded-2xl bg-night3 border border-white/5 overflow-hidden">
+      <div className=" mt-16 rounded-2xl bg-[#d8d4f2] border border-white/5 overflow-hidden">
         <div className="grid grid-cols-3 gap-px bg-white/5">
           <div className="bg-night p-5 text-center font-display font-semibold text-gold text-sm" data-i18n="techniques.compare.feature">Feature</div>
           <div className="bg-night p-5 text-center font-display font-semibold text-gold text-sm" data-i18n="techniques.compare.hunt">Hunt and Peck</div>

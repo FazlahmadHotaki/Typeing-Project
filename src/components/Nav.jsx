@@ -5,6 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 const Nav = ({ onStartTyping }) => {
   const { lang, changeLanguage, langNames } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const menuRef = useRef();
 
   useEffect(() => {
@@ -17,6 +18,17 @@ const Nav = ({ onStartTyping }) => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      setIsScrolled(scrollPosition > viewportHeight);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
 const getBrandName = () => {
     const translations = {
       en: "TypeTone",
@@ -27,7 +39,9 @@ const getBrandName = () => {
   };  
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-night/70 border-b border-white/5">
+    <header className={`fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-night/70 border-b border-white/5  ${
+      isScrolled ? 'bg-white/90 border shaddow-[#f4f1de] shadow-sm border-[#f4f1de] text-black' : 'bg-night/70 text-white'
+    }`}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
         <a href="#top" className="flex items-center gap-2 font-display font-extrabold text-lg tracking-tight">
         <span><img src="/LogoTypeTone.png" className='rounded-3xl w-6 h-6' alt="" /></span>
@@ -46,8 +60,8 @@ const getBrandName = () => {
             <button 
               id="langBtn" 
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex items-center gap-2 text-sm font-medium border border-white/10 rounded-full px-3 py-1.5 hover:border-gold/50 transition"
-            >
+              className={`flex items-center gap-2 text-sm font-medium border border-gray-50 hover:bg-gray-50 hover:text-gray-700 rounded-full px-3 py-1.5 transition
+                    ${isScrolled ? "border-gray-200 hover:bg-[#f4f1de]" : "hover:bg-goldsoft"}      `}            >
               <span id="langBtnLabel">{langNames[lang]}</span>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
@@ -59,7 +73,8 @@ const getBrandName = () => {
               </div>
             )}
           </div>
-          <button onClick={onStartTyping } className="hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800" data-i18n="nav.getStarted" >Get started</button>
+          <button onClick={onStartTyping } className={`hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800
+            ${isScrolled ? "hover:bg-[#f4f1de]" : "hover:bg-goldsoft"}`} data-i18n="nav.getStarted" >Get started</button>
         </div>
       </div>
     </header>

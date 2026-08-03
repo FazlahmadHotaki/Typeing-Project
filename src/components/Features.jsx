@@ -17,12 +17,12 @@ const Features = () => {
     <section id="features" className="bg-night2 border-y border-white/5">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="max-w-2xl mb-14">
-          <p className="font-mono text-gold text-xs tracking-[0.25em] uppercase mb-3" data-i18n="features.eyebrow">Inside TypeTone</p>
+          <p className="font-mono text-gold text-xs tracking-[0.25em] uppercase mb-3 text-[#e57c04]" data-i18n="features.eyebrow">Inside TypeTone</p>
           <h2 className="font-display font-semibold text-3xl sm:text-4xl" data-i18n="features.title">Everything you need to build real typing speed.</h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5 rounded-2xl overflow-hidden">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white border border-white/5 rounded-2xl overflow-hidden ">
           {features.map((f, idx) => (
-            <div key={idx} className="bg-night p-8">
+            <div key={idx} className="bg-[#fbfff1] p-8 border">
               <svg className="mb-5" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A15E" strokeWidth="1.4">
                 <path d={f.icon} />
               </svg>
