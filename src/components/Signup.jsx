@@ -4,13 +4,13 @@ import { useLanguage } from '../context/LanguageContext';
 import translations from '../data/translations';
 
 export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
-  const { language } = useLanguage();
-  
-  // Translation function
-  const t = (key) => {
-    return translations[language]?.[key] || key;
-  };
-  
+const { lang } = useLanguage();  // Translation function
+ const t = (key) => {
+  return translations[lang]?.[key] || key;
+};
+
+const isRTL = lang === "ps" || lang === "da";
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -50,13 +50,12 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
   };
 
   // Determine text direction based on language
-  const isRTL = language === 'fa' || language === 'ps';
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div 
         className="bg-[#1D212C] border border-[#2E3444] rounded-2xl w-full max-w-md p-6 relative animate-fadeIn"
-        dir={isRTL ? 'rtl' : 'ltr'}
+         dir={isRTL ? 'rtl' : 'ltr'}
       >
         {/* Close button */}
         <button
@@ -69,31 +68,32 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
         </button>
 
         <h2 className="text-2xl font-bold text-[#ECEEF3] mb-2" data-i18n="signup.title">
-          Create Account
+          {t('signup.title')}
         </h2>
         <p className="text-[#9AA1B4] text-sm mb-6" data-i18n="signup.subtitle">
-          Start your typing journey today
+          {t('signup.subtitle')}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.fullName">
-              Full Name
+              {t('signup.fullName')}
             </label>
             <input
               type="text"
-              name="name"
+  name="name"
+  placeholder={t("signup.namePlaceholder")}
+  data-i18n-placeholder="signup.namePlaceholder"
               value={formData.name}
               onChange={handleChange}
               className={`w-full bg-[#0f1218] border ${errors.name ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
-              placeholder={t('signup.namePlaceholder')}
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
 
           <div>
             <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.email">
-              Email
+              {t('signup.email')}
             </label>
             <input
               type="email"
@@ -102,13 +102,14 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
               onChange={handleChange}
               className={`w-full bg-[#0f1218] border ${errors.email ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
               placeholder={t('signup.emailPlaceholder')}
+              data-i18n-placeholder="signup.emailPlaceholder"
             />
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
           <div>
             <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.password">
-              Password
+              {t('signup.password')}
             </label>
             <input
               type="password"
@@ -123,7 +124,7 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
 
           <div>
             <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.confirmPassword">
-              Confirm Password
+              {t('signup.confirmPassword')}
             </label>
             <input
               type="password"
@@ -141,18 +142,18 @@ export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
             className="w-full bg-[#E8A33D] text-[#1a1508] font-bold py-2.5 rounded-lg hover:bg-[#C9832A] transition-colors"
             data-i18n="signup.submitButton"
           >
-            Sign Up
+            {t('signup.submitButton')}
           </button>
         </form>
 
         <p className="text-[#9AA1B4] text-sm text-center mt-4">
-          <span data-i18n="signup.alreadyHaveAccount">Already have an account?</span>{' '}
+          <span data-i18n="signup.alreadyHaveAccount">{t('signup.alreadyHaveAccount')}</span>{' '}
           <button 
             onClick={onSwitchToLogin}
             className="text-[#E8A33D] hover:underline font-medium"
             data-i18n="signup.loginLink"
           >
-            Login
+            {t('signup.loginLink')}
           </button>
         </p>
       </div>

@@ -1,11 +1,16 @@
 // TypingVideoSection.jsx - Main Component File
 import React, { useRef, useEffect, useState } from 'react';
 import translations from '../data/translations';
-
+import { useLanguage } from '../context/LanguageContext';
 
 const TypingVideoSection = () => {
   const videoRef_TypeTone = useRef(null);
   const [language_TypeTone, setLanguage_TypeTone] = useState('ps'); // 'en', 'ps', 'da'
+
+  const { lang } = useLanguage();
+  useEffect(() => {
+    setLanguage_TypeTone(lang);
+  }, [lang]);
 
   useEffect(() => {
     if (videoRef_TypeTone.current) {
@@ -69,7 +74,7 @@ const TypingVideoSection = () => {
             >
               <source 
                 type="video/mp4" 
-                src="https://v.ftcdn.net/12/45/25/85/700_F_1245258533_LNJ0xTx9wecgNb1deYRKVsi8KVDbjVT6_ST.mp4" 
+                src="https://v.ftcdn.net/20/40/46/14/700_F_2040461476_3fIM8a1tYsA6QIS8bfTtE7NaNXIsX67U_ST.mp4" 
               />
               {t_TypeTone['videoFallback_TypeTone'] || 'Your browser does not support the video tag.'}
             </video>

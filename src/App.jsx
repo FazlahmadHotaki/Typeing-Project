@@ -126,7 +126,7 @@ function App() {
           <span className="dots"></span> بارېږي
         </p>
         <p className="text-sm text-slateink leading-relaxed mt-1">
-          مهرباني وکړئ انتظار وکړئ، موږ ستاسو مینځپانګه چمتو کوو
+         ... مهرباني وکړئ انتظار وکړئ، موږ ستاسو مینځپانګه چمتو کوو
         </p>
       </div>
     );

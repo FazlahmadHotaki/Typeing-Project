@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './App.css'; // We'll create this file for styles
-
 const App = () => {
   const STATUS = { DONE: 'done', ACTIVE: 'active', LOCKED: 'locked' };
 

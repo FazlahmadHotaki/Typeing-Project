@@ -52,7 +52,7 @@ const Hero = ({ onStartTyping }) => {
         </div>
       </div>
       <div className="scroll-down">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0f4c5c"><path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/></svg>
+        <img className='mt-10' src="https://img.icons8.com/?size=100&id=pHQmM2cgTzW2&format=png&color=000000" alt="" />
       </div>
     </section>
     

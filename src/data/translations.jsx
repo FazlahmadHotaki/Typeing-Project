@@ -142,10 +142,40 @@ const translations = {
     "totalActive_Dashboard": "Total active practice time",
     "Create_Account_Dashboard": "Create Account",
         "signup.title": "Create Account",
+        "login.title": "Welcome Back aganin!",
+
+    // Signup
+    "signup.title": "Create Account",
+    "signup.subtitle": "Start your typing journey today",
+
+    "signup.fullName": "Full Name",
+    "signup.namePlaceholder": "Your name",
+
+    "signup.email": "Email",
+    "signup.emailPlaceholder": "you@example.com",
+
+    "signup.password": "Password",
+    "signup.passwordPlaceholder": "••••••••",
+
+    "signup.confirmPassword": "Confirm Password",
+    "signup.confirmPasswordPlaceholder": "••••••••",
+
+    "signup.submitButton": "Sign Up",
+
+    "signup.alreadyHaveAccount": "Already have an account?",
+    "signup.loginLink": "Login",
+
+
+    // Errors
+    "signup.nameRequired": "Name is required",
+    "signup.emailRequired": "Email is required",
+    "signup.passwordRequired": "Password is required",
+    "signup.passwordMismatch": "Passwords do not match",
 
   },
   
   ps: {
+      "login.title": "Welcome Back aganin!!",
     "signup.title": "حساب جوړول",
     "brand.name": "ټایپټون",
     "nav.TypeTest_TypeTone":"د ټایپ ازموینه",
@@ -286,9 +316,36 @@ const translations = {
     "keyboardCoverage_Dashboard": "د کیبورډ پوښښ",
     "accuracy_Dashboard": "دقت",
     "totalActive_Dashboard": "ټول فعال د تمرین وخت",
+     "signup.title": "حساب جوړ کړئ",
+    "signup.subtitle": "نن خپل د ټایپ کولو سفر پیل کړئ",
+
+    "signup.fullName": "بشپړ نوم",
+    "signup.namePlaceholder": "ستاسو نوم",
+
+    "signup.email": "برېښنالیک",
+    "signup.emailPlaceholder": "تاسو@بېلګه.com",
+
+    "signup.password": "پټنوم",
+    "signup.passwordPlaceholder": "••••••••",
+
+    "signup.confirmPassword": "پټنوم تایید کړئ",
+    "signup.confirmPasswordPlaceholder": "••••••••",
+
+    "signup.submitButton": "نوم‌لیکنه",
+
+    "signup.alreadyHaveAccount": "له مخکې حساب لرئ؟",
+    "signup.loginLink": "ننوتل",
+
+
+    // Errors
+    "signup.nameRequired": "نوم اړین دی",
+    "signup.emailRequired": "برېښنالیک اړین دی",
+    "signup.passwordRequired": "پټنوم اړین دی",
+    "signup.passwordMismatch": "پټنومونه یو شان نه دي",
   },
   
   da: {
+      "login.title": "Welcome Back aganin!!!",
     "signup.title": "ایجاد حساب کاربری",
     "brand.name": "TypeTone",
     "nav.TypeTest_TypeTone":"آزمون تایپ",
@@ -429,6 +486,33 @@ const translations = {
     "keyboardCoverage_Dashboard": "پوشش کیبورد",
     "accuracy_Dashboard": "دقت",
     "totalActive_Dashboard": "کل زمان فعال تمرین",
+     // Signup
+    "signup.title": "ایجاد حساب",
+    "signup.subtitle": "امروز سفر تایپ خود را آغاز کنید",
+
+    "signup.fullName": "نام کامل",
+    "signup.namePlaceholder": "نام شما",
+
+    "signup.email": "ایمیل",
+    "signup.emailPlaceholder": "شما@مثال.com",
+
+    "signup.password": "رمز عبور",
+    "signup.passwordPlaceholder": "••••••••",
+
+    "signup.confirmPassword": "تأیید رمز عبور",
+    "signup.confirmPasswordPlaceholder": "••••••••",
+
+    "signup.submitButton": "ثبت‌نام",
+
+    "signup.alreadyHaveAccount": "از قبل حساب دارید؟",
+    "signup.loginLink": "ورود",
+
+
+    // Errors
+    "signup.nameRequired": "نام الزامی است",
+    "signup.emailRequired": "ایمیل الزامی است",
+    "signup.passwordRequired": "رمز عبور الزامی است",
+    "signup.passwordMismatch": "رمزهای عبور مطابقت ندارند",
   }
 };
 
