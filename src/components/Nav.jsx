@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
-const Nav = ({ onStartTyping }) => {
+const Nav = ({ onStartTyping ,  showGetStarted = true}) => {
   const { lang, changeLanguage, langNames } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -73,9 +73,18 @@ const getBrandName = () => {
               </div>
             )}
           </div>
-          <button onClick={onStartTyping } className={`hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800
-            ${isScrolled ? "hover:bg-[#f4f1de]" : "hover:bg-goldsoft"}`} data-i18n="nav.getStarted" >Get started</button>
-        </div>
+
+          {showGetStarted && (
+  <button
+    onClick={onStartTyping}
+    className={`hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800
+      ${isScrolled ? "hover:bg-[#f4f1de]" : "hover:bg-goldsoft"}`}
+    data-i18n="nav.getStarted"
+  >
+    Get started
+  </button>
+)}   
+  </div>
       </div>
     </header>
   );
