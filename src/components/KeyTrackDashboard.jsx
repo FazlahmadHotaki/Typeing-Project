@@ -30,10 +30,10 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
   );
 
   return (
-    <div className="min-h-screen bg-[#f1faee] text-white p-5 sm:p-8 " dir={isRtl ? "rtl" : "ltr"}>
+    <div className="min-h-screen bg-[#e7bc91] text-white p-5 sm:p-8 " dir={isRtl ? "rtl" : "ltr"}>
       
       {/* Header */}
-         <Nav className="text-gray-800" showGetStarted={false} /> 
+         <Nav  showGetStarted={false} /> 
       
 
       {/* Layout */}
@@ -50,10 +50,10 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
           <div>
             {LESSONS.map((l, idx) => (
               <div
-                key={idx}
+                key={idx} 
                 className="grid grid-cols-[44px_1fr_auto_80px] sm:grid-cols-[46px_1fr_130px_90px] items-center gap-3 sm:gap-4 py-3.5 px-2 rounded-xl border-b border-[#2E3444] last:border-b-0 hover:bg-[#242938] transition-colors"
               >
-                <div
+               {()=> idx===1 ? "fdssadfsa" : "00000"} <div
                   className="w-11 h-11 rounded-[10px] flex items-center justify-center text-lg font-extrabold font-mono"
                   style={{
                     background: `${l.color}22`,
