@@ -13,7 +13,7 @@ const App = () => {
     { n: 7, glyph: '⏱', label: 'Practice: d & k', stars: 5, status: STATUS.DONE },
     { n: 8, glyph: 'fjkd', label: 'Play: fjkd', stars: 4, status: STATUS.LOCKED },
   ];
-
+// Hi
   const CheckSVG = () => (
     <svg width="22" height="22" viewBox="0 0 22 22">
       <circle cx="11" cy="11" r="11" fill="#D98A3D" />
