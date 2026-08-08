@@ -15,7 +15,7 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
     const { lang } = useLanguage();
   // Helper function to get translation with flat keys
   const t = (key) => {
-    return translations[lang]?.[key] || key;
+    return translations[lang]?.[key] || key ;
   };
   
   const isRtl = t("dir_Dashboard") === "rtl";
@@ -26,7 +26,7 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
       { label: t("thisWeek_Dashboard"), value: `42 ${t("minutes_Dashboard")}`, pct: 70 },
       { label: t("today_Dashboard"), value: `9 ${t("minutes_Dashboard")}`, pct: 60 },
     ],
-    [lang]
+    [t]
   );
 
   return (

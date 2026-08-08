@@ -1,6 +1,8 @@
 // App.js
 import React, { useState, useEffect } from 'react';
 import Nav from './components/Nav';
+import MouseCursor from "./components/MouseCursor";
+import "./styles/MouseCursor.css";
 import Hero from './components/Hero';
 import Stats from './components/Stats';
 import HowItWorks from './components/HowItWorks';
@@ -146,6 +148,7 @@ function App() {
 
   return (
     <LanguageProvider>
+      <MouseCursor />
       <div className="app">
         <Nav onStartTyping={handleStartTyping} />
         <Hero onStartTyping={handleStartTyping} />
