@@ -38,7 +38,7 @@ function MouseCursor() {
       }, 300);
     };
 
-    // Smooth follower animation
+    // Smooth follower animationi
     const animateFollower = () => {
       followerX += (mouseX - followerX) * 0.5;
       followerY += (mouseY - followerY) * 0.5;
