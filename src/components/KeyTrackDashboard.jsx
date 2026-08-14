@@ -2,20 +2,58 @@
 import React, { useState, useMemo } from "react";
 import translations from "../data/translations";
 import { LESSONS } from "../data/lessons";
+import MouseCursor from "./MouseCursor";
 import Nav from "./Nav";
+import ChartComponent from "../chart-JS/ChartComponent";
 import { useLanguage } from "../context/LanguageContext";
+
 function Ring({ pct, label, value }) {
   const r = 26;
   const c = 2 * Math.PI * r;
   const offset = c - (pct / 100) * c;
- 
+  
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative w-[70px] h-[70px]">
+        <svg className="w-full h-full -rotate-90" viewBox="0 0 70 70">
+          {/* Background circle */}
+          <circle
+            cx="35"
+            cy="35"
+            r={r}
+            fill="none"
+            stroke="#0f1218"
+            strokeWidth="5"
+          />
+          {/* Progress circle */}
+          <circle
+            cx="35"
+            cy="35"
+            r={r}
+            fill="none"
+            stroke="#4FC38A"
+            strokeWidth="5"
+            strokeDasharray={c}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            style={{ transition: "stroke-dashoffset 0.5s ease" }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-sm font-bold text-white">{pct}%</span>
+        </div>
+      </div>
+      <span className="text-[10px] text-[#9AA1B4] mt-1.5 text-center leading-tight">{label}</span>
+      <span className="text-[11px] font-bold text-white mt-0.5">{value}</span>
+    </div>
+  );
 }
 
 export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
-    const { lang } = useLanguage();
+  const { lang } = useLanguage();
   // Helper function to get translation with flat keys
   const t = (key) => {
-    return translations[lang]?.[key] || key ;
+    return translations[lang]?.[key] || key;
   };
   
   const isRtl = t("dir_Dashboard") === "rtl";
@@ -33,11 +71,11 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
     <div className="min-h-screen bg-[#e7bc91] text-white p-5 sm:p-8 " dir={isRtl ? "rtl" : "ltr"}>
       
       {/* Header */}
-         <Nav  showGetStarted={false} /> 
-      
+      <Nav showGetStarted={false} /> 
+      <MouseCursor />
 
       {/* Layout */}
-      <div className=" grid grid-cols-1 lg:grid-cols-[1fr_340px] mt-10 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] mt-10 gap-5">
         {/* Lesson list */}
         <div className="bg-[#1D212C] border border-[#2E3444] rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
@@ -53,7 +91,7 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
                 key={idx} 
                 className="grid grid-cols-[44px_1fr_auto_80px] sm:grid-cols-[46px_1fr_130px_90px] items-center gap-3 sm:gap-4 py-3.5 px-2 rounded-xl border-b border-[#2E3444] last:border-b-0 hover:bg-[#242938] transition-colors"
               >
-               {()=> idx===1 ? "fdssadfsa" : "00000"} <div
+                <div
                   className="w-11 h-11 rounded-[10px] flex items-center justify-center text-lg font-extrabold font-mono"
                   style={{
                     background: `${l.color}22`,
@@ -142,6 +180,9 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
             </div>
           </div>
         </div>
+      </div>
+      <div className="bg-gray-800">
+              <ChartComponent />
       </div>
     </div>
   );

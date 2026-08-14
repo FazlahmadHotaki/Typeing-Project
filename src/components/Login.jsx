@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import { users } from "../data/users";
 
 const translations = {
   en: {
@@ -16,8 +17,6 @@ const translations = {
     "login.signIn": "Sign In",
     "login.noAccount": "Don't have an account?",
     "login.signUp": "Sign up free",
-    "contact.namePlaceholder": "Your name",
-    "contact.emailPlaceholder": "you@example.com",
   },
 
   ps: {
@@ -32,8 +31,6 @@ const translations = {
     "login.signIn": "ننوتل",
     "login.noAccount": "حساب نه لرئ؟",
     "login.signUp": "وړیا نوم‌لیکنه وکړئ",
-    "contact.namePlaceholder": "ستاسو نوم",
-    "contact.emailPlaceholder": "تاسو@بېلګه.com",
   },
 
   da: {
@@ -48,237 +45,179 @@ const translations = {
     "login.signIn": "ورود",
     "login.noAccount": "حساب کاربری ندارید؟",
     "login.signUp": "رایگان ثبت‌نام کنید",
-    "contact.namePlaceholder": "نام شما",
-    "contact.emailPlaceholder": "شما@مثال.com",
   },
 };
 
-
-const Login = ({ onClose, onSwitchToSignup }) => {
-
+const Login = ({ onClose, onSwitchToSignup ,onSignupSuccess}) => {
   const { lang } = useLanguage();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-
   const updateLanguage = (language) => {
-
     const currentLanguage = translations[language];
 
     if (!currentLanguage) return;
 
-
     // Text translation
     document.querySelectorAll("[data-i18n]").forEach((element) => {
-
       const key = element.dataset.i18n;
 
       if (currentLanguage[key]) {
         element.textContent = currentLanguage[key];
       }
-
     });
-
 
     // Placeholder translation
     document
       .querySelectorAll("[data-i18n-placeholder]")
       .forEach((element) => {
-
         const key = element.dataset.i18nPlaceholder;
 
         if (currentLanguage[key]) {
           element.placeholder = currentLanguage[key];
         }
-
       });
-
   };
-
 
   useEffect(() => {
-
     updateLanguage(lang);
-
   }, [lang]);
 
+ const handleSubmit = (e) => {
+  e.preventDefault();
 
+  const user = users.find(
+    (user) =>
+      user.email === email &&
+      user.password === password
+  );
 
-  const handleSubmit = (e) => {
-
-    e.preventDefault();
-
-    console.log({
-      email,
-      password,
-      rememberMe,
+  if (user) {
+    // Use the same success callback pattern as Signup
+    if (rememberMe) {
+      localStorage.setItem("user", JSON.stringify(user));
+    }
+    
+    // Call the success callback with user data
+    onSignupSuccess({
+      name: user.name,
+      email: user.email,
+      
     });
-
-    alert("You are not Login. Please Sign up first!");
-
+    
     onClose();
-
-  };
-
-
+  } else {
+    // Show error message
+    const errorMsg = translations[lang]?.["login.invalidCredentials"] || "Invalid email or password!";
+    alert(errorMsg);
+  }
+};
 
   return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 text-white backdrop-blur-sm">
 
-    <div className="fixed inset-0 z-50 flex items-center text-white justify-center bg-black/80 backdrop-blur-sm">
-
-      <div className="relative w-full max-w-md mx-4 bg-night3 rounded-2xl border border-white/10 p-8 shadow-2xl">
-
+      <div className="relative mx-4 w-full max-w-md rounded-2xl border border-white/10 bg-night3 p-8 shadow-2xl">
 
         {/* Close Button */}
-
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slateink hover:text-cloudwhite transition"
+          className="absolute right-4 top-4 text-slateink transition hover:text-cloudwhite"
         >
-
           ✕
-
         </button>
 
-
-
         {/* Logo */}
-
-        <div className="text-center mb-8">
+        <div className="mb-8 text-center">
 
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gold">
-
             <img
               src="https://img.icons8.com/?size=100&id=49439&format=png&color=000000"
               alt="logo"
             />
-
           </div>
 
-
           <h2
-            className="font-display font-bold text-2xl mt-3"
+            className="mt-3 font-display text-2xl font-bold"
             data-i18n="login.title"
           >
             Welcome Back
           </h2>
 
-
           <p
-            className="text-slateink text-sm mt-1"
+            className="mt-1 text-sm text-slateink"
             data-i18n="login.subtitle"
           >
             Sign in to continue your typing journey
           </p>
 
-
         </div>
 
-
-
-
+        {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
 
-
+          {/* Email */}
           <div>
 
             <label
-              className="block text-sm font-medium text-slateink mb-1.5"
+              className="mb-1.5 block text-sm font-medium text-slateink"
               data-i18n="login.email"
             >
               Email Address
             </label>
 
-
             <input
-
-             type="email"
-  placeholder="you@example.com"
-  data-i18n-placeholder="contact.emailPlaceholder"
-
+              type="email"
+              placeholder="you@example.com"
+              data-i18n-placeholder="login.emailPlaceholder"
               value={email}
-
-              onChange={(e)=>setEmail(e.target.value)}
-
+              onChange={(e) => setEmail(e.target.value)}
               className="contact-input"
-
-
-
               required
-
             />
 
           </div>
 
-
-
-
+          {/* Password */}
           <div>
 
-
             <label
-              className="block text-sm font-medium text-slateink mb-1.5"
+              className="mb-1.5 block text-sm font-medium text-slateink"
               data-i18n="login.password"
             >
-
               Password
-
             </label>
 
-
-
             <input
-
               type="password"
-
               value={password}
-
-              onChange={(e)=>setPassword(e.target.value)}
-
+              onChange={(e) => setPassword(e.target.value)}
               className="contact-input"
-
               placeholder="••••••••"
-
               data-i18n-placeholder="login.passwordPlaceholder"
-
               required
-
             />
 
           </div>
 
-
-
-
+          {/* Remember Me + Forgot Password */}
           <div className="flex items-center justify-between">
-
 
             <label className="flex items-center gap-2 text-sm text-slateink">
 
-
               <input
-
                 type="checkbox"
-
                 checked={rememberMe}
-
-                onChange={(e)=>setRememberMe(e.target.checked)}
-
+                onChange={(e) => setRememberMe(e.target.checked)}
                 className="rounded border-white/10 bg-white/5 text-gold"
-
               />
-
 
               <span data-i18n="login.rememberMe">
                 Remember me
               </span>
 
-
             </label>
-
-
 
             <a
               href="#"
@@ -288,52 +227,43 @@ const Login = ({ onClose, onSwitchToSignup }) => {
               Forgot password?
             </a>
 
-
           </div>
 
-
-
-
-
+          {/* Sign In Button */}
           <button
-
             type="submit"
-
             className="contact-submit"
-
             data-i18n="login.signIn"
-
+onClick={onSignupSuccess}            
           >
-
             Sign In
-
           </button>
-
-
 
         </form>
 
-
-
-
-
-        <p className="text-center text-sm text-slateink mt-6">
-
+        {/* Sign Up */}
+        <p className="mt-6 text-center text-sm text-slateink">
 
           <span data-i18n="login.noAccount">
-
             Don't have an account?
-
           </span>
+
           {" "}
-          <button onClick={onSwitchToSignup} className="text-gold hover:underline font-medium"data-i18n="login.signUp">Sign up free</button>
+
+          <button
+            onClick={onSwitchToSignup}
+            className="font-medium text-gold hover:underline"
+            data-i18n="login.signUp"
+          >
+            Sign up free
+          </button>
+
         </p>
+
       </div>
+
     </div>
-
   );
-
 };
-
 
 export default Login;
