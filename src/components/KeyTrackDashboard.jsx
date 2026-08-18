@@ -50,7 +50,7 @@ function Ring({ pct, label, value, color = "#8B5CF6" }) {
   );
 }
 
-// Add Lesson Modal Component with Scroll and Body Lock
+// Add Lesson Modal Component
 function AddLessonModal({ isOpen, onClose, onAdd, lang }) {
   const [formData, setFormData] = useState({
     icon: "⌨️",
@@ -164,6 +164,36 @@ function AddLessonModal({ isOpen, onClose, onAdd, lang }) {
       titlePlaceholder: "عنوان درس را وارد کنید",
       subPlaceholder: "زیرعنوان درس را وارد کنید",
       iconPlaceholder: "آیکون ایموجی را وارد کنید"
+    },
+    dr: {
+      addNewLesson: "افزودن درس جدید",
+      lessonIcon: "آیکون درس (ایموجی)",
+      lessonTitle: "عنوان درس",
+      lessonSubtitle: "زیرعنوان درس",
+      progress: "پیشرفت (٪)",
+      score: "امتیاز",
+      stars: "ستاره‌ها",
+      color: "رنگ",
+      cancel: "لغو",
+      add: "افزودن درس",
+      titlePlaceholder: "عنوان درس را وارد کنید",
+      subPlaceholder: "زیرعنوان درس را وارد کنید",
+      iconPlaceholder: "آیکون ایموجی را وارد کنید"
+    },
+    prs: {
+      addNewLesson: "افزودن درس جدید",
+      lessonIcon: "آیکون درس (ایموجی)",
+      lessonTitle: "عنوان درس",
+      lessonSubtitle: "زیرعنوان درس",
+      progress: "پیشرفت (٪)",
+      score: "امتیاز",
+      stars: "ستاره‌ها",
+      color: "رنگ",
+      cancel: "لغو",
+      add: "افزودن درس",
+      titlePlaceholder: "عنوان درس را وارد کنید",
+      subPlaceholder: "زیرعنوان درس را وارد کنید",
+      iconPlaceholder: "آیکون ایموجی را وارد کنید"
     }
   };
 
@@ -176,12 +206,16 @@ function AddLessonModal({ isOpen, onClose, onAdd, lang }) {
       title: {
         en: formData.title,
         ps: formData.title,
-        fa: formData.title
+        fa: formData.title,
+        dr: formData.title,
+        prs: formData.title
       },
       sub: {
         en: formData.sub,
         ps: formData.sub,
-        fa: formData.sub
+        fa: formData.sub,
+        dr: formData.sub,
+        prs: formData.sub
       },
       progress: parseInt(formData.progress) || 0,
       score: parseInt(formData.score) || 0,
@@ -403,6 +437,30 @@ function ColumnChart({ lang }) {
       days: {
         Mon: "دوشنبه", Tue: "سه‌شنبه", Wed: "چهارشنبه", Thu: "پنجشنبه", Fri: "جمعه", Sat: "شنبه", Sun: "یکشنبه"
       }
+    },
+    dr: {
+      weeklyActivity: "فعالیت هفتگی",
+      hoursSpent: "ساعات سپری شده در این هفته",
+      days7: "۷ روز",
+      total: "مجموع: ۲۳.۳ ساعت",
+      practiceTime: "زمان تمرین",
+      lessons: "درس‌ها",
+      exercises: "تمرین‌ها",
+      days: {
+        Mon: "دوشنبه", Tue: "سه‌شنبه", Wed: "چهارشنبه", Thu: "پنجشنبه", Fri: "جمعه", Sat: "شنبه", Sun: "یکشنبه"
+      }
+    },
+    prs: {
+      weeklyActivity: "فعالیت هفتگی",
+      hoursSpent: "ساعات سپری شده در این هفته",
+      days7: "۷ روز",
+      total: "مجموع: ۲۳.۳ ساعت",
+      practiceTime: "زمان تمرین",
+      lessons: "درس‌ها",
+      exercises: "تمرین‌ها",
+      days: {
+        Mon: "دوشنبه", Tue: "سه‌شنبه", Wed: "چهارشنبه", Thu: "پنجشنبه", Fri: "جمعه", Sat: "شنبه", Sun: "یکشنبه"
+      }
     }
   };
 
@@ -504,7 +562,7 @@ function ColumnChart({ lang }) {
 export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
   const { lang } = useLanguage();
   const t = (key) => {
-    return translations[lang]?.[key] || key;
+    return translations[lang]?.[key] || translations.en?.[key] || key;
   };
   
   const isRtl = t("dir_Dashboard") === "rtl";
@@ -525,7 +583,49 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
   const performanceTranslations = {
     en: "Performance Overview",
     ps: "د فعالیت کتنه",
-    fa: "نمای عملکرد"
+    fa: "نمای عملکرد",
+    dr: "نمای عملکرد",
+    prs: "نمای عملکرد"
+  };
+
+  const welcomeTranslations = {
+    en: "Welcome back",
+    ps: "ښه راغلاست",
+    fa: "خوش آمدید",
+    dr: "خوش آمدید",
+    prs: "خوش آمدید"
+  };
+
+  const questionTranslations = {
+    en: "What would you like to learn today?",
+    ps: "نن مو څه زده کول غواړئ؟",
+    fa: "امروز چه چیزی می‌خواهید یاد بگیرید؟",
+    dr: "امروز چه چیزی می‌خواهید یاد بگیرید؟",
+    prs: "امروز چه چیزی می‌خواهید یاد بگیرید؟"
+  };
+
+  const logoutTranslations = {
+    en: "Logout",
+    ps: "وتل",
+    fa: "خروج",
+    dr: "خروج",
+    prs: "خروج"
+  };
+
+  const addPlanTranslations = {
+    en: "Add Plan +",
+    ps: "پلان زیاته کړئ +",
+    fa: "افزودن برنامه +",
+    dr: "افزودن برنامه +",
+    prs: "افزودن برنامه +"
+  };
+
+  const activeLessonsTranslations = {
+    en: "Your active lessons",
+    ps: "ستاسو فعال درسونه",
+    fa: "درس‌های فعال شما",
+    dr: "درس‌های فعال شما",
+    prs: "درس‌های فعال شما"
   };
 
   return (
@@ -546,7 +646,6 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
           animation: scale-up 0.2s ease-out;
         }
         
-        /* Custom scrollbar for modal */
         .overflow-y-auto::-webkit-scrollbar {
           width: 6px;
         }
@@ -575,10 +674,10 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
             </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
-                {lang === "ps" ? "ښه راغلاست" : lang === "fa" ? "خوش آمدید" : "Welcome back"}, {user}!
+                {welcomeTranslations[lang] || welcomeTranslations.en}, {user}!
               </h1>
               <p className="text-gray-500 text-xs sm:text-sm mt-0.5 sm:mt-1">
-                {lang === "ps" ? "نن مو څه زده کول غواړئ؟" : lang === "fa" ? "امروز چه چیزی می‌خواهید یاد بگیرید؟" : "What would you like to learn today?"}
+                {questionTranslations[lang] || questionTranslations.en}
               </p>
             </div>
           </div>
@@ -586,26 +685,26 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
             onClick={onLogout}
             className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 bg-white border-2 border-gray-200 text-gray-700 rounded-lg sm:rounded-xl font-semibold hover:border-red-300 hover:text-red-500 hover:bg-red-50 transition-all duration-300 shadow-sm text-sm sm:text-base"
           >
-            {lang === "ps" ? "وتل" : lang === "fa" ? "خروج" : "Logout"}
+            {logoutTranslations[lang] || logoutTranslations.en}
           </button>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-4 sm:gap-6">
-        {/* Lesson list - No scroll */}
+        {/* Lesson list */}
         <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl shadow-purple-100 p-4 sm:p-6 border border-purple-50">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-gray-800">{t("myPlans_Dashboard")}</h2>
               <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">
-                {lang === "ps" ? "ستاسو فعال درسونه" : lang === "fa" ? "درس‌های فعال شما" : "Your active lessons"}
+                {activeLessonsTranslations[lang] || activeLessonsTranslations.en}
               </p>
             </div>
             <button 
               onClick={() => setIsModalOpen(true)}
               className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-200 transition-all duration-300 transform hover:-translate-y-0.5 text-sm sm:text-base"
             >
-              {lang === "ps" ? "پلان زیاته کړئ +" : lang === "fa" ? "افزودن برنامه +" : "Add Plan +"}
+              {addPlanTranslations[lang] || addPlanTranslations.en}
             </button>
           </div>
 
@@ -638,14 +737,14 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
                           <h3 className="text-sm sm:text-lg font-bold text-gray-800 truncate">
-                            {lesson.title?.[lang] || lesson.title}
+                            {lesson.title?.[lang] || lesson.title?.en || lesson.title}
                           </h3>
                           <span className="text-[10px] sm:text-xs font-semibold text-gray-500 bg-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-gray-200 flex-shrink-0">
                             {lesson.progress || 0}%
                           </span>
                         </div>
                         <p className="text-xs sm:text-sm text-gray-600 mt-0.5 sm:mt-1 truncate">
-                          {lesson.sub?.[lang] || lesson.sub}
+                          {lesson.sub?.[lang] || lesson.sub?.en || lesson.sub}
                         </p>
                         <div className="mt-2 sm:mt-3 bg-white rounded-full h-1.5 sm:h-2 overflow-hidden shadow-inner">
                           <div
@@ -682,7 +781,6 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
 
         {/* Sidebar */}
         <div className="space-y-4 sm:space-y-6">
-          {/* Typing Speed Card */}
           <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl shadow-purple-100 p-4 sm:p-6 border border-purple-50">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
               <h2 className="text-base sm:text-lg font-bold text-gray-800">{t("typingSpeed_Dashboard")}</h2>
@@ -704,35 +802,18 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
             </div>
           </div>
 
-          {/* Practice Time Card */}
           <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl shadow-purple-100 p-4 sm:p-6 border border-purple-50">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <h2 className="text-base sm:text-lg font-bold text-gray-800">{t("practiceTime_Dashboard")}</h2>
               <span className="text-xl sm:text-2xl">⏱️</span>
             </div>
             <div className="flex justify-between gap-1 sm:gap-2">
-              <Ring 
-                pct={0} 
-                label={t("lastWeek_Dashboard")} 
-                value={`0 ${t("minutes_Dashboard")}`}
-                color="#8B5CF6"
-              />
-              <Ring 
-                pct={70} 
-                label={t("thisWeek_Dashboard")} 
-                value={`42 ${t("minutes_Dashboard")}`}
-                color="#3B82F6"
-              />
-              <Ring 
-                pct={60} 
-                label={t("today_Dashboard")} 
-                value={`9 ${t("minutes_Dashboard")}`}
-                color="#EC4899"
-              />
+              <Ring pct={0} label={t("lastWeek_Dashboard")} value={`0 ${t("minutes_Dashboard")}`} color="#8B5CF6" />
+              <Ring pct={70} label={t("thisWeek_Dashboard")} value={`42 ${t("minutes_Dashboard")}`} color="#3B82F6" />
+              <Ring pct={60} label={t("today_Dashboard")} value={`9 ${t("minutes_Dashboard")}`} color="#EC4899" />
             </div>
           </div>
 
-          {/* Overall Stats Card */}
           <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl shadow-purple-100 p-4 sm:p-6 border border-purple-50">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
               <h2 className="text-base sm:text-lg font-bold text-gray-800">{t("overall_Dashboard")}</h2>
@@ -764,7 +845,7 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
           </h3>
           <ChartComponent />
         </div>
-        
+        {/* fdfa */}
         <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl shadow-purple-100 p-4 sm:p-6 border border-purple-50">
           <ColumnChart lang={lang} />
         </div>
