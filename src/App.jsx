@@ -50,6 +50,12 @@ function App() {
     setIsAuthenticated(true);
     setShowSignup(false);
   };
+ const handleLoginSuccess = (user) => {
+  setUserData(user);
+  setIsAuthenticated(true);
+  setShowLogin(false);
+  setShowSignup(false);
+};
 
   // ADD THIS: Handle logout
   const handleLogout = () => {
@@ -166,6 +172,7 @@ function App() {
           <Login 
             onClose={handleCloseLogin}
             onSwitchToSignup={handleSwitchToSignup}
+            onSignupSuccess={handleLoginSuccess} // ADD THIS
           />
         )}
 

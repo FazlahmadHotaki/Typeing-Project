@@ -50,11 +50,11 @@ const translations = {
 
 const Login = ({ onClose, onSwitchToSignup ,onSignupSuccess}) => {
   const { lang } = useLanguage();
-
+  // ADD THIS after other useState declarations:
+const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-
   const updateLanguage = (language) => {
     const currentLanguage = translations[language];
 
@@ -85,36 +85,44 @@ const Login = ({ onClose, onSwitchToSignup ,onSignupSuccess}) => {
     updateLanguage(lang);
   }, [lang]);
 
- const handleSubmit = (e) => {
+const handleSubmit = (e) => {
   e.preventDefault();
 
   const user = users.find(
     (user) =>
-      user.email === email &&
+      user.email === email.trim() &&
       user.password === password
   );
 
   if (user) {
-    // Use the same success callback pattern as Signup
+    // Save user if "Remember me" is checked
     if (rememberMe) {
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: user.name,
+          email: user.email,
+        })
+      );
     }
-    
-    // Call the success callback with user data
+
+    // Login successful
     onSignupSuccess({
       name: user.name,
       email: user.email,
-      
     });
-    
+
+    // Close login modal
     onClose();
   } else {
-    // Show error message
-    const errorMsg = translations[lang]?.["login.invalidCredentials"] || "Invalid email or password!";
+    // Login failed
+    const errorMsg =
+      translations[lang]?.["login.invalidCredentials"] ||
+      "Invalid email or password!";
+
     alert(errorMsg);
   }
 };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 text-white backdrop-blur-sm">
 
@@ -233,9 +241,7 @@ const Login = ({ onClose, onSwitchToSignup ,onSignupSuccess}) => {
           <button
             type="submit"
             className="contact-submit"
-            data-i18n="login.signIn"
-onClick={onSignupSuccess}            
-          >
+            data-i18n="login.signIn" >
             Sign In
           </button>
 
