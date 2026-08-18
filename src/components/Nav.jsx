@@ -22,8 +22,8 @@ const Nav = ({ onStartTyping ,  showGetStarted = true}) => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const viewportHeight = window.innerHeight;
-      viewportHeight=
-      setIsScrolled(scrollPosition > viewportHeight);
+      const  viewportHeight3=viewportHeight* 0.6;
+      setIsScrolled(scrollPosition > viewportHeight3);
     };
 
     window.addEventListener('scroll', handleScroll);
