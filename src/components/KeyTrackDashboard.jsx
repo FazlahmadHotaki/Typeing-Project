@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import translations from "../data/translations";
 import { LESSONS } from "../data/lessons";
-import MouseCursor from "./MouseCursor";
+// import MouseCursor from "./MouseCursor";
 import Nav from "./Nav";
 import ChartComponent from "../chart-JS/ChartComponent";
 import { useLanguage } from "../context/LanguageContext";
@@ -559,7 +559,7 @@ function ColumnChart({ lang }) {
   );
 }
 
-export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
+export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout,openToPahshto }) {
   const { lang } = useLanguage();
   const t = (key) => {
     return translations[lang]?.[key] || translations.en?.[key] || key;
@@ -663,7 +663,7 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
       `}</style>
 
       <Nav showGetStarted={false} /> 
-      <MouseCursor />
+      {/* <MouseCursor /> */}
 
       {/* User Welcome Bar */}
       <div className="max-w-7xl mx-auto mt-4 sm:mt-6 mb-6 sm:mb-8">
@@ -768,9 +768,29 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout }) {
                           <div className="font-bold text-yellow-500 text-sm sm:text-base">★ {lesson.stars || 0}</div>
                         </div>
                       </div>
-                      <button className="w-full sm:w-auto bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl font-bold hover:shadow-lg hover:shadow-green-200 transition-all duration-300 transform hover:-translate-y-0.5 text-xs sm:text-sm">
-                        {t("start_Dashboard")}
-                      </button>
+                   <button
+  type="button"
+  onClick={() => {
+    console.log("Clicked lesson:", lesson);
+
+    const title =
+      lesson.title?.[lang] ||
+      lesson.title?.en ||
+      lesson.title ||
+      "";
+
+    if (
+      title.toLowerCase().includes("pashto") ||
+      title.includes("پښتو")
+    ) {
+      console.log("Opening Pashto Typing...");
+      openToPahshto?.();
+    }
+  }}
+  className="w-full sm:w-auto bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl font-bold hover:shadow-lg hover:shadow-green-200 transition-all duration-300 transform hover:-translate-y-0.5 text-xs sm:text-sm"
+>
+  {t("start_Dashboard")}
+</button>
                     </div>
                   </div>
                 </div>

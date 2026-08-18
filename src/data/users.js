@@ -1,5 +1,5 @@
 export const users = [
-  { name: "Muhammad", password: "1234" ,email:"fazlahmadhotaki7@gmail.com"},
+  { name: "Fazlahmad_Hotaki", password: "1234" ,email:"fazlahmadhotaki7@gmail.com"},
   { name: "Ahmad", password: "1234",email:"fazlahmadhotaki7@gmail.com" },
   { name: "Abdullah", password: "1234",email:"fazlahmadhotaki7@gmail.com" },
   { name: "Yusuf", password: "1234" ,email:"fazlahmadhotaki7@gmail.com"},

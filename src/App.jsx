@@ -1,9 +1,10 @@
 // App.js
 import React, { useState, useEffect } from 'react';
 import Nav from './components/Nav';
-import MouseCursor from "./components/MouseCursor";
-import "./styles/MouseCursor.css";
+// import MouseCursor from "./components/MouseCursor";
+// import "./styles/MouseCursor.css";
 import Hero from './components/Hero';
+import PashtoTyping from "./components/PashtoTyping"
 import Stats from './components/Stats';
 import HowItWorks from './components/HowItWorks';
 import Features from './components/Features';
@@ -22,9 +23,9 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // ADD THIS
-  const [userData, setUserData] = useState(null); // ADD THIS
-
+ const [isAuthenticated, setIsAuthenticated] = useState(false);
+const [userData, setUserData] = useState(null);
+const [page, setPage] = useState("dashboard");
   const handleStartTyping = () => {
     setShowLogin(true);
   };
@@ -142,19 +143,28 @@ function App() {
 
   // ADD THIS: If authenticated, show Dashboard
   if (isAuthenticated) {
-    return (
-      <LanguageProvider>
-        <KeyTrackDashboard 
-          user={userData?.name || "Fazl Ahmad"}
+  return (
+    <LanguageProvider>
+
+      {page === "dashboard" && (
+        <KeyTrackDashboard
+          user={userData?.name || userData?.username || "Fazl Ahmad"}
           onLogout={handleLogout}
+          openToPahshto={() => setPage("pashtoTyping")}
         />
-      </LanguageProvider>
-    );
-  }
+      )}
+
+      {page === "pashtoTyping" && (
+        <PashtoTyping />
+      )}
+
+    </LanguageProvider>
+  );
+}
 
   return (
     <LanguageProvider>
-      <MouseCursor />
+      {/* <MouseCursor /> */}
       <div className="app">
         <Nav onStartTyping={handleStartTyping} />
         <Hero onStartTyping={handleStartTyping} />

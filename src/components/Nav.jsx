@@ -50,8 +50,8 @@ const getBrandName = () => {
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-slateink font-medium">
           <a href="#how" className="hover:text-cloudwhite transition" data-i18n="nav.how">How it works</a>
-          <a href="#techniques" className="hover:text-cloudwhite transition" data-i18n="nav.techniques">Typing Techniques</a>
-          <a href="#lessons" className="hover:text-cloudwhite transition" data-i18n="nav.lessons">Lesson plans</a>
+          <a href="#techniques" className="hidden lg:inline-block hover:text-cloudwhite transition"   data-i18n="nav.techniques"> Typing Techniques</a>
+          <a href="#lessons" className="hidden lg:inline-block hover:text-cloudwhite transition" data-i18n="nav.lessons"> Lesson plans</a>
           <a href="#features" className="hover:text-cloudwhite transition" data-i18n="nav.features">Features</a>
           <a href="#contact" className="hover:text-cloudwhite transition" data-i18n="nav.contact">Contact</a>
           <a href="https://fazlahmadhotaki.github.io/Type-Speed-Project/" className="hover:text-cloudwhite transition" data-i18n="nav.TypeTest_TypeTone">TypeTest</a>
