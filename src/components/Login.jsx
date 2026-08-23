@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { users } from "../data/users";
+import { useNavigate } from "react-router-dom";
 
 const translations = {
   en: {
@@ -50,6 +51,7 @@ const translations = {
 
 const Login = ({ onClose, onSwitchToSignup ,onSignupSuccess}) => {
   const { lang } = useLanguage();
+  const navigate =useNavigate();
   // ADD THIS after other useState declarations:
 const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
   const [email, setEmail] = useState("");
@@ -130,7 +132,7 @@ const handleSubmit = (e) => {
 
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={()=> {navigate('/')}}
           className="absolute right-4 top-4 text-slateink transition hover:text-cloudwhite"
         >
           ✕

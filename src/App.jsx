@@ -1,6 +1,7 @@
 // App.js
 import React, { useState, useEffect } from 'react';
 import Nav from './components/Nav';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
 // import MouseCursor from "./components/MouseCursor";
 // import "./styles/MouseCursor.css";
 import Hero from './components/Hero';
@@ -18,6 +19,7 @@ import Footer from './components/Footer';
 import KeyTrackDashboard from './components/KeyTrackDashboard'; // ADD THIS
 import { LanguageProvider } from './context/LanguageContext';
 import './styles/globals.css';
+import NotFound from './components/NotFound';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -166,7 +168,27 @@ const [page, setPage] = useState("dashboard");
     <LanguageProvider>
       {/* <MouseCursor /> */}
       <div className="app">
-        <Nav onStartTyping={handleStartTyping} />
+        
+
+        {/* Login Modal */}
+        {showLogin && (
+          <Login 
+            // ADD THIS
+          />
+        )}
+
+        {/* Signup Modal */}
+        {showSignup && (
+          <Signup 
+           // ADD THIS
+          />
+        )},
+        <BrowserRouter>
+        <Routes>
+          <Route path='/'
+          element={
+            <div className='app'>
+              <Nav onStartTyping={handleStartTyping} />
         <Hero onStartTyping={handleStartTyping} />
         <Stats />
         <TypingTechniques />
@@ -176,24 +198,17 @@ const [page, setPage] = useState("dashboard");
         <CTABand onStartTyping={handleStartTyping} />
         <Contact />
         <Footer />
-
-        {/* Login Modal */}
-        {showLogin && (
-          <Login 
-            onClose={handleCloseLogin}
+            </div>
+          }
+          />
+          <Route path='/login' element={<Login  onClose={handleCloseLogin}
             onSwitchToSignup={handleSwitchToSignup}
-            onSignupSuccess={handleLoginSuccess} // ADD THIS
-          />
-        )}
-
-        {/* Signup Modal */}
-        {showSignup && (
-          <Signup 
-            onClose={handleCloseLogin}
-            onSwitchToLogin={handleSwitchToLogin}
-            onSignupSuccess={handleSignupSuccess} // ADD THIS
-          />
-        )}
+            onSignupSuccess={handleLoginSuccess} />} />
+            
+          {/* <Routes page='*' element={<NotFound />} /> */}
+          <Route path='/signup' element={<Signup />} />
+        </Routes>
+        </BrowserRouter>
       </div>
     </LanguageProvider>
   );
