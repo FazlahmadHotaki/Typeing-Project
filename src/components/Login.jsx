@@ -49,7 +49,7 @@ const translations = {
   },
 };
 
-const Login = ({ onClose, onSwitchToSignup ,onSignupSuccess}) => {
+const Login = ({ onClose, onSwitchToSignup }) => {
   const { lang } = useLanguage();
   const navigate =useNavigate();
   // ADD THIS after other useState declarations:
@@ -109,11 +109,8 @@ const handleSubmit = (e) => {
     }
 
     // Login successful
-    onSignupSuccess({
-      name: user.name,
-      email: user.email,
-    });
-
+    
+    navigate('/dashboard');
     // Close login modal
     onClose();
   } else {
@@ -165,7 +162,7 @@ const handleSubmit = (e) => {
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} method="post" className="space-y-5">
 
           {/* Email */}
           <div>
@@ -259,7 +256,7 @@ const handleSubmit = (e) => {
           {" "}
 
           <button
-            onClick={onSwitchToSignup}
+            onClick={()=> { navigate('/signup')}}
             className="font-medium text-gold hover:underline"
             data-i18n="login.signUp"
           >

@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import translations from '../data/translations';
+import { useNavigate } from 'react-router-dom';
 
-export default function Signup({ onClose, onSwitchToLogin, onSignupSuccess }) {
+export default function Signup({  }) {
+  const navigate = useNavigate();
 const { lang } = useLanguage();  // Translation function
  const t = (key) => {
   return translations[lang]?.[key] || key;
@@ -41,12 +43,10 @@ const isRTL = lang === "ps" || lang === "da";
       return;
     }
 
+  navigate("/dashboard");
     // Here you would normally make an API call to register the user
     // For demo, we'll just call the success callback
-    onSignupSuccess({
-      name: formData.name,
-      email: formData.email
-    });
+    
   };
 
   // Determine text direction based on language
@@ -59,7 +59,7 @@ const isRTL = lang === "ps" || lang === "da";
       >
         {/* Close button */}
         <button
-          onClick={onClose}
+          onClick={()=> {navigate('/')}}
           className="absolute top-3 right-3 text-[#9AA1B4] hover:text-[#ECEEF3] transition-colors"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -149,7 +149,7 @@ const isRTL = lang === "ps" || lang === "da";
         <p className="text-[#9AA1B4] text-sm text-center mt-4">
           <span data-i18n="signup.alreadyHaveAccount">{t('signup.alreadyHaveAccount')}</span>{' '}
           <button 
-            onClick={onSwitchToLogin}
+            onClick={()=> navigate('/login')}
             className="text-[#E8A33D] hover:underline font-medium"
             data-i18n="signup.loginLink"
           >

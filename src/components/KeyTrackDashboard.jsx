@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import translations from "../data/translations";
 import { LESSONS } from "../data/lessons";
+import { useNavigate } from "react-router-dom";
 // import MouseCursor from "./MouseCursor";
 import Nav from "./Nav";
 import ChartComponent from "../chart-JS/ChartComponent";
@@ -11,7 +12,6 @@ function Ring({ pct, label, value, color = "#8B5CF6" }) {
   const r = 30;
   const c = 2 * Math.PI * r;
   const offset = c - (pct / 100) * c;
-  
   return (
     <div className="flex flex-col items-center group">
       <div className="relative w-[80px] h-[80px] transition-transform group-hover:scale-105">
@@ -559,8 +559,10 @@ function ColumnChart({ lang }) {
   );
 }
 
-export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout,openToPahshto }) {
+export default function KeyTrackDashboard({ user = "Fazl Ahmad",openToPahshto }) {
   const { lang } = useLanguage();
+    const navigate=useNavigate();
+
   const t = (key) => {
     return translations[lang]?.[key] || translations.en?.[key] || key;
   };
@@ -682,7 +684,7 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad", onLogout,openTo
             </div>
           </div>
           <button
-            onClick={onLogout}
+            onClick={()=> {navigate('/')}}
             className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 bg-white border-2 border-gray-200 text-gray-700 rounded-lg sm:rounded-xl font-semibold hover:border-red-300 hover:text-red-500 hover:bg-red-50 transition-all duration-300 shadow-sm text-sm sm:text-base"
           >
             {logoutTranslations[lang] || logoutTranslations.en}

@@ -25,9 +25,20 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
- const [isAuthenticated, setIsAuthenticated] = useState(false);
-const [userData, setUserData] = useState(null);
-const [page, setPage] = useState("dashboard");
+
+
+  const [userData, setUserData] = useState(() => {
+  const savedUser = localStorage.getItem("loggedInUser");
+  return savedUser ? JSON.parse(savedUser) : null;
+});
+
+const [isAuthenticated, setIsAuthenticated] = useState(() => {
+  return !!localStorage.getItem("loggedInUser");
+});
+
+
+
+  const [page, setPage] = useState("dashboard");
   const handleStartTyping = () => {
     setShowLogin(true);
   };
@@ -53,18 +64,24 @@ const [page, setPage] = useState("dashboard");
     setIsAuthenticated(true);
     setShowSignup(false);
   };
- const handleLoginSuccess = (user) => {
+const handleLoginSuccess = (user) => {
+  localStorage.setItem("loggedInUser", JSON.stringify(user));
+
   setUserData(user);
   setIsAuthenticated(true);
+
   setShowLogin(false);
   setShowSignup(false);
 };
 
+
   // ADD THIS: Handle logout
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setUserData(null);
-  };
+ const handleLogout = () => {
+  localStorage.removeItem("loggedInUser");
+
+  setIsAuthenticated(false);
+  setUserData(null);
+};
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 10);
@@ -201,6 +218,7 @@ const [page, setPage] = useState("dashboard");
             </div>
           }
           />
+          <Route path='/dashboard' element={<KeyTrackDashboard /> } />
           <Route path='/login' element={<Login  onClose={handleCloseLogin}
             onSwitchToSignup={handleSwitchToSignup}
             onSignupSuccess={handleLoginSuccess} />} />
