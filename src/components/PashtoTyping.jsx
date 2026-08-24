@@ -1,6 +1,6 @@
 // HomeRowSteps.jsx
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 // ==========================================
 // LESSON DATA - Pashto Version with Pashto Letters
 // ==========================================
@@ -36,6 +36,7 @@ export default function HomeRowSteps() {
   const [errors, setErrors] = useState(0);
   const [startTime, setStartTime] = useState(null);
   const [wpm, setWpm] = useState(0);
+  const navigate =useNavigate();
 
   const completedLessons = selectedId - 1;
   const progress = Math.round(
@@ -365,6 +366,9 @@ export default function HomeRowSteps() {
                         setIsTyping(false);
                         setTypedText("");
                         setCurrentCharIndex(0);
+                      }
+                      if(lesson.id===1){
+                        navigate('/TypingTest')
                       }
                     }}
                     disabled={isLocked || isTyping}

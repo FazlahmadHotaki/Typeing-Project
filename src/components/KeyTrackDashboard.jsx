@@ -561,7 +561,7 @@ function ColumnChart({ lang }) {
 
 export default function KeyTrackDashboard({ user = "Fazl Ahmad",openToPahshto }) {
   const { lang } = useLanguage();
-    const navigate=useNavigate();
+    const navigate= useNavigate();
 
   const t = (key) => {
     return translations[lang]?.[key] || translations.en?.[key] || key;
@@ -787,6 +787,7 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad",openToPahshto })
     ) {
       console.log("Opening Pashto Typing...");
       openToPahshto?.();
+      navigate('/dashboard/steps-pashto')
     }
   }}
   className="w-full sm:w-auto bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl font-bold hover:shadow-lg hover:shadow-green-200 transition-all duration-300 transform hover:-translate-y-0.5 text-xs sm:text-sm"

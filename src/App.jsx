@@ -4,6 +4,7 @@ import Nav from './components/Nav';
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
 // import MouseCursor from "./components/MouseCursor";
 // import "./styles/MouseCursor.css";
+import TypingTest from './components/Step/TypingTestFirst_Step';
 import Hero from './components/Hero';
 import PashtoTyping from "./components/PashtoTyping"
 import Stats from './components/Stats';
@@ -19,8 +20,6 @@ import Footer from './components/Footer';
 import KeyTrackDashboard from './components/KeyTrackDashboard'; // ADD THIS
 import { LanguageProvider } from './context/LanguageContext';
 import './styles/globals.css';
-import NotFound from './components/NotFound';
-
 function App() {
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
@@ -222,9 +221,14 @@ const handleLoginSuccess = (user) => {
           <Route path='/login' element={<Login  onClose={handleCloseLogin}
             onSwitchToSignup={handleSwitchToSignup}
             onSignupSuccess={handleLoginSuccess} />} />
-            
+            <Route path='/dashboard/steps-pashto' element={<PashtoTyping/>} />
+            <Route path='/TypingTest' element={<TypingTest />} />
+            {/* <Route path='/TypingTestFirst' element={<TypingTest />} /> */}
           {/* <Routes page='*' element={<NotFound />} /> */}
-          <Route path='/signup' element={<Signup />} />
+{/* <Route
+  path="/TypingTestFirst"
+  element={<TypingTestFirstStep />}
+/>          <Route path='/signup' element={<Signup />} /> */}
         </Routes>
         </BrowserRouter>
       </div>
