@@ -228,7 +228,8 @@ const handleLoginSuccess = (user) => {
 {/* <Route
   path="/TypingTestFirst"
   element={<TypingTestFirstStep />}
-/>          <Route path='/signup' element={<Signup />} /> */}
+/>        */}
+  <Route path='/signup' element={<Signup />} /> 
         </Routes>
         </BrowserRouter>
       </div>
