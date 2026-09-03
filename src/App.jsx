@@ -222,7 +222,7 @@ const handleLoginSuccess = (user) => {
             <Route path='/dashboard/steps-pashto' element={<PashtoTyping/>} />
             <Route path='/TypingTest' element={<TypingTest />} />
             {/* <Route path='/TypingTestFirst' element={<TypingTest />} /> */}
-          {/* <Routes page='*' element={<NotFound />} /> */}
+          {/* <Routes page='*' element={<NotFo und />} /> */}
 {/* <Route
   path="/TypingTestFirst"
   element={<TypingTestFirstStep />}

@@ -116,6 +116,18 @@ export default function HomeRowSteps() {
     setWpm(0);
   };
 
+  const [idNumber,setIdNumber] = useState();
+  async function GiveID() {
+   for (let i = 0; i < 100; i++) {
+    const res =await fetch(`https://pashto-advice-api.onrender.com/api/advice/${i}`);
+
+    
+    const data =await res.json();
+    console.log(data.id);
+    setIdNumber(data.id);
+   }
+  }
+
   const handleKeyPress = (e) => {
     if (!isTyping) return;
 
@@ -237,8 +249,8 @@ export default function HomeRowSteps() {
                   {progress}%
                 </div>
                 <div className="text-xs text-gray-400">
-                  پرمختګ
-                </div>
+<button onClick={GiveID}>                  پرمختګ
+</button>                </div>
               </div>
 
               <div className="h-8 w-px bg-gray-200" />
@@ -319,7 +331,7 @@ export default function HomeRowSteps() {
           <p className="text-sm text-gray-400 mt-2">
             د پښتو توري د ټایپنګ لپاره زده کړئ
           </p>
-
+        <p>{idNumber}</p>
         </div>
 
         {/* =====================================

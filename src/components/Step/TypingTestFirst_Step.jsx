@@ -35,6 +35,7 @@ const TypingTestFirstStep = ({ stepId = 1 }) => {
   const inputRef = useRef(null);
   const timerRef = useRef(null);
 
+  
   // Render text with visual feedback
   const renderText = useCallback(() => {
     return TEXT.split("").map((char, index) => {
@@ -346,7 +347,13 @@ const TypingTestFirstStep = ({ stepId = 1 }) => {
 
             <div className="flex items-center gap-4 mb-7">
               <div className="w-14 h-14 rounded-2xl bg-[#1B2430] text-white flex items-center justify-center text-2xl font-bold shadow-lg">
-                {stepData.stepNumber}
+                {() => {
+                  return (
+                    <div>
+                      <h1>My name Lorem ipsum dolor sit amet consectetur, adipisicing elit. Deserunt ducimus possimus modi voluptates nobis unde sed ullam vero labore, dolorum libero assumenda suscipit blanditiis pariatur illum nisi consectetur aliquid dolores dolore error, voluptatem veritatis repellat atque est. Quos, illo iure voluptas aliquam dolorum, tempora minus sint ad inventore vero possimus nobis. Vel tempore obcaecati sint totam eum, deserunt, doloremque esse illo eligendi eaque iure odit neque cumque porro asperiores nostrum sequi. Possimus nobis unde ducimus aut inventore nesciunt nihil totam, in fugit quas minus fuga, quos deleniti architecto explicabo facere ab nostrum laboriosam ea! Ratione, laborum iure. Quaerat, saepe nisi. ifjalskdjdsals Ahmad hotaki</h1>
+                    </div>
+                  );
+                }}
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#C9A15E] mb-1">د پښتو ټایپنګ کورس</p>
@@ -366,6 +373,8 @@ const TypingTestFirstStep = ({ stepId = 1 }) => {
 
             <div className="mt-7">
               <h3 className="text-lg sm:text-xl font-bold text-[#1B2430] mb-4">
+
+
                 د کیبورډ تڼۍ وپېژنئ
               </h3>
               <div className="grid grid-cols-2 gap-4" dir="ltr">
