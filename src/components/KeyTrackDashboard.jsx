@@ -559,7 +559,7 @@ function ColumnChart({ lang }) {
   );
 }
 
-export default function KeyTrackDashboard({ user = "Fazl Ahmad",openToPahshto }) {
+export default function KeyTrackDashboard({ usersing,openToPahshto, formData  }) {
   const { lang } = useLanguage();
     const navigate= useNavigate();
 
@@ -666,17 +666,18 @@ export default function KeyTrackDashboard({ user = "Fazl Ahmad",openToPahshto })
 
       <Nav showGetStarted={false} /> 
       {/* <MouseCursor /> */}
+      {console.log("KeyTrackDashboard.jsx: user =", usersing, ", lang =", lang, ", formData =", formData)}
 
       {/* User Welcome Bar */}
       <div className="max-w-7xl mx-auto mt-4 sm:mt-6 mb-6 sm:mb-8">
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg shadow-purple-100 p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border border-purple-100">
           <div className="flex items-center gap-3 sm:gap-4 w-full">
             <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-lg sm:text-xl font-bold shadow-lg flex-shrink-0">
-              {user?.charAt(0) || "F"}
+              {usersing.charAt(0).toUpperCase() || "Hotak"}
             </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
-                {welcomeTranslations[lang] || welcomeTranslations.en}, {user}!
+                {welcomeTranslations[lang] || welcomeTranslations.en}, {formData.name  || usersing}!
               </h1>
               <p className="text-gray-500 text-xs sm:text-sm mt-0.5 sm:mt-1">
                 {questionTranslations[lang] || questionTranslations.en}

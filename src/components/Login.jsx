@@ -49,7 +49,7 @@ const translations = {
   },
 };
 
-const Login = ({ onClose, onSwitchToSignup }) => {
+const Login = ({ onClose, onSwitchToSignup, setUser }) => {
   const { lang } = useLanguage();
   const navigate =useNavigate();
   // ADD THIS after other useState declarations:
@@ -113,6 +113,8 @@ const handleSubmit = (e) => {
     navigate('/dashboard');
     // Close login modal
     onClose();
+    setUser(user.name);
+    console.log("Logged in user:", user.name);
   } else {
     // Login failed
     const errorMsg =

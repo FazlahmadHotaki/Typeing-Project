@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import translations from '../data/translations';
 import { useNavigate } from 'react-router-dom';
 
-export default function Signup({  }) {
+export default function Signup({formData, setFormData,setFindingTure}) {
   const navigate = useNavigate();
 const { lang } = useLanguage();  // Translation function
  const t = (key) => {
@@ -13,12 +13,7 @@ const { lang } = useLanguage();  // Translation function
 
 const isRTL = lang === "ps" || lang === "da";
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+  
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -42,8 +37,8 @@ const isRTL = lang === "ps" || lang === "da";
       setErrors(newErrors);
       return;
     }
-
   navigate("/dashboard");
+  setFindingTure(true);
     // Here you would normally make an API call to register the user
     // For demo, we'll just call the success callback
     

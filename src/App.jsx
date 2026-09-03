@@ -24,7 +24,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-
+  const [usersing,setUser] = useState(null);
+  const [formData,setFormData] = useState("")
 
   const [userData, setUserData] = useState(() => {
   const savedUser = localStorage.getItem("loggedInUser");
@@ -35,6 +36,7 @@ const [isAuthenticated, setIsAuthenticated] = useState(() => {
   return !!localStorage.getItem("loggedInUser");
 });
 
+const [findingTure, setFindingTure] = useState(false);
 
 
   const [page, setPage] = useState("dashboard");
@@ -58,11 +60,7 @@ const [isAuthenticated, setIsAuthenticated] = useState(() => {
   };
 
   // ADD THIS: Handle successful signup
-  const handleSignupSuccess = (user) => {
-    setUserData(user);
-    setIsAuthenticated(true);
-    setShowSignup(false);
-  };
+  
 const handleLoginSuccess = (user) => {
   localStorage.setItem("loggedInUser", JSON.stringify(user));
 
@@ -217,10 +215,10 @@ const handleLoginSuccess = (user) => {
             </div>
           }
           />
-          <Route path='/dashboard' element={<KeyTrackDashboard /> } />
+          <Route path='/dashboard' element={<KeyTrackDashboard formData={formData} usersing={usersing}/>} />
           <Route path='/login' element={<Login  onClose={handleCloseLogin}
             onSwitchToSignup={handleSwitchToSignup}
-            onSignupSuccess={handleLoginSuccess} />} />
+            onSignupSuccess={handleLoginSuccess} setUser={setUser} />} />
             <Route path='/dashboard/steps-pashto' element={<PashtoTyping/>} />
             <Route path='/TypingTest' element={<TypingTest />} />
             {/* <Route path='/TypingTestFirst' element={<TypingTest />} /> */}
@@ -229,7 +227,7 @@ const handleLoginSuccess = (user) => {
   path="/TypingTestFirst"
   element={<TypingTestFirstStep />}
 />        */}
-  <Route path='/signup' element={<Signup />} /> 
+  <Route path='/signup' element={<Signup  formData={formData} setFormData={setFormData} />} /> 
         </Routes>
         </BrowserRouter>
       </div>
