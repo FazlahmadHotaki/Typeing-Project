@@ -382,42 +382,39 @@ const translations = {
     'keyboard.stats': 'موندل شوي توري',
     'keyboard.keyboardLabel': 'کیبورډ',
     // Language detection messages - Pashto
+    'keyboard.title': '⌨️ د کیبورډ سپړونکی',
+    'keyboard.subtitle': 'هغه توري کشف کړئ چې ستاسو نوم جوړوي!',
+    'keyboard.description':
+      'خپل نوم لاندې ولیکئ او کیبورډ به ژوندی شي.',
+    'keyboard.fillPrompt': 'د کیبورډ بڼه',
+    'keyboard.namePrompt': 'خپل نوم دلته ولیکئ',
+    'keyboard.placeholder': 'خپل نوم دلته ولیکئ...',
+    'keyboard.coloredKeysLabel': 'ستاسو په نوم کې توري',
+    'keyboard.colored': 'رنګ شوی',
+    'keyboard.uncolored': 'رنګ نه دی شوی',
+    'keyboard.startTyping': 'پورته خپل نوم ټایپ کړئ ✨',
+    'keyboard.reset': 'بیا پیلول',
+    'keyboard.stats': 'موندل شوي توري',
+    'keyboard.keyboardLabel': 'کیبورډ',
+    'keyboard.footer':
+      '© ۲۰۲۶ ټایپټون اکاډومي — ټیکنالوژي: کیبورډ',
+
     'keyboard.langWarningTitle': '⚠️ د کیبورډ ژبه سمه نه ده',
-    'keyboard.langWarningMessage': 'تاسو په انګلیسي لیکئ، خو کیبورډ په پښتو باندې دی. مهرباني وکړئ خپل کمپیوټر کیبورډ په پښتو بدل کړئ ترڅو سم توري وګورئ.',
-    'keyboard.langWarningAction': 'د کیبورډ ژبه بدلولو څرنګوالی:',
-    'keyboard.langWarningStep1': 'Windows: Windows + Spacebar یا Alt + Shift فشار ورکړئ',
-    'keyboard.langWarningStep2': 'Mac: Command + Spacebar فشار ورکړئ یا د مینو بار کې د ژبې آیکون کلیک وکړئ',
-    'keyboard.langWarningStep3': 'بیا له لست څخه "پښتو" غوره کړئ',
+    'keyboard.langWarningMessage':
+      'تاسو په انګلیسي لیکئ، خو کیبورډ په پښتو باندې دی. مهرباني وکړئ د خپل کمپیوټر کیبورډ ژبه پښتو ته بدله کړئ ترڅو سم توري وګورئ.',
+    'keyboard.langWarningAction':
+      'د کیبورډ ژبه بدلولو څرنګوالی:',
+    'keyboard.langWarningStep1':
+      'Windows: د Windows + Spacebar یا Alt + Shift تڼۍ فشار کړئ',
+    'keyboard.langWarningStep2':
+      'Mac: د Command + Spacebar تڼۍ فشار کړئ یا د مینو بار کې د ژبې آیکون کلیک کړئ',
+    'keyboard.langWarningStep3':
+      'بیا له لست څخه "پښتو" غوره کړئ',
     'keyboard.langDismiss': 'سمه ده، بدلومه',
     'keyboard.langIgnore': 'په همدې حال کې ادامه ورکړئ',
     'keyboard.typingInEnglish': 'تاسو په انګلیسي لیکئ',
     'keyboard.typingInPashto': 'تاسو په پښتو لیکئ 🎉',
     'keyboard.mixed': 'مخلوط ژبې',
-        'keyboard.title': '⌨️ کاوشگر کیبورد',
-    'keyboard.subtitle': 'حروفی که نام شما را می‌سازند کشف کنید!',
-    'keyboard.description': 'نام خود را در زیر تایپ کنید و کیبورد را زنده ببینید.',
-    'keyboard.fillPrompt': 'طرح کیبورد',
-    'keyboard.namePrompt': 'نام خود را وارد کنید',
-    'keyboard.placeholder': 'نام خود را اینجا تایپ کنید...',
-    'keyboard.coloredKeysLabel': 'حروف در نام شما',
-    'keyboard.colored': 'رنگ شده',
-    'keyboard.uncolored': 'رنگ نشده',
-    'keyboard.startTyping': 'تایپ نام خود را بالا شروع کنید ✨',
-    'keyboard.reset': 'بازنشانی',
-    'keyboard.stats': 'حروف پیدا شده',
-    'keyboard.keyboardLabel': 'کیبورد',
-    // Language detection messages - Dari
-    'keyboard.langWarningTitle': '⚠️ زبان کیبورد مطابقت ندارد',
-    'keyboard.langWarningMessage': 'شما به انگلیسی تایپ می‌کنید، اما کیبورد به دری تنظیم شده است. لطفاً زبان کیبورد کامپیوتر خود را به دری تغییر دهید تا حروف صحیح را ببینید.',
-    'keyboard.langWarningAction': 'نحوه تغییر زبان کیبورد:',
-    'keyboard.langWarningStep1': 'Windows: Windows + Spacebar یا Alt + Shift را فشار دهید',
-    'keyboard.langWarningStep2': 'Mac: Command + Spacebar را فشار دهید یا روی آیکون زبان در نوار منو کلیک کنید',
-    'keyboard.langWarningStep3': 'سپس "دری" را از لیست انتخاب کنید',
-    'keyboard.langDismiss': 'باشه، تغییر می‌دهم',
-    'keyboard.langIgnore': 'ادامه بده',
-    'keyboard.typingInEnglish': 'شما به انگلیسی تایپ می‌کنید',
-    'keyboard.typingInPashto': 'شما به دری تایپ می‌کنید 🎉',
-    'keyboard.mixed': 'زبان‌های مختلط'
 
   },
   
@@ -590,6 +587,46 @@ const translations = {
     "signup.emailRequired": "ایمیل الزامی است",
     "signup.passwordRequired": "رمز عبور الزامی است",
     "signup.passwordMismatch": "رمزهای عبور مطابقت ندارند",
+    
+
+    'keyboard.title': '⌨️ کاوشگر کیبورد',
+    'keyboard.subtitle':
+      'حروفی را که نام شما را می‌سازند کشف کنید!',
+    'keyboard.description':
+      'نام خود را در زیر تایپ کنید و کیبورد را زنده ببینید.',
+    'keyboard.fillPrompt': 'طرح کیبورد',
+    'keyboard.namePrompt': 'نام خود را وارد کنید',
+    'keyboard.placeholder': 'نام خود را اینجا تایپ کنید...',
+    'keyboard.coloredKeysLabel': 'حروف در نام شما',
+    'keyboard.colored': 'رنگ شده',
+    'keyboard.uncolored': 'رنگ نشده',
+    'keyboard.startTyping':
+      'تایپ نام خود را در بالا شروع کنید ✨',
+    'keyboard.reset': 'بازنشانی',
+    'keyboard.stats': 'حروف پیدا شده',
+    'keyboard.keyboardLabel': 'کیبورد',
+    'keyboard.footer':
+      '© ۲۰۲۶ تایپ‌تون آکادمی — تکنالوژی: کیبورد',
+
+    'keyboard.langWarningTitle':
+      '⚠️ زبان کیبورد مطابقت ندارد',
+    'keyboard.langWarningMessage':
+      'شما به انگلیسی تایپ می‌کنید، اما کیبورد به دری تنظیم شده است. لطفاً زبان کیبورد کمپیوتر خود را به دری تغییر دهید تا حروف صحیح را ببینید.',
+    'keyboard.langWarningAction':
+      'نحوه تغییر زبان کیبورد:',
+    'keyboard.langWarningStep1':
+      'Windows: Windows + Spacebar یا Alt + Shift را فشار دهید',
+    'keyboard.langWarningStep2':
+      'Mac: Command + Spacebar را فشار دهید یا روی آیکون زبان در نوار منو کلیک کنید',
+    'keyboard.langWarningStep3':
+      'سپس "دری" را از لیست انتخاب کنید',
+    'keyboard.langDismiss': 'باشه، تغییر می‌دهم',
+    'keyboard.langIgnore': 'ادامه بده',
+    'keyboard.typingInEnglish':
+      'شما به انگلیسی تایپ می‌کنید',
+    'keyboard.typingInPashto':
+      'شما به دری تایپ می‌کنید 🎉',
+    'keyboard.mixed': 'زبان‌های مختلط',
   }
 };
 
