@@ -173,7 +173,7 @@ const translations = {
     "signup.passwordRequired": "Password is required",
     "signup.passwordMismatch": "Passwords do not match",
     // ============================================
-    'keyboard.title': '⌨️ Keyboard Explorer',
+    'keyboard.title': 'Keyboard Explorer',
     'keyboard.subtitle': 'Discover the keys that make up your name!',
     'keyboard.description': 'Type your name below and watch the keyboard come to life.',
     'keyboard.fillPrompt': 'Your keyboard layout',
@@ -370,7 +370,7 @@ const translations = {
     "signup.emailRequired": "برېښنالیک اړین دی",
     "signup.passwordRequired": "پټنوم اړین دی",
     "signup.passwordMismatch": "پټنومونه یو شان نه دي",
-     'keyboard.title': '⌨️ د کیبورډ سپړونکی',
+     'keyboard.title': 'د کیبورډ سپړونکی',
     'keyboard.subtitle': 'هغه توري کشف کړئ چې ستاسو نوم جوړوي!',
     'keyboard.description': 'خپل نوم لاندې وليکئ او کیبورډ به ژوندی شي.',
     'keyboard.fillPrompt': 'د کیبورډ بڼه',
@@ -384,7 +384,6 @@ const translations = {
     'keyboard.stats': 'موندل شوي توري',
     'keyboard.keyboardLabel': 'کیبورډ',
     // Language detection messages - Pashto
-    'keyboard.title': '⌨️ د کیبورډ سپړونکی',
     'keyboard.subtitle': 'هغه توري کشف کړئ چې ستاسو نوم جوړوي!',
     'keyboard.description':
       'خپل نوم لاندې ولیکئ او کیبورډ به ژوندی شي.',
@@ -592,7 +591,7 @@ const translations = {
     "signup.passwordMismatch": "رمزهای عبور مطابقت ندارند",
     
 
-    'keyboard.title': '⌨️ کاوشگر کیبورد',
+    'keyboard.title': ' کاوشگر کیبورد',
     'keyboard.subtitle':
       'حروفی را که نام شما را می‌سازند کشف کنید!',
     'keyboard.description':

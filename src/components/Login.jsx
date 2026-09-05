@@ -142,7 +142,7 @@ const handleSubmit = (e) => {
 
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gold">
             <img
-              src="/public/LogoTypeTone.png"
+              src="https://img.icons8.com/?size=100&id=Mvoe3CJ3xK2P&format=png&color=000000"
               alt="logo"
             />
           </div>

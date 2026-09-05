@@ -1089,7 +1089,7 @@ const KeyboardActivity = () => {
 
           <div className="hero-badge">
             <span className="hero-badge-icon">
-              ⌨️
+              <img src="https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000" alt="" />
             </span>
 
             <span>
@@ -1184,7 +1184,7 @@ const KeyboardActivity = () => {
             <div className="section-heading">
 
               <div className="section-icon">
-                ✨
+              <img src="https://img.icons8.com/?size=100&id=YYPQ4qoxoTyN&format=png&color=000000" alt="" />
               </div>
 
               <div>
@@ -1314,7 +1314,7 @@ const KeyboardActivity = () => {
               <div className="keyboard-title-area">
 
                 <div className="keyboard-icon">
-                  ⌨
+              <img src="https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000" alt="" />
                 </div>
 
                 <div>
