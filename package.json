@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview"
   },
+  
   "dependencies": {
     "npm": "^12.0.2",
     "react": "^19.2.7",
