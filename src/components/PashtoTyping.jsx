@@ -1,28 +1,13 @@
 // HomeRowSteps.jsx
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import React, { useState, useEffect } from "react";
+
 // ==========================================
-// LESSON DATA - Pashto Version with Pashto Letters
+// API CONFIGURATION
 // ==========================================
 
-const LESSONS = [
-  { id: 1, title: "د ټایپنګ پیژندنه", subtitle: "توري: ب, پ, ت" },
-  { id: 2, title: "توري: ب, پ, ت", subtitle: "توري: ث, ج, چ" },
-  { id: 3, title: "توري: ث, ج, چ", subtitle: "بیاکتنه: ب, پ, ت, ث, ج, چ" },
-  { id: 4, title: "بیاکتنه: ب, پ, ت, ث, ج, چ", subtitle: "توري: ح, خ, د" },
-  { id: 5, title: "توري: ح, خ, د", subtitle: "توري: ذ, ر, ز" },
-  { id: 6, title: "توري: ذ, ر, ز", subtitle: "بیاکتنه: ح, خ, د, ذ, ر, ز" },
-  { id: 7, title: "بیاکتنه: ح, خ, د, ذ, ر, ز", subtitle: "توري: ژ, س, ش" },
-  { id: 8, title: "توري: ژ, س, ش", subtitle: "توري: ص, ض, ط" },
-  { id: 9, title: "توري: ص, ض, ط", subtitle: "بیاکتنه: ژ, س, ش, ص, ض, ط" },
-  { id: 10, title: "بیاکتنه: ژ, س, ش, ص, ض, ط", subtitle: "توري: ظ, ع, غ" },
-  { id: 11, title: "توري: ظ, ع, غ", subtitle: "توري: ف, ق, ک" },
-  { id: 12, title: "توري: ف, ق, ک", subtitle: "بیاکتنه: ظ, ع, غ, ف, ق, ک" },
-  { id: 13, title: "بیاکتنه: ظ, ع, غ, ف, ق, ک", subtitle: "توري: گ, ل, م" },
-  { id: 14, title: "توري: گ, ل, م", subtitle: "توري: ن, و, ه" },
-  { id: 15, title: "توري: ن, و, ه", subtitle: "بیاکتنه: گ, ل, م, ن, و, ه" },
-  { id: 16, title: "بیاکتنه: گ, ل, م, ن, و, ه", subtitle: "د پښتو ټول توري" },
-];
+const API_BASE_URL =
+  "https://the-typetone-api.onrender.com";
 
 // ==========================================
 // MAIN COMPONENT
@@ -30,277 +15,1049 @@ const LESSONS = [
 
 export default function HomeRowSteps() {
   const [selectedId, setSelectedId] = useState(1);
-  const [isTyping, setIsTyping] = useState(false);
-  const [typedText, setTypedText] = useState("");
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
-  const [errors, setErrors] = useState(0);
-  const [startTime, setStartTime] = useState(null);
-  const [wpm, setWpm] = useState(0);
-  const navigate =useNavigate();
 
-  const completedLessons = selectedId - 1;
-  const progress = Math.round(
-    (completedLessons / LESSONS.length) * 100
-  );
+  const [showLockMessage, setShowLockMessage] =
+    useState(false);
 
-  // Sample practice texts with Pashto letters
-  const practiceTexts = {
-    1: "ب پ ت",
-    2: "ث ج چ",
-    3: "ب پ ت ث ج چ",
-    4: "ح خ د",
-    5: "ذ ر ز",
-    6: "ح خ د ذ ر ز",
-    7: "ژ س ش",
-    8: "ص ض ط",
-    9: "ژ س ش ص ض ط",
-    10: "ظ ع غ",
-    11: "ف ق ک",
-    12: "ظ ع غ ف ق ک",
-    13: "گ ل م",
-    14: "ن و ه",
-    15: "گ ل م ن و ه",
-    16: "ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه",
+  const [lockedLessonId, setLockedLessonId] =
+    useState(null);
+
+  // ==========================================
+  // API STATE
+  // ==========================================
+
+  const [lessons, setLessons] =
+    useState([]);
+
+  const [isLoading, setIsLoading] =
+    useState(true);
+
+  const [apiError, setApiError] =
+    useState(null);
+
+  // ==========================================
+  // COMPLETED LESSONS
+  // ==========================================
+
+  const [completedLessonIds, setCompletedLessonIds] =
+    useState([]);
+
+  // ==========================================
+  // LESSON RESULTS
+  // ==========================================
+
+  const [lessonResults, setLessonResults] =
+    useState({});
+
+  // ==========================================
+  // LOAD COMPLETED LESSONS + RESULTS
+  // ==========================================
+
+  const loadCompletedLessons = () => {
+    try {
+      // ========================================
+      // LOAD COMPLETED LESSONS
+      // ========================================
+
+      const saved =
+        JSON.parse(
+          localStorage.getItem(
+            "completedLessons"
+          ) || "[]"
+        );
+
+      if (Array.isArray(saved)) {
+        setCompletedLessonIds(
+          saved.map((id) =>
+            String(id)
+          )
+        );
+      } else {
+        setCompletedLessonIds([]);
+      }
+
+      // ========================================
+      // LOAD LESSON RESULTS
+      // ========================================
+
+      const savedResults =
+        JSON.parse(
+          localStorage.getItem(
+            "lessonResults"
+          ) || "{}"
+        );
+
+      if (
+        savedResults &&
+        typeof savedResults === "object" &&
+        !Array.isArray(savedResults)
+      ) {
+        setLessonResults(
+          savedResults
+        );
+      } else {
+        setLessonResults({});
+      }
+    } catch (error) {
+      console.error(
+        "Error loading completed lessons:",
+        error
+      );
+
+      setCompletedLessonIds([]);
+      setLessonResults({});
+    }
   };
 
-  // Pashto keyboard layout mapping (simplified)
-  const pashtoKeys = {
-    'ب': 'ب',
-    'پ': 'پ',
-    'ت': 'ت',
-    'ث': 'ث',
-    'ج': 'ج',
-    'چ': 'چ',
-    'ح': 'ح',
-    'خ': 'خ',
-    'د': 'د',
-    'ذ': 'ذ',
-    'ر': 'ر',
-    'ز': 'ز',
-    'ژ': 'ژ',
-    'س': 'س',
-    'ش': 'ش',
-    'ص': 'ص',
-    'ض': 'ض',
-    'ط': 'ط',
-    'ظ': 'ظ',
-    'ع': 'ع',
-    'غ': 'غ',
-    'ف': 'ف',
-    'ق': 'ق',
-    'ک': 'ک',
-    'گ': 'گ',
-    'ل': 'ل',
-    'م': 'م',
-    'ن': 'ن',
-    'و': 'و',
-    'ه': 'ه',
-    'ی': 'ی',
-    'ء': 'ء',
-    'آ': 'آ',
-    'أ': 'أ',
-    'إ': 'إ',
-    'ة': 'ة',
+  // ==========================================
+  // LOAD SAVED COMPLETION
+  // ==========================================
+
+  useEffect(() => {
+    loadCompletedLessons();
+
+    const handleFocus = () => {
+      loadCompletedLessons();
+    };
+
+    const handleStorage = () => {
+      loadCompletedLessons();
+    };
+
+    window.addEventListener(
+      "focus",
+      handleFocus
+    );
+
+    window.addEventListener(
+      "storage",
+      handleStorage
+    );
+
+    return () => {
+      window.removeEventListener(
+        "focus",
+        handleFocus
+      );
+
+      window.removeEventListener(
+        "storage",
+        handleStorage
+      );
+    };
+  }, []);
+
+  // ==========================================
+  // PROGRESS
+  // ==========================================
+
+  const completedLessons =
+    completedLessonIds.length;
+
+  const progress =
+    lessons.length > 0
+      ? Math.min(
+          100,
+          Math.round(
+            (completedLessons /
+              lessons.length) *
+              100
+          )
+        )
+      : 0;
+
+  const remainingLessons =
+    Math.max(
+      0,
+      lessons.length -
+        completedLessons
+    );
+
+  const totalScore =
+    completedLessons * 10;
+
+  const stars =
+    Math.floor(
+      completedLessons / 10
+    );
+
+  // ==========================================
+  // FETCH LESSONS
+  // ==========================================
+
+  useEffect(() => {
+    fetchAllLessons();
+  }, []);
+
+  // ==========================================
+  // FETCH ALL LESSONS
+  // ==========================================
+
+  const fetchAllLessons = async () => {
+    setIsLoading(true);
+    setApiError(null);
+
+    try {
+      const response =
+        await fetch(
+          `${API_BASE_URL}/api/lessons`
+        );
+
+      if (!response.ok) {
+        throw new Error(
+          `HTTP Error: ${response.status}`
+        );
+      }
+
+      const data =
+        await response.json();
+
+      // ========================================
+      // SUPPORT API RESPONSE
+      // ========================================
+
+      const apiLessons =
+        Array.isArray(data)
+          ? data
+          : data &&
+            Array.isArray(
+              data.lessons
+            )
+          ? data.lessons
+          : [];
+
+      if (
+        apiLessons.length > 0
+      ) {
+        const formattedLessons =
+          apiLessons.map(
+            (lesson, index) => ({
+              id: index + 1,
+
+              apiId:
+                lesson.id,
+
+              title:
+                lesson.title,
+
+              subtitle:
+                getLessonSubtitle(
+                  lesson
+                ),
+
+              text:
+                lesson.text || "",
+
+              type:
+                lesson.type,
+
+              level:
+                lesson.level,
+
+              difficulty:
+                lesson.difficulty,
+            })
+          );
+
+        setLessons(
+          formattedLessons
+        );
+
+        console.log(
+          `Total lessons loaded: ${formattedLessons.length}`
+        );
+      } else {
+        throw new Error(
+          "No lessons found in API response"
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Error fetching lessons:",
+        error
+      );
+
+      setApiError(
+        error.message
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const getCurrentText = () => {
-    return practiceTexts[selectedId] || "پښتو ټایپنګ تمرین";
+  // ==========================================
+  // SET CURRENT LESSON
+  // FIRST INCOMPLETE LESSON
+  // ==========================================
+
+  useEffect(() => {
+    if (
+      lessons.length === 0
+    ) {
+      return;
+    }
+
+    const nextLesson =
+      lessons.find(
+        (lesson) =>
+          !completedLessonIds.includes(
+            String(lesson.apiId)
+          )
+      );
+
+    if (nextLesson) {
+      setSelectedId(
+        nextLesson.id
+      );
+    } else {
+      // All lessons completed
+      setSelectedId(
+        lessons.length
+      );
+    }
+  }, [
+    lessons,
+    completedLessonIds,
+  ]);
+
+  // ==========================================
+  // LESSON SUBTITLE
+  // ==========================================
+
+  const getLessonSubtitle = (
+    lesson
+  ) => {
+    if (!lesson.text) {
+      return "";
+    }
+
+    if (
+      lesson.type ===
+      "letter"
+    ) {
+      const uniqueChars = [
+        ...new Set(
+          lesson.text.replace(
+            /\s/g,
+            ""
+          )
+        ),
+      ];
+
+      return `توري: ${uniqueChars.join(
+        "، "
+      )}`;
+    }
+
+    if (
+      lesson.type ===
+      "combination"
+    ) {
+      const words =
+        lesson.text
+          .trim()
+          .split(/\s+/)
+          .slice(0, 3);
+
+      return words.join(" ");
+    }
+
+    const words =
+      lesson.text
+        .trim()
+        .split(/\s+/)
+        .slice(0, 5);
+
+    return words.length > 0
+      ? words.join(" ") + "..."
+      : "";
   };
 
-  const handleStartLesson = () => {
-    setIsTyping(true);
-    setTypedText("");
-    setCurrentCharIndex(0);
-    setErrors(0);
-    setStartTime(Date.now());
-    setWpm(0);
+  // ==========================================
+  // CHECK LESSON COMPLETION
+  // ==========================================
+
+  const isLessonCompleted = (
+    lesson
+  ) => {
+    if (!lesson) {
+      return false;
+    }
+
+    return completedLessonIds.includes(
+      String(lesson.apiId)
+    );
   };
 
-  const [idNumber,setIdNumber] = useState();
-  async function GiveID() {
-   for (let i = 0; i < 100; i++) {
-    const res =await fetch(`https://pashto-advice-api.onrender.com/api/advice/${i}`);
+  // ==========================================
+  // GET LESSON RESULT
+  // ==========================================
 
-    
-    const data =await res.json();
-    console.log(data.id);
-    setIdNumber(data.id);
-   }
+  const getLessonResult = (
+    lesson
+  ) => {
+    if (!lesson) {
+      return null;
+    }
+
+    return (
+      lessonResults[
+        String(lesson.apiId)
+      ] || null
+    );
+  };
+
+  // ==========================================
+  // CHECK LESSON LOCK
+  // ==========================================
+
+  const isLessonLocked = (
+    lessonNumber
+  ) => {
+    // First lesson is always unlocked
+    if (
+      lessonNumber === 1
+    ) {
+      return false;
+    }
+
+    const previousLesson =
+      lessons[
+        lessonNumber - 2
+      ];
+
+    if (!previousLesson) {
+      return true;
+    }
+
+    return !completedLessonIds.includes(
+      String(
+        previousLesson.apiId
+      )
+    );
+  };
+
+  // ==========================================
+  // LOCKED LESSON
+  // ==========================================
+
+  const handleLockedLessonClick = (
+    lessonId
+  ) => {
+    setLockedLessonId(
+      lessonId
+    );
+
+    setShowLockMessage(
+      true
+    );
+
+    setTimeout(() => {
+      setShowLockMessage(
+        false
+      );
+
+      setLockedLessonId(
+        null
+      );
+    }, 3000);
+  };
+
+  // ==========================================
+  // START LESSON
+  // ==========================================
+
+  const handleStartLesson = (
+    lesson
+  ) => {
+    if (!lesson) {
+      return;
+    }
+
+    if (
+      isLessonLocked(
+        lesson.id
+      )
+    ) {
+      handleLockedLessonClick(
+        lesson.id
+      );
+
+      return;
+    }
+
+    setSelectedId(
+      lesson.id
+    );
+
+    window.location.href =
+      `/Typeing_Step?lesson=${
+        lesson.apiId ||
+        lesson.id
+      }`;
+  };
+
+  // ==========================================
+  // LESSON CLICK
+  // ==========================================
+
+  const handleLessonClick = (
+    lessonNumber
+  ) => {
+    const lesson =
+      lessons[
+        lessonNumber - 1
+      ];
+
+    if (!lesson) {
+      return;
+    }
+
+    // ========================================
+    // CHECK LOCK
+    // ========================================
+
+    if (
+      isLessonLocked(
+        lessonNumber
+      )
+    ) {
+      handleLockedLessonClick(
+        lessonNumber
+      );
+
+      return;
+    }
+
+    setSelectedId(
+      lessonNumber
+    );
+
+    window.location.href =
+      `/Typeing_Step?lesson=${
+        lesson.apiId ||
+        lesson.id
+      }`;
+  };
+
+  // ==========================================
+  // LOADING
+  // ==========================================
+
+  if (isLoading) {
+    return (
+      <div
+        className="
+          min-h-screen
+          bg-[#f5f7fa]
+          flex
+          items-center
+          justify-center
+        "
+        dir="rtl"
+      >
+        <div className="text-center">
+
+          <div
+            className="
+              animate-spin
+              rounded-full
+              h-16
+              w-16
+              border-b-2
+              border-[#3498db]
+              mx-auto
+              mb-4
+            "
+          />
+
+          <p
+            className="
+              text-lg
+              font-semibold
+              text-[#34495e]
+            "
+          >
+            د API څخه ټول درسونه بارول...
+          </p>
+
+          <p
+            className="
+              text-sm
+              text-gray-500
+              mt-2
+            "
+          >
+            مهرباني وکړئ صبر وکړئ
+          </p>
+
+        </div>
+      </div>
+    );
   }
 
-  const handleKeyPress = (e) => {
-    if (!isTyping) return;
+  // ==========================================
+  // ERROR
+  // ==========================================
 
-    const currentText = getCurrentText();
-    const key = e.key;
+  if (
+    apiError &&
+    lessons.length === 0
+  ) {
+    return (
+      <div
+        className="
+          min-h-screen
+          bg-[#f5f7fa]
+          flex
+          items-center
+          justify-center
+        "
+        dir="rtl"
+      >
+        <div
+          className="
+            text-center
+            bg-white
+            p-8
+            rounded-xl
+            shadow-sm
+          "
+        >
 
-    // Handle space
-    if (key === " ") {
-      e.preventDefault();
-      if (currentCharIndex < currentText.length) {
-        const expectedChar = currentText[currentCharIndex];
-        if (key === expectedChar) {
-          setTypedText(typedText + key);
-          setCurrentCharIndex(currentCharIndex + 1);
-          
-          if (startTime) {
-            const elapsed = (Date.now() - startTime) / 60000;
-            const wordsTyped = (currentCharIndex + 1) / 5;
-            setWpm(Math.round(wordsTyped / elapsed));
-          }
-        } else {
-          setErrors(errors + 1);
-          const input = document.getElementById("type-input");
-          if (input) {
-            input.style.borderColor = "#e74c3c";
-            setTimeout(() => {
-              input.style.borderColor = "#d5dadd";
-            }, 300);
-          }
-        }
-      }
+          <div className="text-4xl mb-4">
+            ⚠️
+          </div>
+
+          <p
+            className="
+              text-lg
+              font-semibold
+              text-red-600
+              mb-2
+            "
+          >
+            د API سره ستونزه
+          </p>
+
+          <p
+            className="
+              text-sm
+              text-gray-500
+              mb-4
+            "
+          >
+            {apiError}
+          </p>
+
+          <button
+            onClick={
+              fetchAllLessons
+            }
+            className="
+              px-6
+              py-2
+              bg-[#3498db]
+              text-white
+              rounded-md
+              hover:bg-[#2980b9]
+              transition-colors
+            "
+          >
+            بیا هڅه وکړئ
+          </button>
+
+        </div>
+      </div>
+    );
+  }
+
+  // ==========================================
+  // GROUP LESSONS
+  // ==========================================
+
+  const lessonsPerRow = 5;
+  const rows = [];
+
+  for (
+    let i = 0;
+    i < lessons.length;
+    i += lessonsPerRow
+  ) {
+    rows.push(
+      lessons.slice(
+        i,
+        i + lessonsPerRow
+      )
+    );
+  }
+
+  // ==========================================
+  // GRAPH DATA
+  // ==========================================
+
+  const graphData = [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+  ];
+
+  // ==========================================
+  // CURRENT LEVEL
+  // ==========================================
+
+  const getCurrentLevel = () => {
+    if (
+      completedLessons < 20
+    ) {
+      return "پیل کونکی";
     }
 
-    // Handle Pashto characters
-    if (key in pashtoKeys) {
-      e.preventDefault();
-      if (currentCharIndex < currentText.length) {
-        const expectedChar = currentText[currentCharIndex];
-        if (pashtoKeys[key] === expectedChar) {
-          setTypedText(typedText + key);
-          setCurrentCharIndex(currentCharIndex + 1);
-          
-          if (startTime) {
-            const elapsed = (Date.now() - startTime) / 60000;
-            const wordsTyped = (currentCharIndex + 1) / 5;
-            setWpm(Math.round(wordsTyped / elapsed));
-          }
-        } else {
-          setErrors(errors + 1);
-          const input = document.getElementById("type-input");
-          if (input) {
-            input.style.borderColor = "#e74c3c";
-            setTimeout(() => {
-              input.style.borderColor = "#d5dadd";
-            }, 300);
-          }
-        }
-      }
+    if (
+      completedLessons < 50
+    ) {
+      return "منځنۍ کچه";
     }
 
-    // Check if lesson is complete
-    if (currentCharIndex + 1 >= currentText.length) {
-      setIsTyping(false);
-      if (selectedId < LESSONS.length) {
-        setTimeout(() => {
-          setSelectedId(selectedId + 1);
-          setIsTyping(false);
-          setTypedText("");
-          setCurrentCharIndex(0);
-        }, 1500);
-      }
+    if (
+      completedLessons < 100
+    ) {
+      return "پرمختللی";
     }
+
+    return "ماهر";
   };
 
-  // Get color for typed characters
-  const getCharColor = (index) => {
-    if (index < typedText.length) {
-      const currentText = getCurrentText();
-      if (index < typedText.length && typedText[index] === currentText[index]) {
-        return "text-green-600";
-      } else if (index < typedText.length) {
-        return "text-red-600";
-      }
+  // ==========================================
+  // NEXT GOAL
+  // ==========================================
+
+  const getNextGoal = () => {
+    if (
+      lessons.length === 0
+    ) {
+      return 0;
     }
-    return "text-gray-400";
+
+    const next =
+      Math.ceil(
+        (selectedId + 1) /
+          10
+      ) * 10;
+
+    return Math.min(
+      lessons.length,
+      next
+    );
   };
+
+  // ==========================================
+  // RETURN
+  // ==========================================
 
   return (
-    <div className="min-h-screen bg-[#f5f7fa] text-gray-700" dir="rtl">
+    <div
+      className="
+        min-h-screen
+        bg-[#f5f7fa]
+        text-gray-700
+      "
+      dir="rtl"
+    >
 
       {/* =====================================
-          TOP HEADER
+          LOCK MESSAGE
       ===================================== */}
 
-      <div className="bg-white border-b border-gray-200">
+      {showLockMessage && (
+        <div
+          className="
+            fixed
+            inset-0
+            z-50
+            flex
+            items-center
+            justify-center
+          "
+        >
 
-        <div className="max-w-6xl mx-auto px-5 py-5">
+          <div
+            className="
+              absolute
+              inset-0
+              bg-black
+              bg-opacity-50
+            "
+            onClick={() =>
+              setShowLockMessage(
+                false
+              )
+            }
+          />
 
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+          <div
+            className="
+              relative
+              bg-white
+              rounded-xl
+              shadow-xl
+              p-6
+              max-w-sm
+              w-full
+              mx-4
+              animate-bounce-in
+            "
+          >
 
-            {/* Course Title */}
+            <div className="text-center">
 
-            <div>
-              <h1 className="text-2xl font-semibold text-[#34495e]">
-                د پښتو توري
-              </h1>
+              <div className="text-4xl mb-4">
+                🔒
+              </div>
 
-              <p className="text-sm text-gray-500 mt-1">
-                د پښتو ټول توري زده کړئ
+              <h3
+                className="
+                  text-lg
+                  font-bold
+                  text-[#34495e]
+                  mb-2
+                "
+              >
+                دا درس تړل شوی دی
+              </h3>
+
+              <p
+                className="
+                  text-sm
+                  text-gray-500
+                  mb-4
+                "
+              >
+                درس {lockedLessonId} لا تر اوسه
+                تړلی دی. مهرباني وکړئ لومړی
+                مخکني درسونه بشپړ کړئ.
               </p>
-            </div>
 
-            {/* Statistics */}
-
-            <div className="flex items-center gap-6">
-
-              <div className="text-center">
-                <div className="text-lg font-semibold text-[#3498db]">
-                  {progress}%
-                </div>
-                <div className="text-xs text-gray-400">
-<button onClick={GiveID}>                  پرمختګ
-</button>                </div>
-              </div>
-
-              <div className="h-8 w-px bg-gray-200" />
-
-              <div className="text-center">
-                <div className="text-lg font-semibold text-[#f1c40f]">
-                  ⭐ {Math.floor(completedLessons / 3)}
-                </div>
-                <div className="text-xs text-gray-400">
-                  ستوري
-                </div>
-              </div>
-
-              <div className="h-8 w-px bg-gray-200" />
-
-              <div className="text-center">
-                <div className="text-lg font-semibold text-[#2ecc71]">
-                  {completedLessons * 10}
-                </div>
-                <div className="text-xs text-gray-400">
-                  نمرې
-                </div>
-              </div>
-
-              {isTyping && (
-                <>
-                  <div className="h-8 w-px bg-gray-200" />
-                  <div className="text-center">
-                    <div className="text-lg font-semibold text-[#9b59b6]">
-                      {wpm}
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      WPM
-                    </div>
-                  </div>
-                </>
-              )}
+              <button
+                onClick={() =>
+                  setShowLockMessage(
+                    false
+                  )
+                }
+                className="
+                  px-6
+                  py-2
+                  bg-[#3498db]
+                  text-white
+                  rounded-md
+                  hover:bg-[#2980b9]
+                  transition-colors
+                "
+              >
+                ښه
+              </button>
 
             </div>
 
           </div>
 
-          {/* Progress */}
+        </div>
+      )}
+
+      {/* =====================================
+          HEADER
+      ===================================== */}
+
+      <header
+        className="
+          bg-white
+          border-b
+          border-gray-200
+        "
+      >
+
+        <div
+          className="
+            max-w-6xl
+            mx-auto
+            px-5
+            py-5
+          "
+        >
+
+          <div
+            className="
+              flex
+              flex-col
+              md:flex-row
+              md:items-center
+              md:justify-between
+              gap-5
+            "
+          >
+
+            {/* TITLE */}
+
+            <div>
+
+              <h1
+                className="
+                  text-2xl
+                  font-semibold
+                  text-[#34495e]
+                "
+              >
+                د پښتو ټایپنګ زده کړه
+              </h1>
+
+              <p
+                className="
+                  text-sm
+                  text-gray-500
+                  mt-1
+                "
+              >
+                ټول درسونه: {lessons.length}
+              </p>
+
+            </div>
+
+
+            {/* STATISTICS */}
+
+            <div
+              className="
+                flex
+                items-center
+                gap-6
+              "
+            >
+
+              {/* PROGRESS */}
+
+              <div className="text-center">
+
+                <div
+                  className="
+                    text-lg
+                    font-semibold
+                    text-[#3498db]
+                  "
+                >
+                  {progress}%
+                </div>
+
+                <div
+                  className="
+                    text-xs
+                    text-gray-400
+                  "
+                >
+                  پرمختګ
+                </div>
+
+              </div>
+
+
+              <div
+                className="
+                  h-8
+                  w-px
+                  bg-gray-200
+                "
+              />
+
+
+              {/* STARS */}
+
+              <div className="text-center">
+
+                <div
+                  className="
+                    text-lg
+                    font-semibold
+                    text-[#f1c40f]
+                  "
+                >
+                  ⭐ {stars}
+                </div>
+
+                <div
+                  className="
+                    text-xs
+                    text-gray-400
+                  "
+                >
+                  ستوري
+                </div>
+
+              </div>
+
+
+              <div
+                className="
+                  h-8
+                  w-px
+                  bg-gray-200
+                "
+              />
+
+
+              {/* SCORE */}
+
+              <div className="text-center">
+
+                <div
+                  className="
+                    text-lg
+                    font-semibold
+                    text-[#2ecc71]
+                  "
+                >
+                  {totalScore}
+                </div>
+
+                <div
+                  className="
+                    text-xs
+                    text-gray-400
+                  "
+                >
+                  نمرې
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {/* PROGRESS BAR */}
 
           <div className="mt-5">
 
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="
+                h-2
+                bg-gray-200
+                rounded-full
+                overflow-hidden
+              "
+            >
 
               <div
-                className="h-full bg-[#2ecc71] transition-all duration-500"
+                className="
+                  h-full
+                  bg-[#2ecc71]
+                  transition-all
+                  duration-500
+                "
                 style={{
                   width: `${progress}%`,
                 }}
@@ -312,419 +1069,1621 @@ export default function HomeRowSteps() {
 
         </div>
 
-      </div>
+      </header>
+
 
       {/* =====================================
-          COURSE AREA
+          MAIN
       ===================================== */}
 
-      <main className="max-w-6xl mx-auto px-5 py-10">
+      <main
+        className="
+          max-w-6xl
+          mx-auto
+          px-5
+          py-10
+        "
+      >
 
-        {/* Section Header */}
+        {/* =====================================
+            SECTION TITLE
+        ===================================== */}
 
-        <div className="text-center mb-10">
+        <div
+          className="
+            text-center
+            mb-12
+          "
+        >
 
-          <h2 className="text-xl font-semibold text-[#34495e]">
-            د پښتو توري درسونه
+          <h2
+            className="
+              text-xl
+              font-semibold
+              text-[#34495e]
+            "
+          >
+            د پښتو ټایپنګ ټول درسونه
           </h2>
 
-          <p className="text-sm text-gray-400 mt-2">
-            د پښتو توري د ټایپنګ لپاره زده کړئ
+          <p
+            className="
+              text-sm
+              text-gray-400
+              mt-2
+            "
+          >
+            له ۱ څخه تر {lessons.length} پورې درسونه
           </p>
-        <p>{idNumber}</p>
+
         </div>
+
 
         {/* =====================================
             LESSON PATH
         ===================================== */}
 
-        <div className="relative max-w-5xl mx-auto">
+        <div
+          className="
+            relative
+            max-w-5xl
+            mx-auto
+          "
+        >
 
-          {/* Desktop Path Line */}
-          <div className="hidden md:block absolute top-[38px] left-[5%] right-[5%] h-[5px] bg-[#dfe6e9] rounded-full" />
-
-          {/* Progress Path */}
           <div
-            className="hidden md:block absolute top-[38px] left-[5%] h-[5px] bg-[#2ecc71] rounded-full transition-all duration-500"
-            style={{
-              width:
-                LESSONS.length > 1
-                  ? `${(completedLessons / (LESSONS.length - 1)) * 90}%`
-                  : "0%",
-            }}
-          />
+            className="
+              space-y-16
+              md:space-y-20
+            "
+          >
 
-          {/* Lessons Grid - 5 per row */}
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-y-12 md:gap-y-16">
-            
-            {LESSONS.map((lesson) => {
-              const isCompleted = lesson.id < selectedId;
-              const isCurrent = lesson.id === selectedId;
-              const isLocked = lesson.id > selectedId + 1;
+            {rows.map(
+              (
+                row,
+                rowIndex
+              ) => {
 
-              return (
-                <div
-                  key={lesson.id}
-                  className="relative flex flex-col items-center"
-                >
-                  {/* =================================
-                      LESSON CIRCLE
-                  ================================= */}
-                  
-                  <button
-                    onClick={() => {
-                      if (!isLocked && !isTyping) {
-                        setSelectedId(lesson.id);
-                        setIsTyping(false);
-                        setTypedText("");
-                        setCurrentCharIndex(0);
-                      }
-                      if(lesson.id===1){
-                        navigate('/TypingTest')
-                      }
-                    }}
-                    disabled={isLocked || isTyping}
-                    className={`
-                      relative z-10
-                      w-[72px] h-[72px]
-                      rounded-full
-                      flex items-center justify-center
-                      transition-all duration-200
-                      border-[4px]
-                      shadow-sm
-                      ${
-                        isCompleted
-                          ? `
-                            bg-[#2ecc71]
-                            border-[#27ae60]
-                            text-white
-                            hover:scale-105
-                            hover:shadow-md
-                          `
-                          : isCurrent
-                          ? `
-                            bg-[#3498db]
-                            border-[#2980b9]
-                            text-white
-                            scale-110
-                            shadow-lg
-                            shadow-blue-200
-                          `
-                          : `
-                            bg-[#ecf0f1]
-                            border-[#d5dadd]
-                            text-[#95a5a6]
-                          `
-                      }
-                    `}
+                const rowStartIndex =
+                  rowIndex *
+                  lessonsPerRow;
+
+                return (
+                  <div
+                    key={
+                      rowIndex
+                    }
+                    className="relative"
                   >
-                    {/* Completed */}
-                    {isCompleted ? (
-                      <svg
-                        className="w-8 h-8"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    ) : isLocked ? (
-                      <svg
-                        className="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                      >
-                        <rect
-                          x="5"
-                          y="10"
-                          width="14"
-                          height="11"
-                          rx="2"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          d="M8 10V7a4 4 0 018 0v3"
-                        />
-                      </svg>
-                    ) : (
-                      <span className="text-xl font-bold">
-                        {lesson.id}
-                      </span>
-                    )}
 
-                    {/* Current indicator */}
-                    {isCurrent && (
-                      <span className="absolute -top-3 bg-[#3498db] text-white text-[9px] uppercase font-bold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
-                        اوسنی
-                      </span>
-                    )}
-                  </button>
+                    <div
+                      className="
+                        grid
+                        grid-cols-5
+                        gap-6
+                        md:gap-6
+                        lg:gap-14
+                      "
+                      dir="rtl"
+                    >
 
-                  {/* =================================
-                      LESSON TEXT
-                  ================================= */}
-                  
-                  <div className="text-center mt-3 px-1 max-w-[90px]">
-                    <h3
-                      className={`
-                        text-xs font-semibold leading-tight
-                        ${
-                          isCurrent
-                            ? "text-[#2980b9]"
-                            : isCompleted
-                            ? "text-[#34495e]"
-                            : "text-gray-400"
+                      {row.map(
+                        (
+                          lesson,
+                          colIndex
+                        ) => {
+
+                          const lessonNumber =
+                            rowStartIndex +
+                            colIndex +
+                            1;
+
+                          // =================================
+                          // SAVED COMPLETION
+                          // =================================
+
+                          const isCompleted =
+                            isLessonCompleted(
+                              lesson
+                            );
+
+                          // =================================
+                          // CURRENT LESSON
+                          // =================================
+
+                          const isCurrent =
+                            lessonNumber ===
+                            selectedId &&
+                            !isCompleted;
+
+                          // =================================
+                          // LOCK
+                          // =================================
+
+                          const isLocked =
+                            isLessonLocked(
+                              lessonNumber
+                            );
+
+                          const hasNextLesson =
+                            colIndex <
+                            row.length -
+                              1;
+
+                          return (
+                            <div
+                              key={
+                                lesson.apiId ||
+                                colIndex
+                              }
+                              className="
+                                relative
+                                flex
+                                flex-col
+                                items-center
+                              "
+                            >
+
+                              {/* CONNECTOR */}
+
+                              {hasNextLesson && (
+                                <div
+                                  className={` 
+                                    absolute
+                                    z-0
+
+                                    top-[30px]
+                                    sm:top-[37px]
+                                    md:top-[45px]
+                                    lg:top-[50px]
+
+                                    right-[50%]
+
+                                    w-[calc(100%+1.5rem)]
+                                    lg:w-[calc(100%+3.5rem)]
+
+                                    h-[5px]
+
+                                    rounded-full
+
+                                    hidden
+                                    md:block
+
+                                    transition-all
+                                    duration-500
+
+                                    ${
+                                      isCompleted
+                                        ? "bg-[#2ecc71]"
+                                        : "bg-[#dfe6e9]"
+                                    }
+                                  `}
+                                />
+                              )}
+
+
+                              {/* LESSON CIRCLE */}
+
+                              <button
+                                onClick={() => {
+
+                                  if (
+                                    isLocked
+                                  ) {
+
+                                    handleLockedLessonClick(
+                                      lessonNumber
+                                    );
+
+                                  } else {
+
+                                    handleLessonClick(
+                                      lessonNumber
+                                    );
+
+                                  }
+
+                                }}
+                                className={` 
+                                  relative 
+                                  z-10 
+
+                                  w-[60px] 
+                                  h-[60px] 
+
+                                  sm:w-[75px] 
+                                  sm:h-[75px] 
+
+                                  md:w-[90px] 
+                                  md:h-[90px] 
+
+                                  lg:w-[100px] 
+                                  lg:h-[100px] 
+
+                                  rounded-full 
+
+                                  flex 
+                                  items-center 
+                                  justify-center 
+
+                                  transition-all 
+                                  duration-200 
+
+                                  border-[4px] 
+
+                                  shadow-sm 
+
+                                  ${
+                                    isCompleted
+                                      ? ` 
+                                        bg-[#2ecc71] 
+                                        border-[#27ae60] 
+                                        text-white 
+                                        hover:scale-105 
+                                        hover:shadow-md 
+                                        cursor-pointer 
+                                      `
+                                      : isCurrent
+                                      ? ` 
+                                        bg-[#3498db] 
+                                        border-[#2980b9] 
+                                        text-white 
+                                        scale-110 
+                                        shadow-lg 
+                                        shadow-blue-200 
+                                        cursor-pointer 
+                                      `
+                                      : isLocked
+                                      ? ` 
+                                        bg-[#ecf0f1] 
+                                        border-[#d5dadd] 
+                                        text-[#95a5a6] 
+                                        cursor-not-allowed 
+                                      `
+                                      : ` 
+                                        bg-[#ecf0f1] 
+                                        border-[#d5dadd] 
+                                        text-[#95a5a6] 
+                                        cursor-pointer 
+                                      `
+                                  } 
+                                `}
+                              >
+
+                                {isCompleted ? (
+
+                                  <svg
+                                    className="
+                                      w-7
+                                      h-7
+                                      md:w-9
+                                      md:h-9
+                                      lg:w-10
+                                      lg:h-10
+                                    "
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="3"
+                                    viewBox="0 0 24 24"
+                                  >
+
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="
+                                        M5 13l4 4L19 7
+                                      "
+                                    />
+
+                                  </svg>
+
+                                ) : (
+
+                                  <span
+                                    className="
+                                      text-lg
+                                      md:text-xl
+                                      lg:text-2xl
+                                      font-bold
+                                    "
+                                  >
+                                    {lessonNumber}
+                                  </span>
+
+                                )}
+
+                                {/* CURRENT */}
+
+                                {isCurrent && (
+                                  <span
+                                    className="
+                                      absolute
+                                      -top-3
+                                      bg-[#3498db]
+                                      text-white
+                                      text-[8px]
+                                      md:text-[9px]
+                                      lg:text-[10px]
+                                      font-bold
+                                      px-2
+                                      md:px-2.5
+                                      py-0.5
+                                      rounded-full
+                                      shadow-sm
+                                      whitespace-nowrap
+                                    "
+                                  >
+                                    اوسنی
+                                  </span>
+                                )}
+
+                              </button>
+
+
+                              {/* LESSON INFORMATION */}
+
+                              <div
+                                className="
+                                  text-center
+                                  mt-3
+                                  px-1
+                                  max-w-[80px]
+                                  md:max-w-[100px]
+                                  lg:max-w-[120px]
+                                "
+                              >
+
+                                <h3
+                                  className={` 
+                                    text-[10px]
+                                    md:text-[13px]
+                                    lg:text-[15px]
+
+                                    font-semibold
+                                    leading-tight
+
+                                    truncate
+
+                                    ${
+                                      isCurrent
+                                        ? "text-[#2980b9]"
+                                        : isCompleted
+                                        ? "text-[#34495e]"
+                                        : "text-gray-400"
+                                    }
+                                  `}
+                                >
+                                  درس {lessonNumber}
+                                </h3>
+
+                                <p
+                                  className={` 
+                                    text-[9px]
+                                    md:text-[11px]
+                                    lg:text-[13px]
+
+                                    mt-1
+
+                                    truncate
+
+                                    ${
+                                      isCurrent
+                                        ? "text-[#3498db]"
+                                        : "text-gray-400"
+                                    }
+                                  `}
+                                  title={
+                                    lesson.subtitle
+                                  }
+                                >
+                                  {lesson.subtitle}
+                                </p>
+
+                              </div>
+
+                            </div>
+                          );
                         }
-                      `}
-                    >
-                      {lesson.title}
-                    </h3>
-                    <p
-                      className={`
-                        text-[10px] mt-0.5
-                        ${
-                          isCurrent
-                            ? "text-[#3498db]"
-                            : "text-gray-400"
-                        }
-                      `}
-                    >
-                      {lesson.subtitle}
-                    </p>
+                      )}
+
+                    </div>
+
                   </div>
-                </div>
-              );
-            })}
+                );
+              }
+            )}
+
           </div>
+
         </div>
 
-        {/* =====================================
-            SELECTED LESSON PANEL WITH TYPETONE
-        ===================================== */}
 
-        <div className="mt-14 max-w-3xl mx-auto">
+        {/* ==========================================
+            LEARNING DASHBOARD
+        ========================================== */}
 
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <section
+          className="
+            max-w-6xl
+            mx-auto
+            mt-20
+          "
+        >
 
-            {/* Panel Header */}
+          {/* DASHBOARD HEADER */}
 
-            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+          <div
+            className="
+              text-center
+              mb-10
+            "
+          >
 
-              <div>
+            <h2
+              className="
+                text-2xl
+                font-bold
+                text-[#34495e]
+              "
+            >
+              📊 د زده کړې پرمختګ
+            </h2>
 
-                <div className="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                  غوره شوی درس
+            <p
+              className="
+                text-sm
+                text-gray-400
+                mt-2
+              "
+            >
+              ستاسو د پښتو ټایپنګ د زده کړې عمومي وضعیت
+            </p>
+
+          </div>
+
+
+          {/* ==========================================
+              STAT CARDS
+          ========================================== */}
+
+          <div
+            className="
+              grid
+              grid-cols-2
+              md:grid-cols-4
+              gap-4
+              mb-8
+            "
+          >
+
+            {/* COMPLETED */}
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-5
+                shadow-sm
+                hover:shadow-md
+                transition
+              "
+            >
+
+              <div
+                className="
+                  w-11
+                  h-11
+                  rounded-xl
+                  bg-green-100
+                  flex
+                  items-center
+                  justify-center
+                  text-xl
+                  mb-4
+                "
+              >
+                ✓
+              </div>
+
+              <p
+                className="
+                  text-xs
+                  text-gray-400
+                "
+              >
+                بشپړ شوي درسونه
+              </p>
+
+              <h3
+                className="
+                  text-2xl
+                  font-bold
+                  text-[#2ecc71]
+                  mt-1
+                "
+              >
+                {completedLessons}
+              </h3>
+
+              <p
+                className="
+                  text-xs
+                  text-gray-400
+                  mt-1
+                "
+              >
+                له {lessons.length} درسونو څخه
+              </p>
+
+            </div>
+
+
+            {/* REMAINING */}
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-5
+                shadow-sm
+                hover:shadow-md
+                transition
+              "
+            >
+
+              <div
+                className="
+                  w-11
+                  h-11
+                  rounded-xl
+                  bg-blue-100
+                  flex
+                  items-center
+                  justify-center
+                  text-xl
+                  mb-4
+                "
+              >
+                📚
+              </div>
+
+              <p
+                className="
+                  text-xs
+                  text-gray-400
+                "
+              >
+                پاتې درسونه
+              </p>
+
+              <h3
+                className="
+                  text-2xl
+                  font-bold
+                  text-[#3498db]
+                  mt-1
+                "
+              >
+                {remainingLessons}
+              </h3>
+
+              <p
+                className="
+                  text-xs
+                  text-gray-400
+                  mt-1
+                "
+              >
+                د زده کړې لپاره
+              </p>
+
+            </div>
+
+
+            {/* SCORE */}
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-5
+                shadow-sm
+                hover:shadow-md
+                transition
+              "
+            >
+
+              <div
+                className="
+                  w-11
+                  h-11
+                  rounded-xl
+                  bg-yellow-100
+                  flex
+                  items-center
+                  justify-center
+                  text-xl
+                  mb-4
+                "
+              >
+                🏆
+              </div>
+
+              <p
+                className="
+                  text-xs
+                  text-gray-400
+                "
+              >
+                ټولې نمرې
+              </p>
+
+              <h3
+                className="
+                  text-2xl
+                  font-bold
+                  text-[#f1c40f]
+                  mt-1
+                "
+              >
+                {totalScore}
+              </h3>
+
+              <p
+                className="
+                  text-xs
+                  text-gray-400
+                  mt-1
+                "
+              >
+                ترلاسه شوې نمرې
+              </p>
+
+            </div>
+
+
+            {/* STARS */}
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-5
+                shadow-sm
+                hover:shadow-md
+                transition
+              "
+            >
+
+              <div
+                className="
+                  w-11
+                  h-11
+                  rounded-xl
+                  bg-orange-100
+                  flex
+                  items-center
+                  justify-center
+                  text-xl
+                  mb-4
+                "
+              >
+                ⭐
+              </div>
+
+              <p
+                className="
+                  text-xs
+                  text-gray-400
+                "
+              >
+                ستوري
+              </p>
+
+              <h3
+                className="
+                  text-2xl
+                  font-bold
+                  text-orange-500
+                  mt-1
+                "
+              >
+                {stars}
+              </h3>
+
+              <p
+                className="
+                  text-xs
+                  text-gray-400
+                  mt-1
+                "
+              >
+                ترلاسه شوي ستوري
+              </p>
+
+            </div>
+
+          </div>
+
+
+          {/* ==========================================
+              GRAPH + PROGRESS
+          ========================================== */}
+
+          <div
+            className="
+              grid
+              grid-cols-1
+              lg:grid-cols-2
+              gap-6
+            "
+          >
+
+            {/* ========================================
+                LEARNING GRAPH
+            ======================================== */}
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-6
+                shadow-sm
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-between
+                  mb-6
+                "
+              >
+
+                <div>
+
+                  <h3
+                    className="
+                      text-lg
+                      font-bold
+                      text-[#34495e]
+                    "
+                  >
+                    📈 د زده کړې ګراف
+                  </h3>
+
+                  <p
+                    className="
+                      text-xs
+                      text-gray-400
+                      mt-1
+                    "
+                  >
+                    د بشپړو شوو درسونو پرمختګ
+                  </p>
+
                 </div>
 
-                <h3 className="text-lg font-semibold text-[#34495e] mt-1">
-                  درس {selectedId}:{" "}
-                  {LESSONS[selectedId - 1]?.title}
+                <div
+                  className="
+                    px-3
+                    py-1.5
+                    bg-green-50
+                    text-green-600
+                    rounded-lg
+                    text-xs
+                    font-semibold
+                  "
+                >
+                  {progress}% بشپړ
+                </div>
+
+              </div>
+
+
+              {/* GRAPH */}
+
+              <div
+                className="
+                  h-64
+                  flex
+                  items-end
+                  gap-2
+                  border-b
+                  border-gray-200
+                  relative
+                  px-2
+                "
+              >
+
+                {/* GRID LINE 1 */}
+
+                <div
+                  className="
+                    absolute
+                    left-0
+                    right-0
+                    top-0
+                    border-t
+                    border-dashed
+                    border-gray-100
+                  "
+                />
+
+
+                {/* GRID LINE 2 */}
+
+                <div
+                  className="
+                    absolute
+                    left-0
+                    right-0
+                    top-1/4
+                    border-t
+                    border-dashed
+                    border-gray-100
+                  "
+                />
+
+
+                {/* GRID LINE 3 */}
+
+                <div
+                  className="
+                    absolute
+                    left-0
+                    right-0
+                    top-2/4
+                    border-t
+                    border-dashed
+                    border-gray-100
+                  "
+                />
+
+
+                {/* GRID LINE 4 */}
+
+                <div
+                  className="
+                    absolute
+                    left-0
+                    right-0
+                    top-3/4
+                    border-t
+                    border-dashed
+                    border-gray-100
+                  "
+                />
+
+
+                {/* GRAPH BARS */}
+
+                {graphData.map(
+                  (
+                    value,
+                    index
+                  ) => {
+
+                    const lessonProgress =
+                      Math.min(
+                        progress,
+                        value
+                      );
+
+                    return (
+                      <div
+                        key={index}
+                        className="
+                          flex-1
+                          h-full
+                          flex
+                          items-end
+                          justify-center
+                          relative
+                          z-10
+                        "
+                      >
+
+                        <div
+                          className="
+                            w-full
+                            max-w-[28px]
+                            bg-[#3498db]
+                            rounded-t-lg
+                            transition-all
+                            duration-500
+                            hover:bg-[#2980b9]
+                          "
+                          style={{
+                            height: `${Math.max(
+                              8,
+                              lessonProgress
+                            )}%`,
+                          }}
+                        />
+
+                      </div>
+                    );
+                  }
+                )}
+
+              </div>
+
+
+              {/* GRAPH LABELS */}
+
+              <div
+                className="
+                  flex
+                  justify-between
+                  text-[10px]
+                  text-gray-400
+                  mt-3
+                "
+              >
+
+                <span>۱</span>
+                <span>۱۰</span>
+                <span>۲۰</span>
+                <span>۳۰</span>
+                <span>۴۰</span>
+                <span>۵۰</span>
+                <span>۶۰</span>
+                <span>۷۰</span>
+
+              </div>
+
+            </div>
+
+
+            {/* ========================================
+                OVERALL PROGRESS
+            ======================================== */}
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-6
+                shadow-sm
+              "
+            >
+
+              <div className="mb-6">
+
+                <h3
+                  className="
+                    text-lg
+                    font-bold
+                    text-[#34495e]
+                  "
+                >
+                  🎯 د زده کړې حالت
                 </h3>
 
+                <p
+                  className="
+                    text-xs
+                    text-gray-400
+                    mt-1
+                  "
+                >
+                  ستاسو د کورس عمومي پرمختګ
+                </p>
+
               </div>
 
-              <div className="w-12 h-12 rounded-full bg-[#3498db] text-white flex items-center justify-center font-bold">
-                {selectedId}
-              </div>
 
-            </div>
+              {/* CIRCLE */}
 
-            {/* Panel Body - TypeTone Area */}
+              <div
+                className="
+                  flex
+                  justify-center
+                  mb-8
+                "
+              >
 
-            <div className="px-6 py-6">
+                <div
+                  className="
+                    w-40
+                    h-40
+                    rounded-full
+                    flex
+                    items-center
+                    justify-center
+                    relative
+                  "
+                  style={{
+                    background: `
+                      conic-gradient(
+                        #2ecc71 ${progress}%,
+                        #ecf0f1 ${progress}% 100%
+                      )
+                    `,
+                  }}
+                >
 
-              {!isTyping ? (
-                // Lesson Info & Start Button
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
-
-                  <div>
-
-                    <p className="text-sm text-gray-500">
-                      راتلونکی ګام
-                    </p>
-
-                    <p className="font-semibold text-[#34495e] mt-1">
-                      {LESSONS[selectedId - 1]?.subtitle}
-                    </p>
-
-                    {selectedId <= LESSONS.length && (
-                      <div className="mt-2">
-                        <p className="text-xs text-gray-400">
-                          د تمرین توري:
-                        </p>
-                        <p className="text-xl font-bold text-[#34495e] mt-1">
-                          {getCurrentText()}
-                        </p>
-                      </div>
-                    )}
-
-                  </div>
-
-                  <button
-                    onClick={handleStartLesson}
-                    disabled={selectedId > LESSONS.length}
-                    className="px-7 py-3 bg-[#3498db] hover:bg-[#2980b9] text-white rounded-md font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  <div
+                    className="
+                      w-32
+                      h-32
+                      bg-white
+                      rounded-full
+                      flex
+                      flex-col
+                      items-center
+                      justify-center
+                    "
                   >
-                    درس پیل کړئ
-                  </button>
 
-                </div>
-              ) : (
-                // TypeTone Practice Area
-                <div>
-                  {/* Progress bar for current lesson */}
-                  <div className="mb-4">
-                    <div className="flex justify-between text-xs text-gray-500 mb-1">
-                      <span>پرمختګ</span>
-                      <span>{Math.round((currentCharIndex / getCurrentText().length) * 100)}%</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-[#3498db] transition-all duration-300"
-                        style={{
-                          width: `${(currentCharIndex / getCurrentText().length) * 100}%`
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Typing display with Pashto letters */}
-                  <div className="bg-gray-50 rounded-lg p-4 mb-4 min-h-[100px] flex items-center justify-center">
-                    <div className="text-3xl leading-relaxed font-bold" dir="rtl">
-                      {getCurrentText().split("").map((char, index) => (
-                        <span
-                          key={index}
-                          className={`
-                            ${index < typedText.length ? 
-                              typedText[index] === char ? "text-green-600" : "text-red-600 bg-red-100"
-                              : "text-gray-400"
-                            }
-                            ${index === currentCharIndex && index === typedText.length ? "bg-blue-200 animate-pulse" : ""}
-                            transition-colors duration-150
-                            inline-block px-1
-                          `}
-                        >
-                          {char === " " ? "␣" : char}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Keyboard hint */}
-                  <div className="bg-blue-50 rounded-lg p-3 mb-4 border border-blue-200">
-                    <p className="text-sm text-blue-700 text-center">
-                      💡 لارښود: د پښتو توري د کیبورډ په منځنۍ کرښه کې موقعیت لري
-                    </p>
-                    <div className="flex justify-center gap-1 mt-2 flex-wrap">
-                      {getCurrentText().replace(/\s/g, '').split('').slice(0, 10).map((char, idx) => (
-                        <span key={idx} className="bg-white px-2 py-1 rounded border border-blue-200 text-sm font-bold">
-                          {char}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Typing input (hidden) */}
-                  <input
-                    id="type-input"
-                    type="text"
-                    className="absolute opacity-0 w-0 h-0"
-                    autoFocus
-                    onKeyDown={handleKeyPress}
-                    value={typedText}
-                    onChange={() => {}}
-                  />
-
-                  {/* Stats and controls */}
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex gap-4">
-                      <span>غلطۍ: <span className="text-red-600 font-semibold">{errors}</span></span>
-                      <span>WPM: <span className="text-purple-600 font-semibold">{wpm}</span></span>
-                      <span>د توري شمېر: <span className="text-blue-600 font-semibold">{getCurrentText().replace(/\s/g, '').length}</span></span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setIsTyping(false);
-                        setTypedText("");
-                        setCurrentCharIndex(0);
-                        setErrors(0);
-                      }}
-                      className="text-red-500 hover:text-red-700 text-sm font-semibold"
+                    <span
+                      className="
+                        text-3xl
+                        font-bold
+                        text-[#34495e]
+                      "
                     >
-                      بندول
-                    </button>
+                      {progress}%
+                    </span>
+
+                    <span
+                      className="
+                        text-xs
+                        text-gray-400
+                        mt-1
+                      "
+                    >
+                      بشپړ شوی
+                    </span>
+
                   </div>
 
-                  {/* Completion message */}
-                  {currentCharIndex >= getCurrentText().length && (
-                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-center">
-                      <p className="text-green-700 font-semibold text-lg">
-                        ✅ مبارک شه! درس بشپړ شو! 🎉
-                      </p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        غلطۍ: {errors} | WPM: {wpm} | ټول توري: {getCurrentText().replace(/\s/g, '').length}
-                      </p>
-                    </div>
-                  )}
                 </div>
-              )}
+
+              </div>
+
+
+              {/* PROGRESS ITEMS */}
+
+              <div className="space-y-5">
+
+                {/* LESSON PROGRESS */}
+
+                <div>
+
+                  <div
+                    className="
+                      flex
+                      justify-between
+                      text-xs
+                      mb-2
+                    "
+                  >
+
+                    <span className="text-gray-500">
+                      د درسونو پرمختګ
+                    </span>
+
+                    <span
+                      className="
+                        font-semibold
+                        text-[#2ecc71]
+                      "
+                    >
+                      {completedLessons}/
+                      {lessons.length}
+                    </span>
+
+                  </div>
+
+                  <div
+                    className="
+                      h-2
+                      bg-gray-100
+                      rounded-full
+                      overflow-hidden
+                    "
+                  >
+
+                    <div
+                      className="
+                        h-full
+                        bg-[#2ecc71]
+                        rounded-full
+                        transition-all
+                        duration-500
+                      "
+                      style={{
+                        width: `${progress}%`,
+                      }}
+                    />
+
+                  </div>
+
+                </div>
+
+
+                {/* SCORE PROGRESS */}
+
+                <div>
+
+                  <div
+                    className="
+                      flex
+                      justify-between
+                      text-xs
+                      mb-2
+                    "
+                  >
+
+                    <span className="text-gray-500">
+                      د نمرې هدف
+                    </span>
+
+                    <span
+                      className="
+                        font-semibold
+                        text-[#3498db]
+                      "
+                    >
+                      {Math.min(
+                        100,
+                        completedLessons *
+                          10
+                      )}%
+                    </span>
+
+                  </div>
+
+                  <div
+                    className="
+                      h-2
+                      bg-gray-100
+                      rounded-full
+                      overflow-hidden
+                    "
+                  >
+
+                    <div
+                      className="
+                        h-full
+                        bg-[#3498db]
+                        rounded-full
+                        transition-all
+                        duration-500
+                      "
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          completedLessons *
+                            10
+                        )}%`,
+                      }}
+                    />
+
+                  </div>
+
+                </div>
+
+
+                {/* STAR PROGRESS */}
+
+                <div>
+
+                  <div
+                    className="
+                      flex
+                      justify-between
+                      text-xs
+                      mb-2
+                    "
+                  >
+
+                    <span className="text-gray-500">
+                      د ستورو پرمختګ
+                    </span>
+
+                    <span
+                      className="
+                        font-semibold
+                        text-yellow-500
+                      "
+                    >
+                      {stars}
+                    </span>
+
+                  </div>
+
+                  <div
+                    className="
+                      h-2
+                      bg-gray-100
+                      rounded-full
+                      overflow-hidden
+                    "
+                  >
+
+                    <div
+                      className="
+                        h-full
+                        bg-yellow-400
+                        rounded-full
+                        transition-all
+                        duration-500
+                      "
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          (completedLessons %
+                            10) *
+                            10
+                        )}%`,
+                      }}
+                    />
+
+                  </div>
+
+                </div>
+
+              </div>
 
             </div>
 
           </div>
 
-        </div>
 
-        {/* =====================================
-            LEGEND
-        ===================================== */}
+          {/* ==========================================
+              LEARNING INFORMATION
+          ========================================== */}
 
-        <div className="flex justify-center items-center gap-6 mt-8 text-xs text-gray-400">
+          <div
+            className="
+              grid
+              grid-cols-1
+              md:grid-cols-3
+              gap-6
+              mt-6
+            "
+          >
 
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#2ecc71]" />
-            بشپړ شوی
-          </div>
+            {/* CURRENT LEVEL */}
 
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#3498db]" />
-            اوسنی
-          </div>
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-6
+                shadow-sm
+              "
+            >
 
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#d5dadd]" />
-            تړل شوی
-          </div>
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-4
+                "
+              >
 
-        </div>
+                <div
+                  className="
+                    w-12
+                    h-12
+                    rounded-xl
+                    bg-blue-50
+                    flex
+                    items-center
+                    justify-center
+                    text-xl
+                  "
+                >
+                  🎓
+                </div>
 
-        {/* =====================================
-            PASHTO ALPHABET REFERENCE
-        ===================================== */}
+                <div>
 
-        <div className="mt-10 max-w-3xl mx-auto">
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
-            <h4 className="text-center text-sm font-semibold text-gray-600 mb-3">
-              د پښتو الفبا ټول توري
-            </h4>
-            <div className="flex flex-wrap justify-center gap-2">
-              {['ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی', 'ء', 'آ', 'أ', 'إ', 'ة'].map((char, idx) => (
-                <span key={idx} className="inline-block w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-xl font-bold hover:bg-blue-100 transition-colors cursor-default">
-                  {char}
-                </span>
-              ))}
+                  <p
+                    className="
+                      text-xs
+                      text-gray-400
+                    "
+                  >
+                    اوسنی پړاو
+                  </p>
+
+                  <h3
+                    className="
+                      font-bold
+                      text-[#34495e]
+                      mt-1
+                    "
+                  >
+                    {getCurrentLevel()}
+                  </h3>
+
+                </div>
+
+              </div>
+
             </div>
+
+
+            {/* STREAK */}
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-6
+                shadow-sm
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-4
+                "
+              >
+
+                <div
+                  className="
+                    w-12
+                    h-12
+                    rounded-xl
+                    bg-orange-50
+                    flex
+                    items-center
+                    justify-center
+                    text-xl
+                  "
+                >
+                  🔥
+                </div>
+
+                <div>
+
+                  <p
+                    className="
+                      text-xs
+                      text-gray-400
+                    "
+                  >
+                    د زده کړې لړۍ
+                  </p>
+
+                  <h3
+                    className="
+                      font-bold
+                      text-[#34495e]
+                      mt-1
+                    "
+                  >
+                    {completedLessons > 0
+                      ? `${Math.min(
+                          completedLessons,
+                          30
+                        )} ورځې`
+                      : "لا پیل نه دی شوی"}
+                  </h3>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* GOAL */}
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                p-6
+                shadow-sm
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-4
+                "
+              >
+
+                <div
+                  className="
+                    w-12
+                    h-12
+                    rounded-xl
+                    bg-green-50
+                    flex
+                    items-center
+                    justify-center
+                    text-xl
+                  "
+                >
+                  🚀
+                </div>
+
+                <div>
+
+                  <p
+                    className="
+                      text-xs
+                      text-gray-400
+                    "
+                  >
+                    راتلونکی هدف
+                  </p>
+
+                  <h3
+                    className="
+                      font-bold
+                      text-[#34495e]
+                      mt-1
+                    "
+                  >
+                    درس {getNextGoal()}
+                  </h3>
+
+                  <p
+                    className="
+                      text-[11px]
+                      text-gray-400
+                      mt-1
+                    "
+                  >
+                    دې درس ته ځان ورسوه
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
           </div>
-        </div>
+
+
+          {/* ==========================================
+              MOTIVATION
+          ========================================== */}
+
+          <div
+            className="
+              mt-8
+              bg-[#34495e]
+              rounded-2xl
+              p-6
+              md:p-8
+              text-white
+              flex
+              flex-col
+              md:flex-row
+              items-center
+              justify-between
+              gap-6
+            "
+          >
+
+            <div>
+
+              <h3
+                className="
+                  text-xl
+                  font-bold
+                "
+              >
+                💪 خپل تمرین ته دوام ورکړئ!
+              </h3>
+
+              <p
+                className="
+                  text-sm
+                  text-gray-300
+                  mt-2
+                "
+              >
+                هره ورځ لږ تمرین کول ستاسو د ټایپنګ
+                سرعت او دقت زیاتوي.
+              </p>
+
+            </div>
+
+
+            <div
+              className="
+                text-center
+                min-w-[120px]
+              "
+            >
+
+              <div
+                className="
+                  text-3xl
+                  font-bold
+                  text-[#2ecc71]
+                "
+              >
+                {completedLessons}
+              </div>
+
+              <div
+                className="
+                  text-xs
+                  text-gray-300
+                  mt-1
+                "
+              >
+                درسونه بشپړ شوي
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
 
       </main>
+
+
+      {/* =====================================
+          ANIMATION
+      ===================================== */}
+
+      <style jsx>{`
+
+        @keyframes bounce-in {
+
+          0% {
+            transform: scale(0.3);
+            opacity: 0;
+          }
+
+          50% {
+            transform: scale(1.05);
+          }
+
+          70% {
+            transform: scale(0.9);
+          }
+
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+
+        }
+
+        .animate-bounce-in {
+          animation: bounce-in 0.5s ease-out;
+        }
+
+      `}</style>
 
     </div>
   );

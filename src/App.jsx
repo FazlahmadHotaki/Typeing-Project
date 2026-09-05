@@ -4,7 +4,7 @@ import Nav from './components/Nav';
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
 // import MouseCursor from "./components/MouseCursor";
 // import "./styles/MouseCursor.css";
-import TypingTest from './components/Step/TypingTestFirst_Step';
+import TypingTest from './pages/Typeing_Step';
 import Hero from './components/Hero';
 import PashtoTyping from "./components/PashtoTyping"
 import Stats from './components/Stats';
@@ -220,8 +220,10 @@ const handleLoginSuccess = (user) => {
             onSwitchToSignup={handleSwitchToSignup}
             onSignupSuccess={handleLoginSuccess} setUser={setUser} />} />
             <Route path='/dashboard/steps-pashto' element={<PashtoTyping/>} />
-            <Route path='/TypingTest' element={<TypingTest />} />
-            {/* <Route path='/TypingTestFirst' element={<TypingTest />} /> */}
+<Route
+  path="/Typeing_Step"
+  element={<TypingTest />}
+/>            {/* <Route path='/TypingTestFirst' element={<TypingTest />} /> */}
           {/* <Routes page='*' element={<NotFo und />} /> */}
 {/* <Route
   path="/TypingTestFirst"
