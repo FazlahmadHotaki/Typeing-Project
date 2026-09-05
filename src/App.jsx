@@ -79,12 +79,21 @@ const handleLoginSuccess = (user) => {
   setIsAuthenticated(false);
   setUserData(null);
 };
+useEffect(() => {
+  const finishLoading = () => {
+    setLoading(false);
+  };
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 10);
-    return () => clearTimeout(timer);
-  }, []);
+  if (document.readyState === "complete") {
+    finishLoading();
+  } else {
+    window.addEventListener("load", finishLoading);
 
+    return () => {
+      window.removeEventListener("load", finishLoading);
+    };
+  }
+}, []);
   if (loading) {
     return (
       <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#0A1424] z-50">
