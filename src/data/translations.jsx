@@ -2,6 +2,7 @@
 const translations = {
   en: {
     "brand.name": "TypeTone",
+    "nav.dashboard":"Dashboard",
     "nav.TypeTest_TypeTone":"Testing Type",
     "nav.how":"How it works", 
     "nav.techniques":"Typing Techniques",
@@ -204,6 +205,7 @@ const translations = {
       "login.title": "Welcome Back aganin!!",
     "signup.title": "حساب جوړول",
     "brand.name": "ټایپټون",
+    "nav.dashboard":"ډشبورډ",
     "nav.TypeTest_TypeTone":"د ټایپ ازموینه",
     "nav.how":"دا څنګه کار کوي", 
     "nav.techniques":"د ټایپ کولو تخنیکونه",
@@ -422,6 +424,7 @@ const translations = {
       "login.title": "Welcome Back aganin!!!",
     "signup.title": "ایجاد حساب کاربری",
     "brand.name": "TypeTone",
+    "nav.dashboard": "داشبورد",
     "nav.TypeTest_TypeTone":"آزمون تایپ",
     "nav.how":"چگونه کار می‌کند", 
     "nav.techniques":"تکنیک‌های تایپ",

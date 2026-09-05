@@ -2,13 +2,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useNavigate } from 'react-router-dom';
-const Nav = ({ onStartTyping ,  showGetStarted = true}) => {
+const Nav = ({ onStartTyping ,  showGetStarted = true,  darkText = false}) => {
   const navigate =useNavigate();
   const { lang, changeLanguage, langNames } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const menuRef = useRef();
-
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -44,17 +43,25 @@ const getBrandName = () => {
     <header className={`fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-night/70 border-b border-white/5  ${
       isScrolled ? 'bg-white/90 border shaddow-[#f4f1de] shadow-sm border-[#f4f1de] text-black' : 'bg-night/70 text-white'
     }`}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+      <div 
+      
+      className={`max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between
+        ${
+    darkText
+      ? "text-gray-800"
+      : ""
+  }`
+      }>
         <a href="#top" className="flex items-center gap-2 font-display font-extrabold text-lg tracking-tight">
         <span><img src="/LogoTypeTone.png" className='rounded-3xl w-6 h-6' alt="" /></span>
           <span>{getBrandName()}</span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-slateink font-medium">
-          <a href="#how" className="hover:text-cloudwhite transition" data-i18n="nav.how">How it works</a>
+          <a href="how" className="hover:text-cloudwhite transition" data-i18n="nav.how">How it works</a>
           <a href="#techniques" className="hidden lg:inline-block hover:text-cloudwhite transition"   data-i18n="nav.techniques"> Typing Techniques</a>
           <a href="#lessons" className="hidden lg:inline-block hover:text-cloudwhite transition" data-i18n="nav.lessons"> Lesson plans</a>
           <a href="#features" className="hover:text-cloudwhite transition" data-i18n="nav.features">Features</a>
-          <a href="#contact" className="hover:text-cloudwhite transition" data-i18n="nav.contact">Contact</a>
+          <a href="dashboard" className="hover:text-cloudwhite transition" data-i18n="nav.dashboard">Dashboard</a>
           <a href="https://fazlahmadhotaki.github.io/Type-Speed-Project/" className="hover:text-cloudwhite transition" data-i18n="nav.TypeTest_TypeTone">TypeTest</a>
         </nav>
         <div className="flex items-center gap-3">
