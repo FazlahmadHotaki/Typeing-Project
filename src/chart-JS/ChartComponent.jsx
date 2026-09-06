@@ -9,7 +9,7 @@ import {
 } from "recharts";
 
 const data = [
-  { month: "Jan", users: 120 },
+  { month: "Jan", users: 5000 },
   { month: "Feb", users: 180 },
   { month: "Mar", users: 240 },
   { month: "Apr", users: 320 },

@@ -2,12 +2,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useNavigate } from 'react-router-dom';
-const Nav = ({ onStartTyping ,  showGetStarted = true,  darkText = false}) => {
+const Nav = ({ onStartTyping ,  showGetStarted = true,  darkText = false,}) => {
   const navigate =useNavigate();
   const { lang, changeLanguage, langNames } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+  !!localStorage.getItem("loggedInUser")
+);
   const menuRef = useRef();
+
+  
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -83,7 +89,7 @@ const getBrandName = () => {
             )}
           </div>
 
-          {showGetStarted && (
+          {!isLoggedIn && (showGetStarted) && (
   <button
     onClick={()=>{navigate('/login')}}
     className={`hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800

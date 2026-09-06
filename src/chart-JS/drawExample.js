@@ -31,7 +31,7 @@ export const drawExample = async (rootElement) => {
                     animation: { type: EAnimationType.Scale, options: { duration: 500 } },
                 },
                 xyData: {
-                    xValues: [1, 3, 4, 7, 9],
+                    xValues: [1, 3, 4, 70, 9],
                     yValues: [10, 6, 7, 2, 16],
                 },
             },

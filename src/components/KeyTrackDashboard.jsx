@@ -86,6 +86,7 @@ function AddLessonModal({
   onClose,
   onAdd,
   lang,
+  
 }) {
   const [formData, setFormData] = useState({
     icon: "⌨️",
@@ -994,6 +995,7 @@ export default function KeyTrackDashboard({
 
     setDisplayName(
       String(finalName)
+      
     );
 
     // Debug
