@@ -57,7 +57,7 @@ const getBrandName = () => {
           <span>{getBrandName()}</span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-slateink font-medium">
-          <a href="how" className="hover:text-cloudwhite transition" data-i18n="nav.how">How it works</a>
+          <a href="#how" className="hover:text-cloudwhite transition" data-i18n="nav.how">How it works</a>
           <a href="#techniques" className="hidden lg:inline-block hover:text-cloudwhite transition"   data-i18n="nav.techniques"> Typing Techniques</a>
           <a href="#lessons" className="hidden lg:inline-block hover:text-cloudwhite transition" data-i18n="nav.lessons"> Lesson plans</a>
           <a href="#features" className="hover:text-cloudwhite transition" data-i18n="nav.features">Features</a>

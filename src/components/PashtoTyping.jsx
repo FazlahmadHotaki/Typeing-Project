@@ -1,5 +1,3 @@
-// HomeRowSteps.jsx
-
 import React, { useState, useEffect } from "react";
 
 // ==========================================
@@ -55,10 +53,6 @@ export default function HomeRowSteps() {
 
   const loadCompletedLessons = () => {
     try {
-      // ========================================
-      // LOAD COMPLETED LESSONS
-      // ========================================
-
       const saved =
         JSON.parse(
           localStorage.getItem(
@@ -75,10 +69,6 @@ export default function HomeRowSteps() {
       } else {
         setCompletedLessonIds([]);
       }
-
-      // ========================================
-      // LOAD LESSON RESULTS
-      // ========================================
 
       const savedResults =
         JSON.parse(
@@ -212,10 +202,6 @@ export default function HomeRowSteps() {
       const data =
         await response.json();
 
-      // ========================================
-      // SUPPORT API RESPONSE
-      // ========================================
-
       const apiLessons =
         Array.isArray(data)
           ? data
@@ -310,7 +296,6 @@ export default function HomeRowSteps() {
         nextLesson.id
       );
     } else {
-      // All lessons completed
       setSelectedId(
         lessons.length
       );
@@ -414,7 +399,6 @@ export default function HomeRowSteps() {
   const isLessonLocked = (
     lessonNumber
   ) => {
-    // First lesson is always unlocked
     if (
       lessonNumber === 1
     ) {
@@ -513,10 +497,6 @@ export default function HomeRowSteps() {
       return;
     }
 
-    // ========================================
-    // CHECK LOCK
-    // ========================================
-
     if (
       isLessonLocked(
         lessonNumber
@@ -544,7 +524,7 @@ export default function HomeRowSteps() {
   // LOADING
   // ==========================================
 
-  if (isLoading){
+  if (isLoading) {
     return (
       <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#0A1424] z-50">
         <div className="loader">
@@ -567,7 +547,7 @@ export default function HomeRowSteps() {
               className="track"
               stroke="#C9A15E"
               strokeWidth="2"
-            ></rect>
+            />
 
             <rect
               x="2"
@@ -582,35 +562,44 @@ export default function HomeRowSteps() {
               strokeWidth="2"
               strokeDasharray="100"
               strokeDashoffset="94"
-            ></rect>
+            />
 
-            <g className="keys" fill="#C9A15E">
-              <rect x="8" y="8" width="6" height="5" rx="1"></rect>
-              <rect x="16" y="8" width="6" height="5" rx="1"></rect>
-              <rect x="24" y="8" width="6" height="5" rx="1"></rect>
-              <rect x="32" y="8" width="6" height="5" rx="1"></rect>
-              <rect x="40" y="8" width="6" height="5" rx="1"></rect>
-              <rect x="48" y="8" width="8" height="5" rx="1"></rect>
+            <g
+              className="keys"
+              fill="#C9A15E"
+            >
+              <rect x="8" y="8" width="6" height="5" rx="1" />
+              <rect x="16" y="8" width="6" height="5" rx="1" />
+              <rect x="24" y="8" width="6" height="5" rx="1" />
+              <rect x="32" y="8" width="6" height="5" rx="1" />
+              <rect x="40" y="8" width="6" height="5" rx="1" />
+              <rect x="48" y="8" width="8" height="5" rx="1" />
 
-              <rect x="8" y="16" width="6" height="5" rx="1"></rect>
-              <rect x="16" y="16" width="6" height="5" rx="1"></rect>
-              <rect x="24" y="16" width="6" height="5" rx="1"></rect>
-              <rect x="32" y="16" width="6" height="5" rx="1"></rect>
-              <rect x="40" y="16" width="6" height="5" rx="1"></rect>
-              <rect x="48" y="16" width="8" height="5" rx="1"></rect>
+              <rect x="8" y="16" width="6" height="5" rx="1" />
+              <rect x="16" y="16" width="6" height="5" rx="1" />
+              <rect x="24" y="16" width="6" height="5" rx="1" />
+              <rect x="32" y="16" width="6" height="5" rx="1" />
+              <rect x="40" y="16" width="6" height="5" rx="1" />
+              <rect x="48" y="16" width="8" height="5" rx="1" />
 
-              <rect x="8" y="24" width="8" height="5" rx="1"></rect>
-              <rect x="18" y="24" width="6" height="5" rx="1"></rect>
-              <rect x="26" y="24" width="18" height="5" rx="1"></rect>
-              <rect x="46" y="24" width="10" height="5" rx="1"></rect>
+              <rect x="8" y="24" width="8" height="5" rx="1" />
+              <rect x="18" y="24" width="6" height="5" rx="1" />
+              <rect x="26" y="24" width="18" height="5" rx="1" />
+              <rect x="46" y="24" width="10" height="5" rx="1" />
             </g>
           </svg>
         </div>
-        <p id="loadingText" className="text-xl font-semibold text-gold leading-tight mt-4">
-          <span className="dots"></span> بارېږي
+
+        <p
+          id="loadingText"
+          className="text-xl font-semibold text-gold leading-tight mt-4"
+        >
+          <span className="dots"></span>{" "}
+          بارېږي
         </p>
+
         <p className="text-sm text-slateink leading-relaxed mt-1">
-         ... مهرباني وکړئ انتظار وکړئ، موږ ستاسو مینځپانګه چمتو کوو
+          ... مهرباني وکړئ انتظار وکړئ، موږ ستاسو مینځپانګه چمتو کوو
         </p>
       </div>
     );
@@ -644,7 +633,6 @@ export default function HomeRowSteps() {
             shadow-sm
           "
         >
-
           <div className="text-4xl mb-4">
             ⚠️
           </div>
@@ -686,7 +674,6 @@ export default function HomeRowSteps() {
           >
             بیا هڅه وکړئ
           </button>
-
         </div>
       </div>
     );
@@ -789,10 +776,7 @@ export default function HomeRowSteps() {
       "
       dir="rtl"
     >
-
-      {/* =====================================
-          LOCK MESSAGE
-      ===================================== */}
+      {/* LOCK MESSAGE */}
 
       {showLockMessage && (
         <div
@@ -805,7 +789,6 @@ export default function HomeRowSteps() {
             justify-center
           "
         >
-
           <div
             className="
               absolute
@@ -833,9 +816,7 @@ export default function HomeRowSteps() {
               animate-bounce-in
             "
           >
-
             <div className="text-center">
-
               <div className="text-4xl mb-4">
                 🔒
               </div>
@@ -881,17 +862,12 @@ export default function HomeRowSteps() {
               >
                 ښه
               </button>
-
             </div>
-
           </div>
-
         </div>
       )}
 
-      {/* =====================================
-          HEADER
-      ===================================== */}
+      {/* HEADER */}
 
       <header
         className="
@@ -900,7 +876,6 @@ export default function HomeRowSteps() {
           border-gray-200
         "
       >
-
         <div
           className="
             max-w-6xl
@@ -909,7 +884,6 @@ export default function HomeRowSteps() {
             py-5
           "
         >
-
           <div
             className="
               flex
@@ -920,11 +894,7 @@ export default function HomeRowSteps() {
               gap-5
             "
           >
-
-            {/* TITLE */}
-
             <div>
-
               <h1
                 className="
                   text-2xl
@@ -944,11 +914,7 @@ export default function HomeRowSteps() {
               >
                 ټول درسونه: {lessons.length}
               </p>
-
             </div>
-
-
-            {/* STATISTICS */}
 
             <div
               className="
@@ -957,11 +923,7 @@ export default function HomeRowSteps() {
                 gap-6
               "
             >
-
-              {/* PROGRESS */}
-
               <div className="text-center">
-
                 <div
                   className="
                     text-lg
@@ -980,9 +942,7 @@ export default function HomeRowSteps() {
                 >
                   پرمختګ
                 </div>
-
               </div>
-
 
               <div
                 className="
@@ -992,11 +952,7 @@ export default function HomeRowSteps() {
                 "
               />
 
-
-              {/* STARS */}
-
               <div className="text-center">
-
                 <div
                   className="
                     text-lg
@@ -1015,9 +971,7 @@ export default function HomeRowSteps() {
                 >
                   ستوري
                 </div>
-
               </div>
-
 
               <div
                 className="
@@ -1027,11 +981,7 @@ export default function HomeRowSteps() {
                 "
               />
 
-
-              {/* SCORE */}
-
               <div className="text-center">
-
                 <div
                   className="
                     text-lg
@@ -1050,18 +1000,11 @@ export default function HomeRowSteps() {
                 >
                   نمرې
                 </div>
-
               </div>
-
             </div>
-
           </div>
 
-
-          {/* PROGRESS BAR */}
-
           <div className="mt-5">
-
             <div
               className="
                 h-2
@@ -1070,7 +1013,6 @@ export default function HomeRowSteps() {
                 overflow-hidden
               "
             >
-
               <div
                 className="
                   h-full
@@ -1082,19 +1024,12 @@ export default function HomeRowSteps() {
                   width: `${progress}%`,
                 }}
               />
-
             </div>
-
           </div>
-
         </div>
-
       </header>
 
-
-      {/* =====================================
-          MAIN
-      ===================================== */}
+      {/* MAIN */}
 
       <main
         className="
@@ -1104,18 +1039,12 @@ export default function HomeRowSteps() {
           py-10
         "
       >
-
-        {/* =====================================
-            SECTION TITLE
-        ===================================== */}
-
         <div
           className="
             text-center
             mb-12
           "
         >
-
           <h2
             className="
               text-xl
@@ -1135,13 +1064,9 @@ export default function HomeRowSteps() {
           >
             له ۱ څخه تر {lessons.length} پورې درسونه
           </p>
-
         </div>
 
-
-        {/* =====================================
-            LESSON PATH
-        ===================================== */}
+        {/* LESSON PATH */}
 
         <div
           className="
@@ -1150,20 +1075,17 @@ export default function HomeRowSteps() {
             mx-auto
           "
         >
-
           <div
             className="
               space-y-16
               md:space-y-20
             "
           >
-
             {rows.map(
               (
                 row,
                 rowIndex
               ) => {
-
                 const rowStartIndex =
                   rowIndex *
                   lessonsPerRow;
@@ -1175,7 +1097,6 @@ export default function HomeRowSteps() {
                     }
                     className="relative"
                   >
-
                     <div
                       className="
                         grid
@@ -1186,39 +1107,25 @@ export default function HomeRowSteps() {
                       "
                       dir="rtl"
                     >
-
                       {row.map(
                         (
                           lesson,
                           colIndex
                         ) => {
-
                           const lessonNumber =
                             rowStartIndex +
                             colIndex +
                             1;
-
-                          // =================================
-                          // SAVED COMPLETION
-                          // =================================
 
                           const isCompleted =
                             isLessonCompleted(
                               lesson
                             );
 
-                          // =================================
-                          // CURRENT LESSON
-                          // =================================
-
                           const isCurrent =
                             lessonNumber ===
-                            selectedId &&
+                              selectedId &&
                             !isCompleted;
-
-                          // =================================
-                          // LOCK
-                          // =================================
 
                           const isLocked =
                             isLessonLocked(
@@ -1243,35 +1150,24 @@ export default function HomeRowSteps() {
                                 items-center
                               "
                             >
-
-                              {/* CONNECTOR */}
-
                               {hasNextLesson && (
                                 <div
                                   className={` 
                                     absolute
                                     z-0
-
                                     top-[30px]
                                     sm:top-[37px]
                                     md:top-[45px]
                                     lg:top-[50px]
-
                                     right-[50%]
-
                                     w-[calc(100%+1.5rem)]
                                     lg:w-[calc(100%+3.5rem)]
-
                                     h-[5px]
-
                                     rounded-full
-
                                     hidden
                                     md:block
-
                                     transition-all
                                     duration-500
-
                                     ${
                                       isCompleted
                                         ? "bg-[#2ecc71]"
@@ -1281,58 +1177,39 @@ export default function HomeRowSteps() {
                                 />
                               )}
 
-
-                              {/* LESSON CIRCLE */}
-
                               <button
                                 onClick={() => {
-
                                   if (
                                     isLocked
                                   ) {
-
                                     handleLockedLessonClick(
                                       lessonNumber
                                     );
-
                                   } else {
-
                                     handleLessonClick(
                                       lessonNumber
                                     );
-
                                   }
-
                                 }}
                                 className={` 
                                   relative 
                                   z-10 
-
                                   w-[60px] 
                                   h-[60px] 
-
                                   sm:w-[75px] 
                                   sm:h-[75px] 
-
                                   md:w-[90px] 
                                   md:h-[90px] 
-
                                   lg:w-[100px] 
                                   lg:h-[100px] 
-
                                   rounded-full 
-
                                   flex 
                                   items-center 
                                   justify-center 
-
                                   transition-all 
                                   duration-200 
-
                                   border-[4px] 
-
                                   shadow-sm 
-
                                   ${
                                     isCompleted
                                       ? ` 
@@ -1369,9 +1246,7 @@ export default function HomeRowSteps() {
                                   } 
                                 `}
                               >
-
                                 {isCompleted ? (
-
                                   <svg
                                     className="
                                       w-7
@@ -1386,19 +1261,13 @@ export default function HomeRowSteps() {
                                     strokeWidth="3"
                                     viewBox="0 0 24 24"
                                   >
-
                                     <path
                                       strokeLinecap="round"
                                       strokeLinejoin="round"
-                                      d="
-                                        M5 13l4 4L19 7
-                                      "
+                                      d="M5 13l4 4L19 7"
                                     />
-
                                   </svg>
-
                                 ) : (
-
                                   <span
                                     className="
                                       text-lg
@@ -1409,10 +1278,7 @@ export default function HomeRowSteps() {
                                   >
                                     {lessonNumber}
                                   </span>
-
                                 )}
-
-                                {/* CURRENT */}
 
                                 {isCurrent && (
                                   <span
@@ -1436,11 +1302,7 @@ export default function HomeRowSteps() {
                                     اوسنی
                                   </span>
                                 )}
-
                               </button>
-
-
-                              {/* LESSON INFORMATION */}
 
                               <div
                                 className="
@@ -1452,18 +1314,14 @@ export default function HomeRowSteps() {
                                   lg:max-w-[120px]
                                 "
                               >
-
                                 <h3
                                   className={` 
                                     text-[10px]
                                     md:text-[13px]
                                     lg:text-[15px]
-
                                     font-semibold
                                     leading-tight
-
                                     truncate
-
                                     ${
                                       isCurrent
                                         ? "text-[#2980b9]"
@@ -1481,11 +1339,8 @@ export default function HomeRowSteps() {
                                     text-[9px]
                                     md:text-[11px]
                                     lg:text-[13px]
-
                                     mt-1
-
                                     truncate
-
                                     ${
                                       isCurrent
                                         ? "text-[#3498db]"
@@ -1498,29 +1353,20 @@ export default function HomeRowSteps() {
                                 >
                                   {lesson.subtitle}
                                 </p>
-
                               </div>
-
                             </div>
                           );
                         }
                       )}
-
                     </div>
-
                   </div>
                 );
               }
             )}
-
           </div>
-
         </div>
 
-
-        {/* ==========================================
-            LEARNING DASHBOARD
-        ========================================== */}
+        {/* LEARNING DASHBOARD */}
 
         <section
           className="
@@ -1529,16 +1375,12 @@ export default function HomeRowSteps() {
             mt-20
           "
         >
-
-          {/* DASHBOARD HEADER */}
-
           <div
             className="
               text-center
               mb-10
             "
           >
-
             <h2
               className="
                 text-2xl
@@ -1558,13 +1400,9 @@ export default function HomeRowSteps() {
             >
               ستاسو د پښتو ټایپنګ د زده کړې عمومي وضعیت
             </p>
-
           </div>
 
-
-          {/* ==========================================
-              STAT CARDS
-          ========================================== */}
+          {/* STAT CARDS */}
 
           <div
             className="
@@ -1575,9 +1413,6 @@ export default function HomeRowSteps() {
               mb-8
             "
           >
-
-            {/* COMPLETED */}
-
             <div
               className="
                 bg-white
@@ -1590,7 +1425,6 @@ export default function HomeRowSteps() {
                 transition
               "
             >
-
               <div
                 className="
                   w-11
@@ -1607,12 +1441,7 @@ export default function HomeRowSteps() {
                 ✓
               </div>
 
-              <p
-                className="
-                  text-xs
-                  text-gray-400
-                "
-              >
+              <p className="text-xs text-gray-400">
                 بشپړ شوي درسونه
               </p>
 
@@ -1636,11 +1465,7 @@ export default function HomeRowSteps() {
               >
                 له {lessons.length} درسونو څخه
               </p>
-
             </div>
-
-
-            {/* REMAINING */}
 
             <div
               className="
@@ -1654,7 +1479,6 @@ export default function HomeRowSteps() {
                 transition
               "
             >
-
               <div
                 className="
                   w-11
@@ -1671,12 +1495,7 @@ export default function HomeRowSteps() {
                 📚
               </div>
 
-              <p
-                className="
-                  text-xs
-                  text-gray-400
-                "
-              >
+              <p className="text-xs text-gray-400">
                 پاتې درسونه
               </p>
 
@@ -1700,11 +1519,7 @@ export default function HomeRowSteps() {
               >
                 د زده کړې لپاره
               </p>
-
             </div>
-
-
-            {/* SCORE */}
 
             <div
               className="
@@ -1718,7 +1533,6 @@ export default function HomeRowSteps() {
                 transition
               "
             >
-
               <div
                 className="
                   w-11
@@ -1735,12 +1549,7 @@ export default function HomeRowSteps() {
                 🏆
               </div>
 
-              <p
-                className="
-                  text-xs
-                  text-gray-400
-                "
-              >
+              <p className="text-xs text-gray-400">
                 ټولې نمرې
               </p>
 
@@ -1764,11 +1573,7 @@ export default function HomeRowSteps() {
               >
                 ترلاسه شوې نمرې
               </p>
-
             </div>
-
-
-            {/* STARS */}
 
             <div
               className="
@@ -1782,7 +1587,6 @@ export default function HomeRowSteps() {
                 transition
               "
             >
-
               <div
                 className="
                   w-11
@@ -1799,12 +1603,7 @@ export default function HomeRowSteps() {
                 ⭐
               </div>
 
-              <p
-                className="
-                  text-xs
-                  text-gray-400
-                "
-              >
+              <p className="text-xs text-gray-400">
                 ستوري
               </p>
 
@@ -1828,15 +1627,10 @@ export default function HomeRowSteps() {
               >
                 ترلاسه شوي ستوري
               </p>
-
             </div>
-
           </div>
 
-
-          {/* ==========================================
-              GRAPH + PROGRESS
-          ========================================== */}
+          {/* GRAPH + PROGRESS */}
 
           <div
             className="
@@ -1846,10 +1640,7 @@ export default function HomeRowSteps() {
               gap-6
             "
           >
-
-            {/* ========================================
-                LEARNING GRAPH
-            ======================================== */}
+            {/* LEARNING GRAPH */}
 
             <div
               className="
@@ -1861,7 +1652,6 @@ export default function HomeRowSteps() {
                 shadow-sm
               "
             >
-
               <div
                 className="
                   flex
@@ -1870,9 +1660,7 @@ export default function HomeRowSteps() {
                   mb-6
                 "
               >
-
                 <div>
-
                   <h3
                     className="
                       text-lg
@@ -1892,7 +1680,6 @@ export default function HomeRowSteps() {
                   >
                     د بشپړو شوو درسونو پرمختګ
                   </p>
-
                 </div>
 
                 <div
@@ -1908,11 +1695,7 @@ export default function HomeRowSteps() {
                 >
                   {progress}% بشپړ
                 </div>
-
               </div>
-
-
-              {/* GRAPH */}
 
               <div
                 className="
@@ -1926,9 +1709,6 @@ export default function HomeRowSteps() {
                   px-2
                 "
               >
-
-                {/* GRID LINE 1 */}
-
                 <div
                   className="
                     absolute
@@ -1940,9 +1720,6 @@ export default function HomeRowSteps() {
                     border-gray-100
                   "
                 />
-
-
-                {/* GRID LINE 2 */}
 
                 <div
                   className="
@@ -1956,9 +1733,6 @@ export default function HomeRowSteps() {
                   "
                 />
 
-
-                {/* GRID LINE 3 */}
-
                 <div
                   className="
                     absolute
@@ -1970,9 +1744,6 @@ export default function HomeRowSteps() {
                     border-gray-100
                   "
                 />
-
-
-                {/* GRID LINE 4 */}
 
                 <div
                   className="
@@ -1986,15 +1757,11 @@ export default function HomeRowSteps() {
                   "
                 />
 
-
-                {/* GRAPH BARS */}
-
                 {graphData.map(
                   (
                     value,
                     index
                   ) => {
-
                     const lessonProgress =
                       Math.min(
                         progress,
@@ -2014,7 +1781,6 @@ export default function HomeRowSteps() {
                           z-10
                         "
                       >
-
                         <div
                           className="
                             w-full
@@ -2032,16 +1798,11 @@ export default function HomeRowSteps() {
                             )}%`,
                           }}
                         />
-
                       </div>
                     );
                   }
                 )}
-
               </div>
-
-
-              {/* GRAPH LABELS */}
 
               <div
                 className="
@@ -2052,7 +1813,6 @@ export default function HomeRowSteps() {
                   mt-3
                 "
               >
-
                 <span>۱</span>
                 <span>۱۰</span>
                 <span>۲۰</span>
@@ -2061,15 +1821,10 @@ export default function HomeRowSteps() {
                 <span>۵۰</span>
                 <span>۶۰</span>
                 <span>۷۰</span>
-
               </div>
-
             </div>
 
-
-            {/* ========================================
-                OVERALL PROGRESS
-            ======================================== */}
+            {/* OVERALL PROGRESS */}
 
             <div
               className="
@@ -2081,9 +1836,7 @@ export default function HomeRowSteps() {
                 shadow-sm
               "
             >
-
               <div className="mb-6">
-
                 <h3
                   className="
                     text-lg
@@ -2103,11 +1856,7 @@ export default function HomeRowSteps() {
                 >
                   ستاسو د کورس عمومي پرمختګ
                 </p>
-
               </div>
-
-
-              {/* CIRCLE */}
 
               <div
                 className="
@@ -2116,7 +1865,6 @@ export default function HomeRowSteps() {
                   mb-8
                 "
               >
-
                 <div
                   className="
                     w-40
@@ -2136,7 +1884,6 @@ export default function HomeRowSteps() {
                     `,
                   }}
                 >
-
                   <div
                     className="
                       w-32
@@ -2149,7 +1896,6 @@ export default function HomeRowSteps() {
                       justify-center
                     "
                   >
-
                     <span
                       className="
                         text-3xl
@@ -2169,22 +1915,12 @@ export default function HomeRowSteps() {
                     >
                       بشپړ شوی
                     </span>
-
                   </div>
-
                 </div>
-
               </div>
 
-
-              {/* PROGRESS ITEMS */}
-
               <div className="space-y-5">
-
-                {/* LESSON PROGRESS */}
-
                 <div>
-
                   <div
                     className="
                       flex
@@ -2193,7 +1929,6 @@ export default function HomeRowSteps() {
                       mb-2
                     "
                   >
-
                     <span className="text-gray-500">
                       د درسونو پرمختګ
                     </span>
@@ -2207,7 +1942,6 @@ export default function HomeRowSteps() {
                       {completedLessons}/
                       {lessons.length}
                     </span>
-
                   </div>
 
                   <div
@@ -2218,7 +1952,6 @@ export default function HomeRowSteps() {
                       overflow-hidden
                     "
                   >
-
                     <div
                       className="
                         h-full
@@ -2231,16 +1964,10 @@ export default function HomeRowSteps() {
                         width: `${progress}%`,
                       }}
                     />
-
                   </div>
-
                 </div>
 
-
-                {/* SCORE PROGRESS */}
-
                 <div>
-
                   <div
                     className="
                       flex
@@ -2249,7 +1976,6 @@ export default function HomeRowSteps() {
                       mb-2
                     "
                   >
-
                     <span className="text-gray-500">
                       د نمرې هدف
                     </span>
@@ -2266,7 +1992,6 @@ export default function HomeRowSteps() {
                           10
                       )}%
                     </span>
-
                   </div>
 
                   <div
@@ -2277,7 +2002,6 @@ export default function HomeRowSteps() {
                       overflow-hidden
                     "
                   >
-
                     <div
                       className="
                         h-full
@@ -2294,16 +2018,10 @@ export default function HomeRowSteps() {
                         )}%`,
                       }}
                     />
-
                   </div>
-
                 </div>
 
-
-                {/* STAR PROGRESS */}
-
                 <div>
-
                   <div
                     className="
                       flex
@@ -2312,7 +2030,6 @@ export default function HomeRowSteps() {
                       mb-2
                     "
                   >
-
                     <span className="text-gray-500">
                       د ستورو پرمختګ
                     </span>
@@ -2325,7 +2042,6 @@ export default function HomeRowSteps() {
                     >
                       {stars}
                     </span>
-
                   </div>
 
                   <div
@@ -2336,7 +2052,6 @@ export default function HomeRowSteps() {
                       overflow-hidden
                     "
                   >
-
                     <div
                       className="
                         h-full
@@ -2354,21 +2069,13 @@ export default function HomeRowSteps() {
                         )}%`,
                       }}
                     />
-
                   </div>
-
                 </div>
-
               </div>
-
             </div>
-
           </div>
 
-
-          {/* ==========================================
-              LEARNING INFORMATION
-          ========================================== */}
+          {/* LEARNING INFORMATION */}
 
           <div
             className="
@@ -2379,7 +2086,6 @@ export default function HomeRowSteps() {
               mt-6
             "
           >
-
             {/* CURRENT LEVEL */}
 
             <div
@@ -2392,7 +2098,6 @@ export default function HomeRowSteps() {
                 shadow-sm
               "
             >
-
               <div
                 className="
                   flex
@@ -2400,7 +2105,6 @@ export default function HomeRowSteps() {
                   gap-4
                 "
               >
-
                 <div
                   className="
                     w-12
@@ -2417,7 +2121,6 @@ export default function HomeRowSteps() {
                 </div>
 
                 <div>
-
                   <p
                     className="
                       text-xs
@@ -2436,13 +2139,9 @@ export default function HomeRowSteps() {
                   >
                     {getCurrentLevel()}
                   </h3>
-
                 </div>
-
               </div>
-
             </div>
-
 
             {/* STREAK */}
 
@@ -2456,7 +2155,6 @@ export default function HomeRowSteps() {
                 shadow-sm
               "
             >
-
               <div
                 className="
                   flex
@@ -2464,7 +2162,6 @@ export default function HomeRowSteps() {
                   gap-4
                 "
               >
-
                 <div
                   className="
                     w-12
@@ -2481,7 +2178,6 @@ export default function HomeRowSteps() {
                 </div>
 
                 <div>
-
                   <p
                     className="
                       text-xs
@@ -2505,13 +2201,9 @@ export default function HomeRowSteps() {
                         )} ورځې`
                       : "لا پیل نه دی شوی"}
                   </h3>
-
                 </div>
-
               </div>
-
             </div>
-
 
             {/* GOAL */}
 
@@ -2525,7 +2217,6 @@ export default function HomeRowSteps() {
                 shadow-sm
               "
             >
-
               <div
                 className="
                   flex
@@ -2533,7 +2224,6 @@ export default function HomeRowSteps() {
                   gap-4
                 "
               >
-
                 <div
                   className="
                     w-12
@@ -2550,7 +2240,6 @@ export default function HomeRowSteps() {
                 </div>
 
                 <div>
-
                   <p
                     className="
                       text-xs
@@ -2579,19 +2268,12 @@ export default function HomeRowSteps() {
                   >
                     دې درس ته ځان ورسوه
                   </p>
-
                 </div>
-
               </div>
-
             </div>
-
           </div>
 
-
-          {/* ==========================================
-              MOTIVATION
-          ========================================== */}
+          {/* MOTIVATION */}
 
           <div
             className="
@@ -2609,9 +2291,7 @@ export default function HomeRowSteps() {
               gap-6
             "
           >
-
             <div>
-
               <h3
                 className="
                   text-xl
@@ -2631,9 +2311,7 @@ export default function HomeRowSteps() {
                 هره ورځ لږ تمرین کول ستاسو د ټایپنګ
                 سرعت او دقت زیاتوي.
               </p>
-
             </div>
-
 
             <div
               className="
@@ -2641,7 +2319,6 @@ export default function HomeRowSteps() {
                 min-w-[120px]
               "
             >
-
               <div
                 className="
                   text-3xl
@@ -2661,19 +2338,12 @@ export default function HomeRowSteps() {
               >
                 درسونه بشپړ شوي
               </div>
-
             </div>
-
           </div>
-
         </section>
-
       </main>
 
-
-      {/* =====================================
-          ANIMATION
-      ===================================== */}
+      {/* ANIMATION */}
 
       <style jsx>{`
 
@@ -2704,7 +2374,6 @@ export default function HomeRowSteps() {
         }
 
       `}</style>
-
     </div>
   );
 }
