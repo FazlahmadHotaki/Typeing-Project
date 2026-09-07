@@ -248,14 +248,14 @@ const handleSubmit = (e) => {
             Sign In
           </button>
 
-          <GoogleLogin
+         <div className="text-center items-center justify-cneter">
+           <GoogleLogin
   onSuccess={(credentialResponse) => {
     console.log("Google login successful:", credentialResponse);
 
     // Save Google credential temporarily
     localStorage.setItem(
-      "googleCredential",
-      credentialResponse.credential
+      "googleCredential",credentialResponse.credential
     );
 
     // Get Google user information
@@ -286,6 +286,7 @@ const handleSubmit = (e) => {
     alert("Google login failed. Please try again.");
   }}
 />
+         </div>
 
         </form>
 
