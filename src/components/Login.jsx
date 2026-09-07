@@ -50,7 +50,7 @@ const translations = {
   },
 };
 
-const Login = ({ onClose, onSwitchToSignup, setUser }) => {
+const Login = ({ onClose, onSwitchToSignup, setUser,showGetStarted }) => {
   const { lang } = useLanguage();
   const navigate =useNavigate();
   // ADD THIS after other useState declarations:
@@ -99,15 +99,13 @@ const handleSubmit = (e) => {
 
   if (user) {
     // Save user if "Remember me" is checked
-    if (rememberMe) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          name: user.name,
-          email: user.email,
-        })
-      );
-    }
+    localStorage.setItem(
+  "user",
+  JSON.stringify({
+    name: user.name,
+    email: user.email,
+  })
+);
 
     // Login successful
     
@@ -271,8 +269,7 @@ const handleSubmit = (e) => {
 
     // Save user
     localStorage.setItem("user", JSON.stringify(googleUser));
-
-    // Update your React state
+localStorage.setItem("showGetStarted", "false");    // Update your React state
     setUser(googleUser.name);
 
     // Go to dashboard
