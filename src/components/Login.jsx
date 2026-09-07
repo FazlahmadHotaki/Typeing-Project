@@ -147,44 +147,7 @@ const handleSubmit = (e) => {
               alt="logo"
             />
           </div>
-          <GoogleLogin
-  onSuccess={(credentialResponse) => {
-    console.log("Google login successful:", credentialResponse);
-
-    // Save Google credential temporarily
-    localStorage.setItem(
-      "googleCredential",
-      credentialResponse.credential
-    );
-
-    // Get Google user information
-    const payload = JSON.parse(
-      atob(credentialResponse.credential.split(".")[1])
-    );
-
-    const googleUser = {
-      name: payload.name,
-      email: payload.email,
-      picture: payload.picture,
-    };
-
-    // Save user
-    localStorage.setItem("user", JSON.stringify(googleUser));
-
-    // Update your React state
-    setUser(googleUser.name);
-
-    // Go to dashboard
-    navigate("/dashboard");
-
-    // Close login
-    onClose();
-  }}
-  onError={() => {
-    console.log("Google Login Failed");
-    alert("Google login failed. Please try again.");
-  }}
-/>
+          
 
           <h2
             className="mt-3 font-display text-2xl font-bold"
@@ -284,6 +247,45 @@ const handleSubmit = (e) => {
             data-i18n="login.signIn" >
             Sign In
           </button>
+
+          <GoogleLogin
+  onSuccess={(credentialResponse) => {
+    console.log("Google login successful:", credentialResponse);
+
+    // Save Google credential temporarily
+    localStorage.setItem(
+      "googleCredential",
+      credentialResponse.credential
+    );
+
+    // Get Google user information
+    const payload = JSON.parse(
+      atob(credentialResponse.credential.split(".")[1])
+    );
+
+    const googleUser = {
+      name: payload.name,
+      email: payload.email,
+      picture: payload.picture,
+    };
+
+    // Save user
+    localStorage.setItem("user", JSON.stringify(googleUser));
+
+    // Update your React state
+    setUser(googleUser.name);
+
+    // Go to dashboard
+    navigate("/dashboard");
+
+    // Close login
+    onClose();
+  }}
+  onError={() => {
+    console.log("Google Login Failed");
+    alert("Google login failed. Please try again.");
+  }}
+/>
 
         </form>
 

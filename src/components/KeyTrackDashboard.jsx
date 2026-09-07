@@ -991,7 +991,7 @@ export default function KeyTrackDashboard({
     const finalName =
       loginName ||
       signupName ||
-      "Hotak";
+      "Not Logain";
 
     setDisplayName(
       String(finalName)
