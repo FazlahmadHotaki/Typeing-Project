@@ -817,8 +817,8 @@ export default function HomeRowSteps() {
             "
           >
             <div className="text-center">
-              <div className="text-4xl mb-4">
-                🔒
+              <div className="text-4xl flex mb-4 text-center items-center justify-center">
+                <img className="text-center" src="https://img.icons8.com/?size=100&id=1F5Aok9b4nxz&format=png&color=000000" alt="" />
               </div>
 
               <h3
@@ -902,7 +902,7 @@ export default function HomeRowSteps() {
                   text-[#34495e]
                 "
               >
-                د پښتو ټایپنګ زده کړه
+               <img className="w-10 inline" src="/public/LogoTypeTone.png" alt="" /> د پښتو ټایپنګ زده کړه
               </h1>
 
               <p
@@ -960,7 +960,7 @@ export default function HomeRowSteps() {
                     text-[#f1c40f]
                   "
                 >
-                  ⭐ {stars}
+                  <img className="w-8 inline" src="https://img.icons8.com/?size=100&id=DN2HGLRhklaz&format=png&color=000000" alt="" /> {stars}
                 </div>
 
                 <div
@@ -1388,7 +1388,7 @@ export default function HomeRowSteps() {
                 text-[#34495e]
               "
             >
-              📊 د زده کړې پرمختګ
+              <img className="w-10 inline" src="https://img.icons8.com/?size=100&id=80411&format=png&color=000000" alt="" /> د زده کړې پرمختګ
             </h2>
 
             <p
@@ -1438,7 +1438,7 @@ export default function HomeRowSteps() {
                   mb-4
                 "
               >
-                ✓
+                <img className="w-8" src="https://img.icons8.com/?size=100&id=19Qs7U6PcAie&format=png&color=000000" alt="" />
               </div>
 
               <p className="text-xs text-gray-400">
@@ -1492,7 +1492,7 @@ export default function HomeRowSteps() {
                   mb-4
                 "
               >
-                📚
+                <img className="w-8" src="https://img.icons8.com/?size=100&id=azSfWCOkgnra&format=png&color=000000" alt="" />
               </div>
 
               <p className="text-xs text-gray-400">
@@ -1546,7 +1546,7 @@ export default function HomeRowSteps() {
                   mb-4
                 "
               >
-                🏆
+                <img className="w-8" src="https://img.icons8.com/?size=100&id=43668&format=png&color=000000" alt="" />
               </div>
 
               <p className="text-xs text-gray-400">
@@ -1600,7 +1600,7 @@ export default function HomeRowSteps() {
                   mb-4
                 "
               >
-                ⭐
+                <img className="w-8" src="https://img.icons8.com/?size=100&id=vjbhDe9kblMm&format=png&color=000000" alt="" />
               </div>
 
               <p className="text-xs text-gray-400">
@@ -1668,7 +1668,7 @@ export default function HomeRowSteps() {
                       text-[#34495e]
                     "
                   >
-                    📈 د زده کړې ګراف
+                  📈 د زده کړې ګراف
                   </h3>
 
                   <p
@@ -1844,7 +1844,7 @@ export default function HomeRowSteps() {
                     text-[#34495e]
                   "
                 >
-                  🎯 د زده کړې حالت
+                <img className="inline " src="https://img.icons8.com/?size=100&id=Nbzofp4mlokw&format=png&color=000000" alt="" /> د زده کړې حالت
                 </h3>
 
                 <p
@@ -2117,7 +2117,7 @@ export default function HomeRowSteps() {
                     text-xl
                   "
                 >
-                  🎓
+                  <img className="" src="https://img.icons8.com/?size=100&id=eWPI4hqnBXCI&format=png&color=000000" alt="" />
                 </div>
 
                 <div>
@@ -2174,7 +2174,7 @@ export default function HomeRowSteps() {
                     text-xl
                   "
                 >
-                  🔥
+                  <img src="https://img.icons8.com/?size=100&id=QV5JEtrTP6nH&format=png&color=000000" alt="" />
                 </div>
 
                 <div>
@@ -2236,7 +2236,7 @@ export default function HomeRowSteps() {
                     text-xl
                   "
                 >
-                  🚀
+                  <img src="https://img.icons8.com/?size=100&id=SRNB1GypkOpc&format=png&color=000000" alt="" />
                 </div>
 
                 <div>
@@ -2298,7 +2298,7 @@ export default function HomeRowSteps() {
                   font-bold
                 "
               >
-                💪 خپل تمرین ته دوام ورکړئ!
+              <img className="inline" src="https://img.icons8.com/?size=100&id=HUv7WXgdm9lr&format=png&color=000000" alt="" /> خپل تمرین ته دوام ورکړئ!
               </h3>
 
               <p

@@ -874,6 +874,7 @@ function ColumnChart({ lang }) {
 export default function KeyTrackDashboard({
   usersing = "",
   openToPahshto,
+  showGetStarted,
   formData = {},
 }) {
   const { lang } = useLanguage();
@@ -1188,7 +1189,6 @@ export default function KeyTrackDashboard({
   // ====================================================
   // RETURN
   // ====================================================
-
   return (
     <div
       className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3 sm:p-6 lg:p-8"

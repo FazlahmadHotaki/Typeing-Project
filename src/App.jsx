@@ -224,7 +224,7 @@ useEffect(() => {
             </div>
           }
           />
-          <Route path='/dashboard' element={<KeyTrackDashboard formData={formData} usersing={usersing}/>} />
+          <Route path='/dashboard' element={<KeyTrackDashboard  formData={formData} usersing={usersing}/>} />
           <Route path='/login' element={<Login  onClose={handleCloseLogin}
             onSwitchToSignup={handleSwitchToSignup}
             onSignupSuccess={handleLoginSuccess} setUser={setUser} />} />
