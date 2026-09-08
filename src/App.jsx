@@ -205,7 +205,7 @@ useEffect(() => {
           <Signup 
            // ADD THIS
           />
-        )},
+        )}
         <BrowserRouter>
         <Routes>
           <Route path='/'

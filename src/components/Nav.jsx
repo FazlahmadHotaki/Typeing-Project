@@ -75,7 +75,7 @@ const getBrandName = () => {
             <button 
               id="langBtn" 
               onClick={() => setMenuOpen(!menuOpen)}
-              className={`flex items-center gap-2 text-sm font-medium border border-gray-50 hover:bg-gray-50 hover:text-gray-700 rounded-full px-3 py-1.5 transition
+              className={`flex items-center gap-2 ml-10 text-sm font-medium border border-gray-50 hover:bg-gray-50 hover:text-gray-700 rounded-full px-3 py-1.5 transition
                     ${isScrolled ? "border-gray-200 hover:bg-[#f4f1de]" : "hover:bg-goldsoft"}      `}            >
               <span id="langBtnLabel">{langNames[lang]}</span>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
