@@ -212,7 +212,7 @@ useEffect(() => {
           element={
             <div className='app'>
               <Nav onStartTyping={handleStartTyping} />
-        <Hero onStartTyping={handleStartTyping} />
+        <Hero onStartTyping={handleStartTyping}/>
         <Stats />
         <TypingTechniques />
         <HowItWorks />
