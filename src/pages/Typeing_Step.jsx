@@ -4,11 +4,15 @@ import React, {
   useState,
 } from "react";
 
+/* =========================================================
+   API
+========================================================= */
+
 const API_BASE_URL =
   "https://the-typetone-api.onrender.com";
 
 /* =========================================================
-   KEYBOARD LAYOUT
+   PASHTO KEYBOARD
 ========================================================= */
 
 const keyboardLayout = [
@@ -85,559 +89,362 @@ const keyboardLayout = [
 ];
 
 /* =========================================================
-   MAIN COMPONENT
+   COMPONENT
 ========================================================= */
 
 export default function Typeing_Step() {
+  /* =======================================================
+     LESSON STATE
+  ======================================================= */
+
   const [lesson, setLesson] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [typedText, setTypedText] = useState("");
+  /* =======================================================
+     TYPING STATE
+  ======================================================= */
 
+  const [typedText, setTypedText] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
-
-  const [isFinished, setIsFinished] = useState(false);
 
   const [correctCharacters, setCorrectCharacters] =
     useState(0);
 
-  const [totalCharacters, setTotalCharacters] =
-    useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
 
-  const [isKeyboardAnimating, setIsKeyboardAnimating] =
-    useState(false);
+  /* =======================================================
+     UI STATE
+  ======================================================= */
 
-  const completionHandledRef = useRef(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] =
+    useState(true);
+
+  const [activeKey, setActiveKey] = useState(null);
+
+  const [showMenu, setShowMenu] = useState(false);
+
+  /* =======================================================
+     REFS
+  ======================================================= */
+
   const inputRef = useRef(null);
-  const keyboardAnimationTimer = useRef(null);
+  const keyboardTimer = useRef(null);
+  const completionHandledRef = useRef(false);
 
-  /* =========================================================
+  /* =======================================================
+     AUDIO
+  ======================================================= */
+
+  const audioContextRef = useRef(null);
+
+  const initAudio = () => {
+    if (!audioContextRef.current) {
+      const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      if (AudioContext) {
+        audioContextRef.current =
+          new AudioContext();
+      }
+    }
+
+    if (
+      audioContextRef.current &&
+      audioContextRef.current.state ===
+        "suspended"
+    ) {
+      audioContextRef.current.resume();
+    }
+  };
+
+  /* =======================================================
+     CORRECT SOUND
+  ======================================================= */
+
+  const playCorrectSound = () => {
+    if (isMuted) return;
+
+    initAudio();
+
+    const ctx = audioContextRef.current;
+
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    const oscillator =
+      ctx.createOscillator();
+
+    const gain = ctx.createGain();
+
+    oscillator.type = "sine";
+
+    oscillator.frequency.setValueAtTime(
+      900,
+      now
+    );
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+      550,
+      now + 0.06
+    );
+
+    gain.gain.setValueAtTime(
+      0.09,
+      now
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      now + 0.06
+    );
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.start(now);
+    oscillator.stop(now + 0.06);
+  };
+
+  /* =======================================================
+     INCORRECT / BITTER SOUND
+  ======================================================= */
+
+  const playIncorrectSound = () => {
+    if (isMuted) return;
+
+    initAudio();
+
+    const ctx = audioContextRef.current;
+
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    const master =
+      ctx.createGain();
+
+    master.gain.setValueAtTime(
+      0.14,
+      now
+    );
+
+    master.gain.exponentialRampToValueAtTime(
+      0.001,
+      now + 0.18
+    );
+
+    master.connect(ctx.destination);
+
+    const osc1 =
+      ctx.createOscillator();
+
+    const osc2 =
+      ctx.createOscillator();
+
+    osc1.type = "sawtooth";
+    osc2.type = "sawtooth";
+
+    osc1.frequency.setValueAtTime(
+      220,
+      now
+    );
+
+    osc2.frequency.setValueAtTime(
+      227,
+      now
+    );
+
+    osc1.frequency.exponentialRampToValueAtTime(
+      110,
+      now + 0.15
+    );
+
+    osc2.frequency.exponentialRampToValueAtTime(
+      113,
+      now + 0.15
+    );
+
+    const oscGain =
+      ctx.createGain();
+
+    oscGain.gain.setValueAtTime(
+      0.35,
+      now
+    );
+
+    oscGain.gain.exponentialRampToValueAtTime(
+      0.001,
+      now + 0.16
+    );
+
+    osc1.connect(oscGain);
+    osc2.connect(oscGain);
+
+    oscGain.connect(master);
+
+    osc1.start(now);
+    osc2.start(now);
+
+    osc1.stop(now + 0.18);
+    osc2.stop(now + 0.18);
+  };
+
+  /* =======================================================
+     BACKSPACE SOUND
+  ======================================================= */
+
+  const playBackspaceSound = () => {
+    if (isMuted) return;
+
+    initAudio();
+
+    const ctx = audioContextRef.current;
+
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    const oscillator =
+      ctx.createOscillator();
+
+    const gain =
+      ctx.createGain();
+
+    oscillator.type = "sine";
+
+    oscillator.frequency.setValueAtTime(
+      300,
+      now
+    );
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+      500,
+      now + 0.08
+    );
+
+    gain.gain.setValueAtTime(
+      0.08,
+      now
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      now + 0.08
+    );
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.start(now);
+    oscillator.stop(now + 0.08);
+  };
+
+  /* =======================================================
+     COMPLETE SOUND
+  ======================================================= */
+
+  const playCompleteSound = () => {
+    if (isMuted) return;
+
+    initAudio();
+
+    const ctx = audioContextRef.current;
+
+    if (!ctx) return;
+
+    const notes = [
+      523.25,
+      659.25,
+      784,
+      1046.5,
+    ];
+
+    notes.forEach((frequency, index) => {
+      setTimeout(() => {
+        const now = ctx.currentTime;
+
+        const oscillator =
+          ctx.createOscillator();
+
+        const gain =
+          ctx.createGain();
+
+        oscillator.type = "triangle";
+
+        oscillator.frequency.setValueAtTime(
+          frequency,
+          now
+        );
+
+        gain.gain.setValueAtTime(
+          0.12,
+          now
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          now + 0.35
+        );
+
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+
+        oscillator.start(now);
+        oscillator.stop(now + 0.35);
+      }, index * 100);
+    });
+  };
+
+  /* =======================================================
      GET LESSON ID
-  ========================================================= */
+  ======================================================= */
 
   const getLessonId = () => {
     try {
-      const urlParams = new URLSearchParams(
-        window.location.search
-      );
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
 
-      const urlLessonId = urlParams.get("lesson");
+      const urlLesson =
+        params.get("lesson");
 
-      if (urlLessonId) {
-        return String(urlLessonId);
+      if (urlLesson) {
+        return String(urlLesson);
       }
 
-      const savedId =
-        localStorage.getItem("selectedLessonId");
+      const saved =
+        localStorage.getItem(
+          "selectedLessonId"
+        );
 
-      return savedId ? String(savedId) : null;
-    } catch (error) {
-      console.error(
-        "Could not read lesson ID:",
-        error
-      );
-
+      return saved
+        ? String(saved)
+        : null;
+    } catch {
       return null;
     }
   };
 
-  const lessonId = getLessonId();
-
-  /* =========================================================
+  /* =======================================================
      FETCH LESSON
-  ========================================================= */
+  ======================================================= */
 
   const fetchLesson = async () => {
     setIsLoading(true);
     setError(null);
 
-    completionHandledRef.current = false;
-
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/lessons`
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          `HTTP Error: ${response.status}`
+      const response =
+        await fetch(
+          `${API_BASE_URL}/api/lessons`
         );
-      }
-
-      const data = await response.json();
-
-      const lessons = Array.isArray(data)
-        ? data
-        : Array.isArray(data.lessons)
-        ? data.lessons
-        : [];
-
-      if (lessons.length === 0) {
-        throw new Error("درسونه پیدا نه شول.");
-      }
-
-      let foundLesson = null;
-
-      if (lessonId) {
-        foundLesson = lessons.find(
-          (item) =>
-            String(item.id) === String(lessonId)
-        );
-      }
-
-      if (!foundLesson) {
-        foundLesson = lessons[0];
-      }
-
-      if (!foundLesson) {
-        throw new Error("درس پیدا نه شو.");
-      }
-
-      try {
-        localStorage.setItem(
-          "selectedLessonId",
-          String(foundLesson.id)
-        );
-      } catch (storageError) {
-        console.error(
-          "Could not save selected lesson ID:",
-          storageError
-        );
-      }
-
-      setLesson(foundLesson);
-
-      setTypedText("");
-      setStartTime(null);
-      setElapsedTime(0);
-      setIsFinished(false);
-      setCorrectCharacters(0);
-
-      setTotalCharacters(
-        (foundLesson.text || "").length
-      );
-    } catch (err) {
-      console.error(
-        "Error fetching lesson:",
-        err
-      );
-
-      setError(
-        err.message ||
-          "د درس په ترلاسه کولو کې ستونزه رامنځته شوه."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  /* =========================================================
-     LOAD LESSON
-  ========================================================= */
-
-  useEffect(() => {
-    fetchLesson();
-
-    return () => {
-      if (keyboardAnimationTimer.current) {
-        clearTimeout(
-          keyboardAnimationTimer.current
-        );
-      }
-    };
-  }, []);
-
-  /* =========================================================
-     TIMER
-     NO TIME LIMIT
-  ========================================================= */
-
-  useEffect(() => {
-    if (!startTime || isFinished) {
-      return;
-    }
-
-    const timer = setInterval(() => {
-      const currentTime = Math.floor(
-        (Date.now() - startTime) / 1000
-      );
-
-      setElapsedTime(currentTime);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [startTime, isFinished]);
-
-  /* =========================================================
-     FORMAT TIME
-  ========================================================= */
-
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-
-    const remainingSeconds =
-      seconds % 60;
-
-    return `${String(minutes).padStart(
-      2,
-      "0"
-    )}:${String(remainingSeconds).padStart(
-      2,
-      "0"
-    )}`;
-  };
-
-  /* =========================================================
-     TARGET TEXT
-  ========================================================= */
-
-  const targetText = lesson?.text || "";
-
-  /* =========================================================
-     PROGRESS
-  ========================================================= */
-
-  const typingProgress =
-    targetText.length > 0
-      ? Math.min(
-          100,
-          Math.round(
-            (typedText.length /
-              targetText.length) *
-              100
-          )
-        )
-      : 0;
-
-  /* =========================================================
-     ACCURACY
-  ========================================================= */
-
-  const accuracy =
-    typedText.length > 0
-      ? Math.round(
-          (correctCharacters /
-            typedText.length) *
-            100
-        )
-      : 100;
-
-  /* =========================================================
-     WPM
-  ========================================================= */
-
-  const wordsTyped =
-    typedText.trim().length > 0
-      ? typedText
-          .trim()
-          .split(/\s+/).length
-      : 0;
-
-  const minutes = elapsedTime / 60;
-
-  const wpm =
-    minutes > 0
-      ? Math.round(wordsTyped / minutes)
-      : 0;
-
-  /* =========================================================
-     CURRENT CHARACTER
-  ========================================================= */
-
-  const currentCharacter =
-    targetText[typedText.length] || "";
-
-  /* =========================================================
-     KEYBOARD MATCH
-  ========================================================= */
-
-  const isKeyActive = (key) => {
-    if (!currentCharacter) {
-      return false;
-    }
-
-    if (currentCharacter === " ") {
-      return false;
-    }
-
-    const possibleCharacters = [
-      key.en,
-      key.en.toLowerCase(),
-      key.ps,
-      key.da,
-    ];
-
-    return possibleCharacters.includes(
-      currentCharacter
-    );
-  };
-
-  /* =========================================================
-     SPACE
-  ========================================================= */
-
-  const isSpaceActive =
-    currentCharacter === " ";
-
-  /* =========================================================
-     KEY DISPLAY
-  ========================================================= */
-
-  const getKeyDisplay = (key) => {
-    return key.ps;
-  };
-
-  /* =========================================================
-     HANDLE TYPING
-  ========================================================= */
-
-  const handleTyping = (event) => {
-    if (
-      !lesson ||
-      isFinished ||
-      completionHandledRef.current
-    ) {
-      return;
-    }
-
-    const value = event.target.value;
-    const target = lesson.text || "";
-
-    if (value.length === 1 && !startTime) {
-      setStartTime(Date.now());
-    }
-
-    setTypedText(value);
-
-    let correct = 0;
-
-    for (
-      let i = 0;
-      i < value.length;
-      i++
-    ) {
-      if (value[i] === target[i]) {
-        correct++;
-      }
-    }
-
-    setCorrectCharacters(correct);
-
-    setIsKeyboardAnimating(true);
-
-    if (keyboardAnimationTimer.current) {
-      clearTimeout(
-        keyboardAnimationTimer.current
-      );
-    }
-
-    keyboardAnimationTimer.current =
-      setTimeout(() => {
-        setIsKeyboardAnimating(false);
-      }, 300);
-
-    if (
-      value === target &&
-      target.length > 0
-    ) {
-      let finalStartTime = startTime;
-
-      if (!finalStartTime) {
-        finalStartTime = Date.now();
-        setStartTime(finalStartTime);
-      }
-
-      const finishTime = Date.now();
-
-      const finalElapsedTime =
-        Math.floor(
-          (finishTime -
-            finalStartTime) /
-            1000
-        );
-
-      setElapsedTime(
-        finalElapsedTime
-      );
-
-      setIsFinished(true);
-    }
-  };
-
-  /* =========================================================
-     SAVE COMPLETED LESSON
-  ========================================================= */
-
-  const saveCompletedLesson = () => {
-    if (!lesson) {
-      return;
-    }
-
-    try {
-      const currentId =
-        String(lesson.id);
-
-      let completed = [];
-
-      try {
-        const saved = JSON.parse(
-          localStorage.getItem(
-            "completedLessons"
-          ) || "[]"
-        );
-
-        if (Array.isArray(saved)) {
-          completed =
-            saved.map(String);
-        }
-      } catch {
-        completed = [];
-      }
-
-      if (
-        !completed.includes(currentId)
-      ) {
-        completed.push(currentId);
-      }
-
-      localStorage.setItem(
-        "completedLessons",
-        JSON.stringify(completed)
-      );
-
-      let results = {};
-
-      try {
-        const savedResults =
-          JSON.parse(
-            localStorage.getItem(
-              "lessonResults"
-            ) || "{}"
-          );
-
-        if (
-          savedResults &&
-          typeof savedResults ===
-            "object" &&
-          !Array.isArray(
-            savedResults
-          )
-        ) {
-          results = savedResults;
-        }
-      } catch {
-        results = {};
-      }
-
-      results[currentId] = {
-        lessonId: lesson.id,
-        title: lesson.title || "",
-        level: lesson.level || "",
-        type: lesson.type || "",
-        difficulty:
-          lesson.difficulty || "",
-        text: lesson.text || "",
-        completed: true,
-        progress: 100,
-        typedCharacters:
-          typedText.length,
-        totalCharacters:
-          targetText.length,
-        correctCharacters:
-          correctCharacters,
-        accuracy: accuracy,
-        wpm: wpm,
-        elapsedTime: elapsedTime,
-        score: 10,
-        completedAt:
-          new Date().toISOString(),
-      };
-
-      localStorage.setItem(
-        "lessonResults",
-        JSON.stringify(results)
-      );
-
-      localStorage.setItem(
-        "lastCompletedLesson",
-        JSON.stringify(
-          results[currentId]
-        )
-      );
-    } catch (error) {
-      console.error(
-        "Could not save lesson result:",
-        error
-      );
-    }
-  };
-
-  /* =========================================================
-     COMPLETION
-  ========================================================= */
-
-  useEffect(() => {
-    if (
-      !isFinished ||
-      !lesson ||
-      completionHandledRef.current
-    ) {
-      return;
-    }
-
-    completionHandledRef.current = true;
-
-    saveCompletedLesson();
-  }, [
-    isFinished,
-    lesson,
-    typedText,
-    elapsedTime,
-    correctCharacters,
-  ]);
-
-  /* =========================================================
-     RESTART
-  ========================================================= */
-
-  const restartLesson = () => {
-    completionHandledRef.current = false;
-
-    setTypedText("");
-    setStartTime(null);
-    setElapsedTime(0);
-    setIsFinished(false);
-    setCorrectCharacters(0);
-
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 50);
-  };
-
-  /* =========================================================
-     BACK
-  ========================================================= */
-
-  const goBackToLessons = () => {
-    window.location.href =
-      "/dashboard/steps-pashto";
-  };
-
-  /* =========================================================
-     NEXT LESSON
-  ========================================================= */
-
-  const goToNextLesson = async () => {
-    if (!lesson) {
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/lessons`
-      );
 
       if (!response.ok) {
         throw new Error(
@@ -648,199 +455,728 @@ export default function Typeing_Step() {
       const data =
         await response.json();
 
-      const lessons = Array.isArray(data)
-        ? data
-        : Array.isArray(data.lessons)
-        ? data.lessons
-        : [];
+      const lessons =
+        Array.isArray(data)
+          ? data
+          : Array.isArray(
+              data.lessons
+            )
+          ? data.lessons
+          : [];
 
-      if (lessons.length === 0) {
-        goBackToLessons();
-        return;
+      if (!lessons.length) {
+        throw new Error(
+          "درسونه پیدا نه شول."
+        );
       }
 
-      const currentIndex =
-        lessons.findIndex(
-          (item) =>
-            String(item.id) ===
-            String(lesson.id)
-        );
+      const lessonId =
+        getLessonId();
 
-      if (
-        currentIndex >= 0 &&
-        currentIndex <
-          lessons.length - 1
-      ) {
-        const nextLesson =
-          lessons[currentIndex + 1];
+      let selectedLesson = null;
 
-        localStorage.setItem(
-          "selectedLessonId",
-          String(nextLesson.id)
-        );
-
-        window.location.href =
-          "/Typeing_Step?lesson=" +
-          nextLesson.id;
-      } else {
-        goBackToLessons();
+      if (lessonId) {
+        selectedLesson =
+          lessons.find(
+            (item) =>
+              String(item.id) ===
+              String(lessonId)
+          );
       }
-    } catch (error) {
-      console.error(
-        "Error fetching next lesson:",
-        error
+
+      if (!selectedLesson) {
+        selectedLesson =
+          lessons[0];
+      }
+
+      localStorage.setItem(
+        "selectedLessonId",
+        String(selectedLesson.id)
       );
 
-      goBackToLessons();
+      setLesson(selectedLesson);
+
+      setTypedText("");
+      setStartTime(null);
+      setElapsedTime(0);
+      setCorrectCharacters(0);
+      setIsFinished(false);
+      setIsPaused(true);
+
+      completionHandledRef.current =
+        false;
+    } catch (err) {
+      console.error(err);
+
+      setError(
+        err.message ||
+          "د درس په ترلاسه کولو کې ستونزه رامنځته شوه."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  /* =========================================================
+  /* =======================================================
+     INITIAL LOAD
+  ======================================================= */
+
+  useEffect(() => {
+    fetchLesson();
+
+    return () => {
+      if (keyboardTimer.current) {
+        clearTimeout(
+          keyboardTimer.current
+        );
+      }
+    };
+  }, []);
+
+  /* =======================================================
+     TIMER
+  ======================================================= */
+
+  useEffect(() => {
+    if (
+      !startTime ||
+      isFinished ||
+      isPaused
+    ) {
+      return;
+    }
+
+    const timer =
+      setInterval(() => {
+        setElapsedTime(
+          Math.floor(
+            (Date.now() -
+              startTime) /
+              1000
+          )
+        );
+      }, 1000);
+
+    return () =>
+      clearInterval(timer);
+  }, [
+    startTime,
+    isFinished,
+    isPaused,
+  ]);
+
+  /* =======================================================
+     DATA
+  ======================================================= */
+
+  const targetText =
+    lesson?.text || "";
+
+  const totalCharacters =
+    targetText.length;
+
+  const currentCharacter =
+    targetText[
+      typedText.length
+    ] || "";
+
+  /* =======================================================
+     PROGRESS
+  ======================================================= */
+
+  const progress =
+    totalCharacters > 0
+      ? Math.min(
+          100,
+          Math.round(
+            (typedText.length /
+              totalCharacters) *
+              100
+          )
+        )
+      : 0;
+
+  /* =======================================================
+     ACCURACY
+  ======================================================= */
+
+  const accuracy =
+    typedText.length > 0
+      ? Math.round(
+          (correctCharacters /
+            typedText.length) *
+            100
+        )
+      : 100;
+
+  /* =======================================================
+     WPM
+  ======================================================= */
+
+  const words =
+    typedText.trim().length
+      ? typedText
+          .trim()
+          .split(/\s+/).length
+      : 0;
+
+  const minutes =
+    elapsedTime / 60;
+
+  const wpm =
+    minutes > 0
+      ? Math.round(
+          words / minutes
+        )
+      : 0;
+
+  /* =======================================================
+     TIME FORMAT
+  ======================================================= */
+
+  const formatTime = (
+    seconds
+  ) => {
+    const mins =
+      Math.floor(
+        seconds / 60
+      );
+
+    const secs =
+      seconds % 60;
+
+    return `${String(
+      mins
+    ).padStart(
+      2,
+      "0"
+    )}:${String(
+      secs
+    ).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
+  /* =======================================================
+     KEYBOARD ACTIVE
+  ======================================================= */
+
+  const isKeyActive = (
+    key
+  ) => {
+    if (!currentCharacter) {
+      return false;
+    }
+
+    if (
+      currentCharacter ===
+      " "
+    ) {
+      return false;
+    }
+
+    return [
+      key.en,
+      key.en.toLowerCase(),
+      key.ps,
+      key.da,
+    ].includes(
+      currentCharacter
+    );
+  };
+
+  const isSpaceActive =
+    currentCharacter === " ";
+
+  /* =======================================================
+     ANIMATE KEY
+  ======================================================= */
+
+  const animateKey = (
+    char
+  ) => {
+    setActiveKey(char);
+
+    if (keyboardTimer.current) {
+      clearTimeout(
+        keyboardTimer.current
+      );
+    }
+
+    keyboardTimer.current =
+      setTimeout(() => {
+        setActiveKey(null);
+      }, 180);
+  };
+
+  /* =======================================================
+     TYPING
+  ======================================================= */
+
+  const handleTyping = (
+    event
+  ) => {
+    if (
+      !lesson ||
+      isFinished
+    ) {
+      return;
+    }
+
+    initAudio();
+
+    const value =
+      event.target.value;
+
+    const target =
+      lesson.text || "";
+
+    /* START */
+
+    if (
+      value.length === 1 &&
+      !startTime
+    ) {
+      setStartTime(
+        Date.now()
+      );
+
+      setIsPaused(false);
+    }
+
+    /* DETECT LAST CHARACTER */
+
+    if (
+      value.length >
+      typedText.length
+    ) {
+      const newChar =
+        value[value.length - 1];
+
+      animateKey(
+        newChar
+      );
+
+      const expected =
+        target[
+          value.length - 1
+        ];
+
+      if (
+        newChar === expected
+      ) {
+        playCorrectSound();
+      } else {
+        playIncorrectSound();
+      }
+    }
+
+    /* BACKSPACE */
+
+    if (
+      value.length <
+      typedText.length
+    ) {
+      playBackspaceSound();
+    }
+
+    /* COUNT CORRECT */
+
+    let correct = 0;
+
+    for (
+      let i = 0;
+      i < value.length;
+      i++
+    ) {
+      if (
+        value[i] ===
+        target[i]
+      ) {
+        correct++;
+      }
+    }
+
+    setCorrectCharacters(
+      correct
+    );
+
+    setTypedText(value);
+
+    /* COMPLETE */
+
+    if (
+      value === target &&
+      target.length > 0
+    ) {
+      const finishTime =
+        Date.now();
+
+      const finalStart =
+        startTime ||
+        finishTime;
+
+      const finalElapsed =
+        Math.floor(
+          (finishTime -
+            finalStart) /
+            1000
+        );
+
+      setElapsedTime(
+        finalElapsed
+      );
+
+      setIsFinished(true);
+      setIsPaused(true);
+
+      playCompleteSound();
+    }
+  };
+
+  /* =======================================================
+     KEYBOARD PHYSICAL KEY
+  ======================================================= */
+
+  useEffect(() => {
+    const handleKeyDown =
+      (event) => {
+        if (
+          isFinished
+        ) {
+          return;
+        }
+
+        if (
+          event.key ===
+          " "
+        ) {
+          event.preventDefault();
+        }
+
+        initAudio();
+
+        if (
+          event.key ===
+          "Backspace"
+        ) {
+          return;
+        }
+
+        if (
+          event.key.length ===
+          1
+        ) {
+          animateKey(
+            event.key
+          );
+        }
+      };
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    return () =>
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+  }, [
+    isFinished,
+  ]);
+
+  /* =======================================================
+     SAVE COMPLETED LESSON
+  ======================================================= */
+
+  const saveCompletedLesson =
+    () => {
+      if (!lesson) return;
+
+      const id =
+        String(lesson.id);
+
+      try {
+        let completed = [];
+
+        try {
+          const saved =
+            JSON.parse(
+              localStorage.getItem(
+                "completedLessons"
+              ) || "[]"
+            );
+
+          if (
+            Array.isArray(saved)
+          ) {
+            completed =
+              saved.map(String);
+          }
+        } catch {
+          completed = [];
+        }
+
+        if (
+          !completed.includes(id)
+        ) {
+          completed.push(id);
+        }
+
+        localStorage.setItem(
+          "completedLessons",
+          JSON.stringify(
+            completed
+          )
+        );
+
+        let results = {};
+
+        try {
+          const saved =
+            JSON.parse(
+              localStorage.getItem(
+                "lessonResults"
+              ) || "{}"
+            );
+
+          if (
+            saved &&
+            typeof saved ===
+              "object" &&
+            !Array.isArray(saved)
+          ) {
+            results = saved;
+          }
+        } catch {
+          results = {};
+        }
+
+        results[id] = {
+          lessonId:
+            lesson.id,
+
+          title:
+            lesson.title || "",
+
+          level:
+            lesson.level || "",
+
+          type:
+            lesson.type || "",
+
+          difficulty:
+            lesson.difficulty ||
+            "",
+
+          text:
+            lesson.text || "",
+
+          completed:
+            true,
+
+          progress: 100,
+
+          typedCharacters:
+            typedText.length,
+
+          totalCharacters:
+            targetText.length,
+
+          correctCharacters:
+            correctCharacters,
+
+          accuracy,
+
+          wpm,
+
+          elapsedTime,
+
+          score: 10,
+
+          completedAt:
+            new Date().toISOString(),
+        };
+
+        localStorage.setItem(
+          "lessonResults",
+          JSON.stringify(
+            results
+          )
+        );
+
+        localStorage.setItem(
+          "lastCompletedLesson",
+          JSON.stringify(
+            results[id]
+          )
+        );
+      } catch (err) {
+        console.error(
+          "Could not save:",
+          err
+        );
+      }
+    };
+
+  /* =======================================================
+     SAVE WHEN FINISHED
+  ======================================================= */
+
+  useEffect(() => {
+    if (
+      !isFinished ||
+      !lesson ||
+      completionHandledRef.current
+    ) {
+      return;
+    }
+
+    completionHandledRef.current =
+      true;
+
+    saveCompletedLesson();
+  }, [isFinished]);
+
+  /* =======================================================
+     RESTART
+  ======================================================= */
+
+  const restartLesson =
+    () => {
+      completionHandledRef.current =
+        false;
+
+      setTypedText("");
+      setStartTime(null);
+      setElapsedTime(0);
+      setCorrectCharacters(0);
+      setIsFinished(false);
+      setIsPaused(true);
+      setActiveKey(null);
+
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    };
+
+  /* =======================================================
+     BACK
+  ======================================================= */
+
+  const goBack =
+    () => {
+      window.location.href =
+        "/dashboard/steps-pashto";
+    };
+
+  /* =======================================================
+     NEXT LESSON
+  ======================================================= */
+
+  const nextLesson =
+    async () => {
+      if (!lesson) return;
+
+      try {
+        const response =
+          await fetch(
+            `${API_BASE_URL}/api/lessons`
+          );
+
+        const data =
+          await response.json();
+
+        const lessons =
+          Array.isArray(data)
+            ? data
+            : data.lessons || [];
+
+        const index =
+          lessons.findIndex(
+            (item) =>
+              String(item.id) ===
+              String(lesson.id)
+          );
+
+        if (
+          index >= 0 &&
+          index <
+            lessons.length - 1
+        ) {
+          const next =
+            lessons[
+              index + 1
+            ];
+
+          localStorage.setItem(
+            "selectedLessonId",
+            String(next.id)
+          );
+
+          window.location.href =
+            `/Typeing_Step?lesson=${next.id}`;
+        } else {
+          goBack();
+        }
+      } catch (err) {
+        console.error(err);
+        goBack();
+      }
+    };
+
+  /* =======================================================
      LOADING
-  ========================================================= */
+  ======================================================= */
 
   if (isLoading) {
     return (
-      <div
-        dir="rtl"
-        className="
-          min-h-screen
-          bg-gray-50
-          dark:bg-gray-900
-          flex
-          items-center
-          justify-center
-        "
-      >
+      <div className="min-h-screen bg-[#fdf4c7] flex items-center justify-center">
         <div className="text-center">
-          <div
-            className="
-              animate-spin
-              rounded-full
-              h-14
-              w-14
-              border-b-4
-              border-blue-500
-              mx-auto
-              mb-5
-            "
-          />
+          <div className="w-14 h-14 border-4 border-pink-300 border-t-pink-600 rounded-full animate-spin mx-auto" />
 
-          <h2
-            className="
-              text-lg
-              font-bold
-              text-gray-800
-              dark:text-white
-            "
-          >
+          <p className="mt-5 text-gray-600 font-bold">
             درس بارول کېږي...
-          </h2>
-
-          <p
-            className="
-              text-sm
-              text-gray-500
-              dark:text-gray-400
-              mt-2
-            "
-          >
-            مهرباني وکړئ صبر وکړئ
           </p>
         </div>
       </div>
     );
   }
 
-  /* =========================================================
+  /* =======================================================
      ERROR
-  ========================================================= */
+  ======================================================= */
 
   if (error) {
     return (
-      <div
-        dir="rtl"
-        className="
-          min-h-screen
-          bg-gray-50
-          dark:bg-gray-900
-          flex
-          items-center
-          justify-center
-          px-5
-        "
-      >
-        <div
-          className="
-            bg-white
-            dark:bg-gray-800
-            rounded-2xl
-            border
-            border-gray-200
-            dark:border-gray-700
-            p-8
-            max-w-md
-            w-full
-            text-center
-            shadow-lg
-          "
-        >
+      <div className="min-h-screen bg-[#fdf4c7] flex items-center justify-center p-5">
+        <div className="bg-white rounded-2xl shadow-xl p-8 text-center max-w-md w-full">
           <div className="text-5xl mb-5">
             ⚠️
           </div>
 
-          <h2
-            className="
-              text-xl
-              font-bold
-              text-red-600
-              dark:text-red-400
-            "
-          >
+          <h2 className="text-2xl font-bold text-red-500">
             ستونزه رامنځته شوه
           </h2>
 
-          <p
-            className="
-              text-sm
-              text-gray-500
-              dark:text-gray-400
-              mt-3
-            "
-          >
+          <p className="text-gray-500 mt-3">
             {error}
           </p>
 
           <div className="flex gap-3 justify-center mt-6">
             <button
               onClick={fetchLesson}
-              className="
-                px-5
-                py-2.5
-                bg-blue-500
-                hover:bg-blue-600
-                text-white
-                rounded-xl
-                font-semibold
-              "
+              className="px-5 py-3 bg-pink-500 text-white rounded-xl font-bold"
             >
               بیا هڅه
             </button>
 
             <button
-              onClick={goBackToLessons}
-              className="
-                px-5
-                py-2.5
-                bg-gray-100
-                dark:bg-gray-700
-                hover:bg-gray-200
-                dark:hover:bg-gray-600
-                text-gray-700
-                dark:text-gray-300
-                rounded-xl
-                font-semibold
-              "
+              onClick={goBack}
+              className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold"
             >
               بېرته
             </button>
@@ -850,19 +1186,19 @@ export default function Typeing_Step() {
     );
   }
 
-  /* =========================================================
-     MAIN UI
-  ========================================================= */
+  /* =======================================================
+     MAIN
+  ======================================================= */
 
   return (
     <div
-      dir="rtl"
       className="
-        min-h-screen
-        bg-gray-50
-        dark:bg-gray-900
-        text-gray-800
-        dark:text-gray-200
+        relative
+        h-screen
+        overflow-hidden
+        bg-[#fdf4c7]
+        text-gray-700
+        font-sans
       "
     >
       {/* =====================================================
@@ -871,825 +1207,939 @@ export default function Typeing_Step() {
 
       <header
         className="
-          bg-white
-          dark:bg-gray-800
+          absolute
+          top-0
+          left-0
+          right-0
+          h-[48px]
+          bg-white/85
+          backdrop-blur-md
           border-b
-          border-gray-200
-          dark:border-gray-700
-          shadow-sm
+          border-black/5
+          flex
+          items-center
+          justify-between
+          px-5
+          z-50
         "
       >
-        <div
-          className="
-            max-w-5xl
-            mx-auto
-            px-5
-            py-4
-          "
-        >
-          <div
+        {/* LEFT */}
+
+        <div className="relative flex items-center gap-4">
+          <button
+            onClick={() =>
+              setShowMenu(
+                !showMenu
+              )
+            }
             className="
-              flex
-              flex-col
-              md:flex-row
-              md:items-center
-              md:justify-between
-              gap-4
+              text-gray-500
+              text-xl
+              hover:text-gray-800
+              transition
             "
           >
-            <button
-              onClick={goBackToLessons}
+            ☰
+          </button>
+
+          <div
+            className="
+              hidden
+              sm:block
+              font-extrabold
+              text-gray-600
+              text-sm
+            "
+          >
+            Lesson {lesson?.id}:{" "}
+            {lesson?.title ||
+              "Pashto Typing"}
+          </div>
+
+          {/* DROPDOWN */}
+
+          {showMenu && (
+            <div
               className="
-                px-4
-                py-2
-                bg-gray-100
-                dark:bg-gray-700
-                hover:bg-gray-200
-                dark:hover:bg-gray-600
+                absolute
+                top-9
+                left-0
+                bg-white
                 rounded-xl
-                text-sm
-                font-semibold
-                text-gray-600
-                dark:text-gray-300
+                shadow-xl
+                border
+                border-black/5
+                py-2
+                w-48
+                z-[100]
               "
             >
-              ← بېرته
-            </button>
-
-            <div className="text-center">
-              <p
+              <button
+                onClick={() => {
+                  restartLesson();
+                  setShowMenu(
+                    false
+                  );
+                }}
                 className="
-                  text-xs
-                  text-gray-400
-                  dark:text-gray-500
-                "
-              >
-                د پښتو ټایپنګ تمرین
-              </p>
-
-              <h1
-                className="
-                  text-2xl
-                  font-bold
-                  text-gray-800
-                  dark:text-white
-                  mt-1
-                "
-              >
-                درس {lesson.id}
-              </h1>
-
-              <p
-                className="
+                  w-full
+                  text-left
+                  px-4
+                  py-2
+                  hover:bg-[#fdf4c7]
                   text-sm
-                  text-blue-500
-                  dark:text-blue-400
-                  mt-1
                 "
               >
-                {lesson.title}
-              </p>
+                🔄 Restart Lesson
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsMuted(
+                    !isMuted
+                  );
+                  setShowMenu(
+                    false
+                  );
+                }}
+                className="
+                  w-full
+                  text-left
+                  px-4
+                  py-2
+                  hover:bg-[#fdf4c7]
+                  text-sm
+                "
+              >
+                {isMuted
+                  ? "🔇 Enable Sound"
+                  : "🔊 Mute Sound"}
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsKeyboardVisible(
+                    !isKeyboardVisible
+                  );
+                  setShowMenu(
+                    false
+                  );
+                }}
+                className="
+                  w-full
+                  text-left
+                  px-4
+                  py-2
+                  hover:bg-[#fdf4c7]
+                  text-sm
+                "
+              >
+                ⌨️ Toggle Keyboard
+              </button>
+
+              <button
+                onClick={goBack}
+                className="
+                  w-full
+                  text-left
+                  px-4
+                  py-2
+                  hover:bg-[#fdf4c7]
+                  text-sm
+                "
+              >
+                ← Lessons
+              </button>
             </div>
-          </div>
+          )}
+        </div>
+
+        {/* CENTER */}
+
+        <div className="flex items-center gap-5">
+          <button
+            onClick={() => {
+              initAudio();
+
+              if (isFinished) {
+                restartLesson();
+                return;
+              }
+
+              setIsPaused(
+                !isPaused
+              );
+
+              if (
+                isPaused &&
+                !startTime
+              ) {
+                setStartTime(
+                  Date.now()
+                );
+              }
+
+              setTimeout(() => {
+                inputRef.current?.focus();
+              }, 50);
+            }}
+            className="text-gray-500 hover:text-gray-800 text-lg"
+          >
+            {isPaused
+              ? "▶"
+              : "⏸"}
+          </button>
+
+          <button
+            onClick={restartLesson}
+            className="text-gray-500 hover:text-gray-800 text-xl"
+          >
+            ⟳
+          </button>
+
+          <button
+            onClick={() =>
+              setIsKeyboardVisible(
+                !isKeyboardVisible
+              )
+            }
+            className="text-gray-500 hover:text-gray-800 text-xl"
+          >
+            ⌨
+          </button>
+
+          <button
+            onClick={() =>
+              alert(
+                "Finger guide will be added here."
+              )
+            }
+            className="hidden sm:block text-gray-500 hover:text-gray-800"
+          >
+            👆
+          </button>
+
+          <button
+            onClick={() => {
+              initAudio();
+              setIsMuted(
+                !isMuted
+              );
+            }}
+            className="text-gray-500 hover:text-gray-800"
+          >
+            {isMuted
+              ? "🔇"
+              : "🔊"}
+          </button>
+
+          <button
+            onClick={() =>
+              alert(
+                "Settings panel will be added here."
+              )
+            }
+            className="text-gray-500 hover:text-gray-800"
+          >
+            ⚙
+          </button>
+        </div>
+
+        {/* USER */}
+
+        <div className="font-bold text-gray-500 text-sm">
+          Fazlahmad
         </div>
       </header>
 
       {/* =====================================================
-          MAIN
+          CLOUDS
+      ===================================================== */}
+
+      <div
+        className="
+          absolute
+          top-[13%]
+          left-[7%]
+          w-32
+          h-12
+          bg-white/60
+          rounded-full
+          z-0
+        "
+      />
+
+      <div
+        className="
+          absolute
+          top-[9%]
+          left-[9%]
+          w-16
+          h-16
+          bg-white/60
+          rounded-full
+        "
+      />
+
+      <div
+        className="
+          absolute
+          top-[16%]
+          left-[15%]
+          w-12
+          h-12
+          bg-white/60
+          rounded-full
+        "
+      />
+
+      <div
+        className="
+          absolute
+          top-[21%]
+          right-[10%]
+          w-44
+          h-14
+          bg-white/60
+          rounded-full
+        "
+      />
+
+      <div
+        className="
+          absolute
+          top-[15%]
+          right-[16%]
+          w-20
+          h-20
+          bg-white/60
+          rounded-full
+        "
+      />
+
+      {/* =====================================================
+          SIGNPOST
+      ===================================================== */}
+
+      <div
+        className="
+          hidden
+          lg:flex
+          absolute
+          left-10
+          bottom-14
+          flex-col
+          items-center
+          z-10
+        "
+      >
+        <div className="relative w-2.5 h-48 bg-gray-400 rounded-full">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-gray-400 rounded-full" />
+
+          <div
+            className="
+              absolute
+              top-7
+              -left-16
+              bg-pink-300
+              px-4
+              py-2
+              rounded-md
+              text-xs
+              font-bold
+              shadow-md
+              -rotate-3
+              whitespace-nowrap
+            "
+          >
+            Keyboard
+          </div>
+
+          <div
+            className="
+              absolute
+              top-20
+              -left-12
+              bg-yellow-200
+              px-4
+              py-2
+              rounded-md
+              text-xs
+              font-bold
+              shadow-md
+              rotate-2
+              whitespace-nowrap
+            "
+          >
+            Home Row
+          </div>
+
+          <div
+            className="
+              absolute
+              top-32
+              -left-20
+              bg-blue-300
+              px-4
+              py-2
+              rounded-md
+              text-xs
+              font-bold
+              shadow-md
+              -rotate-2
+              whitespace-nowrap
+            "
+          >
+            Typing City
+          </div>
+        </div>
+      </div>
+
+      {/* =====================================================
+          TAXI
+      ===================================================== */}
+
+      <div
+        className="
+          hidden
+          lg:block
+          absolute
+          right-12
+          bottom-10
+          w-40
+          h-20
+          z-10
+        "
+      >
+        <div
+          className="
+            absolute
+            bottom-0
+            w-full
+            h-14
+            bg-yellow-400
+            rounded-[25px_35px_8px_8px]
+            shadow-inner
+          "
+        />
+
+        <div
+          className="
+            absolute
+            -top-5
+            right-5
+            w-20
+            h-8
+            bg-sky-300
+            rounded-t-[20px]
+            border-4
+            border-yellow-400
+          "
+        />
+
+        <div
+          className="
+            absolute
+            -top-3
+            left-5
+            bg-yellow-400
+            rounded-t
+            px-2
+            text-[7px]
+            font-bold
+          "
+        >
+          TAXI
+        </div>
+
+        <div className="absolute bottom-[-7px] left-5 w-6 h-6 bg-gray-800 rounded-full border-4 border-gray-500" />
+
+        <div className="absolute bottom-[-7px] right-5 w-6 h-6 bg-gray-800 rounded-full border-4 border-gray-500" />
+      </div>
+
+      {/* =====================================================
+          MAIN APPLICATION
       ===================================================== */}
 
       <main
         className="
-          max-w-5xl
-          mx-auto
+          relative
+          z-20
+          h-full
+          flex
+          items-center
+          justify-center
           px-5
-          py-8
+          pt-12
+          pb-3
         "
       >
-        {/* ===================================================
-            STATISTICS
-        =================================================== */}
-
         <div
           className="
-            grid
-            grid-cols-2
-            md:grid-cols-4
-            gap-4
-            mb-6
+            w-full
+            max-w-[1050px]
+            flex
+            flex-col
+            items-center
           "
         >
-          <div
+          {/* =================================================
+              START TOOLTIP
+          ================================================= */}
+
+          <button
+            onClick={() => {
+              initAudio();
+
+              if (isFinished) {
+                restartLesson();
+                return;
+              }
+
+              setIsPaused(
+                !isPaused
+              );
+
+              if (
+                isPaused &&
+                !startTime
+              ) {
+                setStartTime(
+                  Date.now()
+                );
+              }
+
+              setTimeout(() => {
+                inputRef.current?.focus();
+              }, 50);
+            }}
             className="
-              bg-white
-              dark:bg-gray-800
+              self-start
+              ml-[7%]
+              mb-2
+              bg-yellow-200
               border
-              border-gray-200
-              dark:border-gray-700
-              rounded-2xl
-              p-5
-              text-center
+              border-yellow-300
+              px-5
+              py-2
+              rounded-lg
+              text-gray-600
+              font-bold
+              text-sm
               shadow-sm
+              hover:bg-yellow-300
+              transition
             "
           >
-            <span className="block text-2xl mb-2">
-              ⏱️
-            </span>
-
-            <p
-              className="
-                text-xs
-                text-gray-400
-                dark:text-gray-500
-              "
-            >
-              تېر شوی وخت
-            </p>
-
-            <strong
-              className="
-                block
-                text-lg
-                text-gray-800
-                dark:text-white
-                mt-1
-              "
-            >
-              {formatTime(elapsedTime)}
-            </strong>
-          </div>
-
-          <div
-            className="
-              bg-white
-              dark:bg-gray-800
-              border
-              border-gray-200
-              dark:border-gray-700
-              rounded-2xl
-              p-5
-              text-center
-              shadow-sm
-            "
-          >
-            <span className="block text-2xl mb-2">
-              🎯
-            </span>
-
-            <p
-              className="
-                text-xs
-                text-gray-400
-                dark:text-gray-500
-              "
-            >
-              دقت
-            </p>
-
-            <strong
-              className="
-                block
-                text-lg
-                text-green-500
-                dark:text-green-400
-                mt-1
-              "
-            >
-              {accuracy}%
-            </strong>
-          </div>
-
-          <div
-            className="
-              bg-white
-              dark:bg-gray-800
-              border
-              border-gray-200
-              dark:border-gray-700
-              rounded-2xl
-              p-5
-              text-center
-              shadow-sm
-            "
-          >
-            <span className="block text-2xl mb-2">
-              ⚡
-            </span>
-
-            <p
-              className="
-                text-xs
-                text-gray-400
-                dark:text-gray-500
-              "
-            >
-              سرعت
-            </p>
-
-            <strong
-              className="
-                block
-                text-lg
-                text-blue-500
-                dark:text-blue-400
-                mt-1
-              "
-            >
-              {wpm} WPM
-            </strong>
-          </div>
-
-          <div
-            className="
-              bg-white
-              dark:bg-gray-800
-              border
-              border-gray-200
-              dark:border-gray-700
-              rounded-2xl
-              p-5
-              text-center
-              shadow-sm
-            "
-          >
-            <span className="block text-2xl mb-2">
-              ⌨️
-            </span>
-
-            <p
-              className="
-                text-xs
-                text-gray-400
-                dark:text-gray-500
-              "
-            >
-              توري
-            </p>
-
-            <strong
-              className="
-                block
-                text-lg
-                text-gray-800
-                dark:text-white
-                mt-1
-              "
-            >
-              {typedText.length}/
-              {targetText.length}
-            </strong>
-          </div>
-        </div>
-
-        {/* ===================================================
-            PROGRESS
-        =================================================== */}
-
-        <div
-          className="
-            bg-white
-            dark:bg-gray-800
-            border
-            border-gray-200
-            dark:border-gray-700
-            rounded-2xl
-            p-5
-            mb-6
-            shadow-sm
-          "
-        >
-          <div
-            className="
-              flex
-              justify-between
-              items-center
-              mb-3
-            "
-          >
-            <span
-              className="
-                font-semibold
-                text-gray-800
-                dark:text-white
-              "
-            >
-              د ټایپنګ پرمختګ
-            </span>
-
-            <span
-              className="
-                font-bold
-                text-blue-500
-                dark:text-blue-400
-              "
-            >
-              {typingProgress}%
-            </span>
-          </div>
-
-          <div
-            className="
-              h-3
-              bg-gray-100
-              dark:bg-gray-700
-              rounded-full
-              overflow-hidden
-            "
-          >
-            <div
-              className={` 
-                h-full
-                rounded-full
-                transition-all
-                duration-200
-                ${
-                  typingProgress === 100
-                    ? "bg-green-500"
-                    : "bg-blue-500"
-                }
-              `}
-              style={{
-                width: `${typingProgress}%`,
-              }}
-            />
-          </div>
-        </div>
-
-        {/* ===================================================
-            WRITING CARD
-        =================================================== */}
-
-        <div
-          className="
-            bg-white
-            dark:bg-gray-800
-            border
-            border-gray-200
-            dark:border-gray-700
-            rounded-2xl
-            shadow-sm
-            p-6
-            md:p-8
-            mb-6
-          "
-        >
-          {/* Lesson title */}
-
-          <div className="text-center mb-5">
-            <h2
-              className="
-                text-xl
-                font-bold
-                text-gray-800
-                dark:text-white
-              "
-            >
-              {lesson.title}
-            </h2>
-          </div>
+            {isFinished
+              ? "🎉 Lesson Complete!"
+              : isPaused
+              ? "▶ Start Typing"
+              : "⏸ Typing..."}
+          </button>
 
           {/* =================================================
-              LESSON TEXT INSIDE WRITING AREA
+              TEXT
           ================================================= */}
 
           <div
+            dir="ltr"
             className="
               w-full
-              min-h-[180px]
-              border
-              border-gray-200
-              dark:border-gray-700
-              bg-gray-50
-              dark:bg-gray-900
-              rounded-xl
-              p-6
-              mb-5
+              min-h-[145px]
+              px-[7%]
+              flex
+              items-center
+              justify-center
             "
           >
             <div
-              dir="rtl"
               className="
-                text-2xl
-                md:text-3xl
-                lg:text-4xl
-                font-bold
-                leading-loose
-                text-center
+                font-['Fredoka']
+                text-[32px]
+                sm:text-[40px]
+                md:text-[46px]
+                leading-[1.45]
+                tracking-wide
+                text-gray-700
+                text-left
                 break-words
+                w-full
               "
             >
               {targetText
                 .split("")
-                .map((char, index) => {
-                  let className =
-                    "text-gray-400 dark:text-gray-600";
+                .map(
+                  (
+                    char,
+                    index
+                  ) => {
+                    let className =
+                      "text-gray-500";
 
-                  if (
-                    index <
-                    typedText.length
-                  ) {
-                    className =
-                      typedText[index] ===
-                      char
-                        ? "text-green-500 dark:text-green-400"
-                        : "text-red-500 dark:text-red-400";
+                    if (
+                      index <
+                      typedText.length
+                    ) {
+                      className =
+                        typedText[
+                          index
+                        ] === char
+                          ? "text-gray-700"
+                          : "text-red-500 bg-red-100 rounded-md";
+                    }
+
+                    if (
+                      index ===
+                      typedText.length
+                    ) {
+                      className =
+                        "text-pink-500 border-b-4 border-blue-400";
+                    }
+
+                    return (
+                      <span
+                        key={
+                          index
+                        }
+                        className={`
+                          transition-all
+                          duration-100
+                          ${className}
+                        `}
+                      >
+                        {char ===
+                        " "
+                          ? "\u00A0"
+                          : char}
+                      </span>
+                    );
                   }
-
-                  if (
-                    index ===
-                    typedText.length
-                  ) {
-                    className =
-                      "text-blue-500 dark:text-blue-400 underline decoration-2";
-                  }
-
-                  return (
-                    <span
-                      key={index}
-                      className={className}
-                    >
-                      {char === " "
-                        ? "\u00A0"
-                        : char}
-                    </span>
-                  );
-                })}
+                )}
             </div>
           </div>
 
           {/* =================================================
-              INPUT BOX
+              INPUT
           ================================================= */}
 
-          <textarea
-            ref={inputRef}
-            value={typedText}
-            onChange={handleTyping}
-            disabled={isFinished}
-            autoFocus
-            dir="rtl"
-            spellCheck={false}
-            placeholder="دلته ټایپ کول پیل کړئ..."
+          <div
             className="
-              w-full
-              min-h-[120px]
-              resize-none
-              border
-              border-gray-200
-              dark:border-gray-700
-              bg-white
-              dark:bg-gray-900
-              text-gray-800
-              dark:text-gray-200
-              focus:border-blue-500
-              focus:ring-2
-              focus:ring-blue-100
-              dark:focus:ring-blue-900
-              outline-none
-              rounded-xl
-              p-5
-              text-2xl
-              leading-loose
-              transition-colors
-              text-right
+              w-[86%]
+              mt-1
+              mb-2
             "
-          />
+          >
+            <textarea
+              ref={
+                inputRef
+              }
+              value={
+                typedText
+              }
+              onChange={
+                handleTyping
+              }
+              disabled={
+                isFinished ||
+                isPaused
+              }
+              spellCheck={
+                false
+              }
+              autoFocus
+              dir="ltr"
+              placeholder={
+                isPaused
+                  ? "▶ Start typing..."
+                  : ""
+              }
+              className="
+                w-full
+                h-[100px]
+                resize-none
+                outline-none
+                bg-white/60
+                border-2
+                border-white
+                focus:border-blue-300
+                rounded-xl
+                px-6
+                py-4
+                text-[26px]
+                sm:text-[32px]
+                font-['Fredoka']
+                text-gray-700
+                shadow-inner
+                text-left
+                transition
+              "
+            />
+          </div>
 
           {/* =================================================
-              PASHTO KEYBOARD
+              PROGRESS
+          ================================================= */}
+
+          <div
+            className="
+              w-[86%]
+              flex
+              items-center
+              gap-3
+              mb-2
+            "
+          >
+            <div className="flex-1 h-2 bg-white/50 rounded-full overflow-hidden">
+              <div
+                className="
+                  h-full
+                  bg-pink-400
+                  rounded-full
+                  transition-all
+                  duration-200
+                "
+                style={{
+                  width: `${progress}%`,
+                }}
+              />
+            </div>
+
+            <span className="text-xs font-bold text-gray-500">
+              {progress}%
+            </span>
+
+            <span className="text-xs font-bold text-gray-500">
+              {formatTime(
+                elapsedTime
+              )}
+            </span>
+          </div>
+
+          {/* =================================================
+              KEYBOARD
+          ================================================= */}
+
+          {isKeyboardVisible && (
+            <div
+              className="
+                w-[90%]
+                max-w-[900px]
+                bg-white/45
+                border
+                border-white/70
+                rounded-xl
+                px-4
+                py-3
+                shadow-lg
+                backdrop-blur-sm
+              "
+            >
+              {keyboardLayout.map(
+                (row) => (
+                  <div
+                    key={
+                      row.id
+                    }
+                    className="
+                      flex
+                      justify-center
+                      gap-1
+                      sm:gap-1.5
+                      mb-1.5
+                    "
+                  >
+                    {row.keys.map(
+                      (
+                        key
+                      ) => {
+                        const active =
+                          isKeyActive(
+                            key
+                          );
+
+                        const pressed =
+                          activeKey ===
+                          key.en ||
+                          activeKey ===
+                          key.ps;
+
+                        return (
+                          <div
+                            key={`${row.id}-${key.en}`}
+                            className={`
+                              flex
+                              items-center
+                              justify-center
+                              w-[30px]
+                              sm:w-[42px]
+                              md:w-[50px]
+                              h-[34px]
+                              sm:h-[40px]
+                              md:h-[44px]
+                              rounded-md
+                              border
+                              font-bold
+                              text-sm
+                              sm:text-base
+                              select-none
+                              transition-all
+                              duration-100
+
+                              ${
+                                active
+                                  ? `
+                                    bg-pink-500
+                                    text-white
+                                    border-pink-500
+                                    -translate-y-1
+                                    shadow-none
+                                  `
+                                  : `
+                                    bg-white/90
+                                    text-gray-500
+                                    border-gray-300
+                                    shadow-[0_3px_0_#bbb]
+                                  `
+                              }
+
+                              ${
+                                pressed
+                                  ? "scale-110"
+                                  : ""
+                              }
+                            `}
+                          >
+                            {
+                              key.ps
+                            }
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+                )
+              )}
+
+              {/* SPACE */}
+
+              <div className="flex justify-center mt-1">
+                <div
+                  className={`
+                    w-[45%]
+                    h-[34px]
+                    sm:h-[40px]
+                    rounded-md
+                    border
+                    flex
+                    items-center
+                    justify-center
+                    text-xs
+                    font-bold
+                    transition-all
+
+                    ${
+                      isSpaceActive
+                        ? `
+                          bg-pink-500
+                          text-white
+                          border-pink-500
+                          -translate-y-1
+                        `
+                        : `
+                          bg-white/90
+                          text-gray-500
+                          border-gray-300
+                          shadow-[0_3px_0_#bbb]
+                        `
+                    }
+                  `}
+                >
+                  SPACE
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* =================================================
+              FINISHED MESSAGE
+          ================================================= */}
+
+          {isFinished && (
+            <div
+              className="
+                absolute
+                bottom-2
+                bg-yellow-200
+                border
+                border-yellow-300
+                px-6
+                py-2
+                rounded-xl
+                shadow-md
+                text-sm
+                font-bold
+                text-gray-600
+                flex
+                items-center
+                gap-5
+              "
+            >
+              <span>
+                🎉 درس بشپړ شو!
+              </span>
+
+              <span>
+                {wpm} WPM
+              </span>
+
+              <span>
+                {accuracy}%
+              </span>
+
+              <button
+                onClick={
+                  nextLesson
+                }
+                className="
+                  bg-pink-500
+                  hover:bg-pink-600
+                  text-white
+                  px-4
+                  py-1.5
+                  rounded-lg
+                "
+              >
+                بل درس →
+              </button>
+            </div>
+          )}
+
+          {/* =================================================
+              SMALL STATS
           ================================================= */}
 
           {!isFinished && (
             <div
               className="
-                mt-6
-                pt-6
-                border-t
-                border-gray-200
-                dark:border-gray-700
+                absolute
+                right-5
+                top-[62px]
+                hidden
+                md:flex
+                gap-3
               "
             >
-              {/* Keyboard body */}
-              <div
-                className="
-                  p-4
-                  border
-                  border-gray-200
-                  dark:border-gray-700
-                  rounded-2xl
-                  bg-gray-100
-                  dark:bg-gray-900
-                  overflow-x-auto
-                "
-              >
-                {keyboardLayout.map(
-                  (row) => (
-                    <div
-                      key={row.id}
-                      className="
-                        flex
-                        justify-center
-                        gap-1.5
-                        mb-2
-                        min-w-[650px]
-                      "
-                    >
-                      {row.keys.map(
-                        (key) => {
-                          const active =
-                            isKeyActive(
-                              key
-                            );
+              <div className="bg-white/70 px-3 py-1 rounded-lg text-xs font-bold text-gray-500">
+                🎯 {accuracy}%
+              </div>
 
-                          return (
-                            <div
-                              key={`${row.id}-${key.en}`}
-                              className={`
-                                flex
-                                items-center
-                                justify-center
-                                min-w-[42px]
-                                h-[50px]
-                                flex-1
-                                max-w-[65px]
-                                rounded-xl
-                                border
-                                text-sm
-                                font-bold
-                                select-none
-                                transition-all
-                                duration-200
-
-                                ${
-                                  active
-                                    ? `
-                                      text-white
-                                      border-blue-500
-                                      bg-blue-500
-                                      shadow-lg
-                                      shadow-blue-500/30
-                                      -translate-y-1
-                                    `
-                                    : `
-                                      text-gray-600
-                                      dark:text-gray-300
-                                      border-gray-300
-                                      dark:border-gray-600
-                                      bg-white
-                                      dark:bg-gray-800
-                                      shadow-[0_4px_0_rgba(0,0,0,0.12)]
-                                    `
-                                }
-
-                                ${
-                                  active &&
-                                  isKeyboardAnimating
-                                    ? "scale-105"
-                                    : ""
-                                }
-                              `}
-                            >
-                              {getKeyDisplay(
-                                key
-                              )}
-                            </div>
-                          );
-                        }
-                      )}
-                    </div>
-                  )
-                )}
-
-                {/* Space */}
-
-                <div
-                  className="
-                    flex
-                    justify-center
-                    mt-2
-                    min-w-[650px]
-                  "
-                >
-                  <div
-                    className={`
-                      w-[48%]
-                      h-[45px]
-                      flex
-                      items-center
-                      justify-center
-                      rounded-xl
-                      border
-                      font-bold
-                      text-sm
-                      select-none
-                      transition-all
-                      duration-200
-
-                      ${
-                        isSpaceActive
-                          ? `
-                            text-white
-                            border-blue-500
-                            bg-blue-500
-                            shadow-lg
-                            shadow-blue-500/30
-                            -translate-y-1
-                          `
-                          : `
-                            text-gray-500
-                            dark:text-gray-400
-                            border-gray-300
-                            dark:border-gray-600
-                            bg-white
-                            dark:bg-gray-800
-                            shadow-[0_4px_0_rgba(0,0,0,0.12)]
-                          `
-                      }
-
-                      ${
-                        isSpaceActive &&
-                        isKeyboardAnimating
-                          ? "scale-105"
-                          : ""
-                      }
-                    `}
-                  >
-                    SPACE
-                  </div>
-                </div>
+              <div className="bg-white/70 px-3 py-1 rounded-lg text-xs font-bold text-gray-500">
+                ⚡ {wpm} WPM
               </div>
             </div>
           )}
         </div>
-
-        {/* ===================================================
-            FINISHED
-        =================================================== */}
-
-        {isFinished && (
-          <div
-            className="
-              bg-white
-              dark:bg-gray-800
-              border
-              border-green-200
-              dark:border-green-700
-              rounded-2xl
-              p-7
-              text-center
-              shadow-sm
-              mb-6
-            "
-          >
-            <div className="text-5xl mb-4">
-              🎉
-            </div>
-
-            <h2
-              className="
-                text-2xl
-                font-bold
-                text-green-600
-                dark:text-green-400
-              "
-            >
-              درس مو بشپړ کړ!
-            </h2>
-
-            <p
-              className="
-                text-sm
-                text-gray-500
-                dark:text-gray-400
-                mt-2
-              "
-            >
-              ډېر ښه! تاسو دا درس په بریالیتوب سره بشپړ کړ.
-            </p>
-
-            <div
-              className="
-                flex
-                justify-center
-                gap-10
-                mt-6
-                mb-8
-              "
-            >
-              <div>
-                <p
-                  className="
-                    text-2xl
-                    font-bold
-                    text-blue-500
-                    dark:text-blue-400
-                  "
-                >
-                  {wpm}
-                </p>
-
-                <p
-                  className="
-                    text-xs
-                    text-gray-400
-                    dark:text-gray-500
-                  "
-                >
-                  WPM
-                </p>
-              </div>
-
-              <div>
-                <p
-                  className="
-                    text-2xl
-                    font-bold
-                    text-green-500
-                    dark:text-green-400
-                  "
-                >
-                  {accuracy}%
-                </p>
-
-                <p
-                  className="
-                    text-xs
-                    text-gray-400
-                    dark:text-gray-500
-                  "
-                >
-                  دقت
-                </p>
-              </div>
-
-              <div>
-                <p
-                  className="
-                    text-2xl
-                    font-bold
-                    text-yellow-500
-                    dark:text-yellow-400
-                  "
-                >
-                  +10
-                </p>
-
-                <p
-                  className="
-                    text-xs
-                    text-gray-400
-                    dark:text-gray-500
-                  "
-                >
-                  نمرې
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={goToNextLesson}
-              className="
-                px-8
-                py-3
-                bg-blue-500
-                hover:bg-blue-600
-                text-white
-                rounded-xl
-                font-semibold
-                transition-colors
-              "
-            >
-              بل درس ته لاړ شئ ←
-            </button>
-          </div>
-        )}
-
-        {/* ===================================================
-            RESTART
-        =================================================== */}
-
-        {!isFinished && (
-          <div className="flex justify-center">
-            <button
-              onClick={restartLesson}
-              className="
-                px-8
-                py-3
-                bg-gray-100
-                dark:bg-gray-700
-                hover:bg-gray-200
-                dark:hover:bg-gray-600
-                text-gray-700
-                dark:text-gray-300
-                rounded-xl
-                font-semibold
-                transition-colors
-              "
-            >
-              🔄 بیا پیل
-            </button>
-          </div>
-        )}
       </main>
     </div>
   );
