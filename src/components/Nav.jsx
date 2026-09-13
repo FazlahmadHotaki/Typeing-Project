@@ -1,9 +1,10 @@
 // components/Nav.js
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation} from 'react-router-dom';
 const Nav = ({ onStartTyping ,  showGetStarted,  darkText = false,}) => {
   const navigate =useNavigate();
+  const location = useLocation();                 // ✅ ADD
   const { lang, changeLanguage, langNames } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -12,6 +13,9 @@ const Nav = ({ onStartTyping ,  showGetStarted,  darkText = false,}) => {
 );
   const menuRef = useRef();
 
+    useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("user"));
+  }, [location.pathname]);  
   
 
   useEffect(() => {
@@ -58,7 +62,7 @@ const getBrandName = () => {
       : ""
   }`
       }>
-        <a href="#top" className="flex items-center gap-2 font-display font-extrabold text-lg tracking-tight">
+        <a href="/#top" className="flex items-center gap-2 font-display font-extrabold text-lg tracking-tight">
         <span><img src="/LogoTypeTone.png" className='rounded-3xl w-6 h-6' alt="" /></span>
           <span>{getBrandName()}</span>
         </a>
@@ -89,16 +93,15 @@ const getBrandName = () => {
             )}
           </div>
 
-          {!isLoggedIn && !showGetStarted && (
+          {!showGetStarted && !isLoggedIn && (
   <button
-    onClick={()=>{navigate('/login')}}
-    className={`hidden sm:inline-block bg-gold hover:bg-goldsoft text-night font-semibold text-sm px-4 py-2 rounded-full transition border bodder-gray-700 hover:bg-white hover:text-gray-800
-      ${isScrolled ? "hover:bg-[#f4f1de]" : "hover:bg-goldsoft"}`}
+    onClick={() => navigate('/login')}
     data-i18n="nav.getStarted"
   >
     Get started
   </button>
-)} 
+)}
+ 
 {/* fjlsad   */}
   </div>
       </div>

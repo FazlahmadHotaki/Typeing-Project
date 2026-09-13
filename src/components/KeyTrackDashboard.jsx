@@ -8,6 +8,7 @@ import Nav from "./Nav";
 import ChartComponent from "../chart-JS/ChartComponent";
 import { useLanguage } from "../context/LanguageContext";
 
+
 // ======================================================
 // RING COMPONENT
 // ======================================================
@@ -992,7 +993,7 @@ export default function KeyTrackDashboard({
     const finalName =
       loginName ||
       signupName ||
-      "Not Logain";
+      "Continue"
 
     setDisplayName(
       String(finalName)
@@ -1179,10 +1180,10 @@ export default function KeyTrackDashboard({
       "formData"
     );
 
-    localStorage.removeItem(
-      "keytrackUser"
-    );
-
+    localStorage.removeItem("keytrackUser");
+    localStorage.removeItem("user");          // ✅ ADD THIS
+    localStorage.removeItem("googleCredential"); // ✅ optional cleanup
+    localStorage.removeItem("showGetStarted");   // ✅ optional cleanup
     navigate("/");
   };
 

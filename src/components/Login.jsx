@@ -88,7 +88,11 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
     updateLanguage(lang);
   }, [lang]);
 
-const handleSubmit = (e) => {
+
+
+ 
+
+ const handleSubmit = (e) => {
   e.preventDefault();
 
   const user = users.find(
@@ -98,29 +102,23 @@ const handleSubmit = (e) => {
   );
 
   if (user) {
-    // Save user if "Remember me" is checked
-    localStorage.setItem(
-  "user",
-  JSON.stringify({
-    name: user.name,
-    email: user.email,
-  })
-);
+    const userData = { name: user.name, email: user.email };
 
-    // Login successful
-    
-    navigate('/dashboard');
-    // Close login modal
+    // ✅ Save to the key Nav checks
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    // ✅ Also save to the keys KeyTrackDashboard reads
+    localStorage.setItem("formData", JSON.stringify(userData));
+    localStorage.setItem("usersing", user.name);
+
+    navigate("/dashboard");
     onClose();
     setUser(user.name);
-    console.log("Logged in user:", user.name);
   } else {
-    // Login failed
-    const errorMsg =
+    alert(
       translations[lang]?.["login.invalidCredentials"] ||
-      "Invalid email or password!";
-
-    alert(errorMsg);
+      "Invalid email or password!"
+    );
   }
 };
   return (
@@ -267,10 +265,15 @@ const handleSubmit = (e) => {
       picture: payload.picture,
     };
 
-    // Save user
-    localStorage.setItem("user", JSON.stringify(googleUser));
-localStorage.setItem("showGetStarted", "false");    // Update your React state
-    setUser(googleUser.name);
+   // Save user — the key Nav checks
+localStorage.setItem("user", JSON.stringify(googleUser));
+
+// ✅ ALSO save to the keys KeyTrackDashboard reads
+localStorage.setItem("formData", JSON.stringify(googleUser));
+localStorage.setItem("usersing", googleUser.name);
+
+localStorage.setItem("showGetStarted", "true");
+setUser(googleUser.name);
 
     // Go to dashboard
     navigate("/dashboard");
