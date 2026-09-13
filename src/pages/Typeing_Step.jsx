@@ -12,7 +12,7 @@ const API_BASE_URL =
   "https://the-typetone-api.onrender.com";
 
 /* =========================================================
-   PASHTO KEYBOARD ""jsdlk
+   PASHTO KEYBOARD ""jsdlkfsd
 ========================================================= */
 
 const keyboardLayout = [
