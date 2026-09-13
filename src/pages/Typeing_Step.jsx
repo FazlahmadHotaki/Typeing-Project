@@ -12,7 +12,7 @@ const API_BASE_URL =
   "https://the-typetone-api.onrender.com";
 
 /* =========================================================
-   PASHTO KEYBOARD "API problem"
+   PASHTO KEYBOARD
 ========================================================= */
 
 const keyboardLayout = [
@@ -94,7 +94,7 @@ const keyboardLayout = [
 
 export default function Typeing_Step() {
   /* =======================================================
-     LESSON STATE
+     LESSON
   ======================================================= */
 
   const [lesson, setLesson] = useState(null);
@@ -102,7 +102,7 @@ export default function Typeing_Step() {
   const [error, setError] = useState(null);
 
   /* =======================================================
-     TYPING STATE
+     TYPING
   ======================================================= */
 
   const [typedText, setTypedText] = useState("");
@@ -116,10 +116,11 @@ export default function Typeing_Step() {
   const [isPaused, setIsPaused] = useState(true);
 
   /* =======================================================
-     UI STATE
+     UI
   ======================================================= */
 
   const [isMuted, setIsMuted] = useState(false);
+
   const [isKeyboardVisible, setIsKeyboardVisible] =
     useState(true);
 
@@ -131,15 +132,15 @@ export default function Typeing_Step() {
      REFS
   ======================================================= */
 
-  const inputRef = useRef(null);
+  const typingAreaRef = useRef(null);
+
   const keyboardTimer = useRef(null);
-  const completionHandledRef = useRef(false);
+
+  const audioContextRef = useRef(null);
 
   /* =======================================================
      AUDIO
   ======================================================= */
-
-  const audioContextRef = useRef(null);
 
   const initAudio = () => {
     if (!audioContextRef.current) {
@@ -171,16 +172,19 @@ export default function Typeing_Step() {
 
     initAudio();
 
-    const ctx = audioContextRef.current;
+    const ctx =
+      audioContextRef.current;
 
     if (!ctx) return;
 
-    const now = ctx.currentTime;
+    const now =
+      ctx.currentTime;
 
     const oscillator =
       ctx.createOscillator();
 
-    const gain = ctx.createGain();
+    const gain =
+      ctx.createGain();
 
     oscillator.type = "sine";
 
@@ -205,14 +209,20 @@ export default function Typeing_Step() {
     );
 
     oscillator.connect(gain);
-    gain.connect(ctx.destination);
+
+    gain.connect(
+      ctx.destination
+    );
 
     oscillator.start(now);
-    oscillator.stop(now + 0.06);
+
+    oscillator.stop(
+      now + 0.06
+    );
   };
 
   /* =======================================================
-     INCORRECT / BITTER SOUND
+     INCORRECT SOUND
   ======================================================= */
 
   const playIncorrectSound = () => {
@@ -220,11 +230,13 @@ export default function Typeing_Step() {
 
     initAudio();
 
-    const ctx = audioContextRef.current;
+    const ctx =
+      audioContextRef.current;
 
     if (!ctx) return;
 
-    const now = ctx.currentTime;
+    const now =
+      ctx.currentTime;
 
     const master =
       ctx.createGain();
@@ -239,7 +251,9 @@ export default function Typeing_Step() {
       now + 0.18
     );
 
-    master.connect(ctx.destination);
+    master.connect(
+      ctx.destination
+    );
 
     const osc1 =
       ctx.createOscillator();
@@ -291,8 +305,13 @@ export default function Typeing_Step() {
     osc1.start(now);
     osc2.start(now);
 
-    osc1.stop(now + 0.18);
-    osc2.stop(now + 0.18);
+    osc1.stop(
+      now + 0.18
+    );
+
+    osc2.stop(
+      now + 0.18
+    );
   };
 
   /* =======================================================
@@ -304,11 +323,13 @@ export default function Typeing_Step() {
 
     initAudio();
 
-    const ctx = audioContextRef.current;
+    const ctx =
+      audioContextRef.current;
 
     if (!ctx) return;
 
-    const now = ctx.currentTime;
+    const now =
+      ctx.currentTime;
 
     const oscillator =
       ctx.createOscillator();
@@ -339,10 +360,16 @@ export default function Typeing_Step() {
     );
 
     oscillator.connect(gain);
-    gain.connect(ctx.destination);
+
+    gain.connect(
+      ctx.destination
+    );
 
     oscillator.start(now);
-    oscillator.stop(now + 0.08);
+
+    oscillator.stop(
+      now + 0.08
+    );
   };
 
   /* =======================================================
@@ -354,7 +381,8 @@ export default function Typeing_Step() {
 
     initAudio();
 
-    const ctx = audioContextRef.current;
+    const ctx =
+      audioContextRef.current;
 
     if (!ctx) return;
 
@@ -365,40 +393,53 @@ export default function Typeing_Step() {
       1046.5,
     ];
 
-    notes.forEach((frequency, index) => {
-      setTimeout(() => {
-        const now = ctx.currentTime;
+    notes.forEach(
+      (
+        frequency,
+        index
+      ) => {
+        setTimeout(() => {
+          const now =
+            ctx.currentTime;
 
-        const oscillator =
-          ctx.createOscillator();
+          const oscillator =
+            ctx.createOscillator();
 
-        const gain =
-          ctx.createGain();
+          const gain =
+            ctx.createGain();
 
-        oscillator.type = "triangle";
+          oscillator.type =
+            "triangle";
 
-        oscillator.frequency.setValueAtTime(
-          frequency,
-          now
-        );
+          oscillator.frequency.setValueAtTime(
+            frequency,
+            now
+          );
 
-        gain.gain.setValueAtTime(
-          0.12,
-          now
-        );
+          gain.gain.setValueAtTime(
+            0.12,
+            now
+          );
 
-        gain.gain.exponentialRampToValueAtTime(
-          0.001,
-          now + 0.35
-        );
+          gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            now + 0.35
+          );
 
-        oscillator.connect(gain);
-        gain.connect(ctx.destination);
+          oscillator.connect(gain);
 
-        oscillator.start(now);
-        oscillator.stop(now + 0.35);
-      }, index * 100);
-    });
+          gain.connect(
+            ctx.destination
+          );
+
+          oscillator.start(now);
+
+          oscillator.stop(
+            now + 0.35
+          );
+        }, index * 100);
+      }
+    );
   };
 
   /* =======================================================
@@ -416,7 +457,9 @@ export default function Typeing_Step() {
         params.get("lesson");
 
       if (urlLesson) {
-        return String(urlLesson);
+        return String(
+          urlLesson
+        );
       }
 
       const saved =
@@ -436,86 +479,95 @@ export default function Typeing_Step() {
      FETCH LESSON
   ======================================================= */
 
-  const fetchLesson = async () => {
-    setIsLoading(true);
-    setError(null);
+  const fetchLesson =
+    async () => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const response =
-        await fetch(
-          `${API_BASE_URL}/api/lessons`
-        );
-
-      if (!response.ok) {
-        throw new Error(
-          `HTTP Error: ${response.status}`
-        );
-      }
-
-      const data =
-        await response.json();
-
-      const lessons =
-        Array.isArray(data)
-          ? data
-          : Array.isArray(
-              data.lessons
-            )
-          ? data.lessons
-          : [];
-
-      if (!lessons.length) {
-        throw new Error(
-          "درسونه پیدا نه شول."
-        );
-      }
-
-      const lessonId =
-        getLessonId();
-
-      let selectedLesson = null;
-
-      if (lessonId) {
-        selectedLesson =
-          lessons.find(
-            (item) =>
-              String(item.id) ===
-              String(lessonId)
+      try {
+        const response =
+          await fetch(
+            `${API_BASE_URL}/api/lessons`
           );
+
+        if (!response.ok) {
+          throw new Error(
+            `HTTP Error: ${response.status}`
+          );
+        }
+
+        const data =
+          await response.json();
+
+        const lessons =
+          Array.isArray(data)
+            ? data
+            : Array.isArray(
+                data.lessons
+              )
+            ? data.lessons
+            : [];
+
+        if (!lessons.length) {
+          throw new Error(
+            "درسونه پیدا نه شول."
+          );
+        }
+
+        const lessonId =
+          getLessonId();
+
+        let selectedLesson =
+          null;
+
+        if (lessonId) {
+          selectedLesson =
+            lessons.find(
+              (item) =>
+                String(
+                  item.id
+                ) ===
+                String(
+                  lessonId
+                )
+            );
+        }
+
+        if (!selectedLesson) {
+          selectedLesson =
+            lessons[0];
+        }
+
+        localStorage.setItem(
+          "selectedLessonId",
+          String(
+            selectedLesson.id
+          )
+        );
+
+        setLesson(
+          selectedLesson
+        );
+
+        setTypedText("");
+        setStartTime(null);
+        setElapsedTime(0);
+        setCorrectCharacters(0);
+
+        setIsFinished(false);
+        setIsPaused(true);
+        setActiveKey(null);
+      } catch (err) {
+        console.error(err);
+
+        setError(
+          err.message ||
+            "د درس په ترلاسه کولو کې ستونزه رامنځته شوه."
+        );
+      } finally {
+        setIsLoading(false);
       }
-
-      if (!selectedLesson) {
-        selectedLesson =
-          lessons[0];
-      }
-
-      localStorage.setItem(
-        "selectedLessonId",
-        String(selectedLesson.id)
-      );
-
-      setLesson(selectedLesson);
-
-      setTypedText("");
-      setStartTime(null);
-      setElapsedTime(0);
-      setCorrectCharacters(0);
-      setIsFinished(false);
-      setIsPaused(true);
-
-      completionHandledRef.current =
-        false;
-    } catch (err) {
-      console.error(err);
-
-      setError(
-        err.message ||
-          "د درس په ترلاسه کولو کې ستونزه رامنځته شوه."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
   /* =======================================================
      INITIAL LOAD
@@ -525,7 +577,9 @@ export default function Typeing_Step() {
     fetchLesson();
 
     return () => {
-      if (keyboardTimer.current) {
+      if (
+        keyboardTimer.current
+      ) {
         clearTimeout(
           keyboardTimer.current
         );
@@ -558,7 +612,9 @@ export default function Typeing_Step() {
       }, 1000);
 
     return () =>
-      clearInterval(timer);
+      clearInterval(
+        timer
+      );
   }, [
     startTime,
     isFinished,
@@ -566,7 +622,7 @@ export default function Typeing_Step() {
   ]);
 
   /* =======================================================
-     DATA
+     LESSON DATA
   ======================================================= */
 
   const targetText =
@@ -614,10 +670,12 @@ export default function Typeing_Step() {
   ======================================================= */
 
   const words =
-    typedText.trim().length
+    typedText.trim().length > 0
       ? typedText
           .trim()
-          .split(/\s+/).length
+          .split(/\s+/)
+          .filter(Boolean)
+          .length
       : 0;
 
   const minutes =
@@ -659,13 +717,15 @@ export default function Typeing_Step() {
   };
 
   /* =======================================================
-     KEYBOARD ACTIVE
+     ACTIVE KEY
   ======================================================= */
 
   const isKeyActive = (
     key
   ) => {
-    if (!currentCharacter) {
+    if (
+      !currentCharacter
+    ) {
       return false;
     }
 
@@ -687,10 +747,11 @@ export default function Typeing_Step() {
   };
 
   const isSpaceActive =
-    currentCharacter === " ";
+    currentCharacter ===
+    " ";
 
   /* =======================================================
-     ANIMATE KEY
+     KEY ANIMATION
   ======================================================= */
 
   const animateKey = (
@@ -698,7 +759,9 @@ export default function Typeing_Step() {
   ) => {
     setActiveKey(char);
 
-    if (keyboardTimer.current) {
+    if (
+      keyboardTimer.current
+    ) {
       clearTimeout(
         keyboardTimer.current
       );
@@ -711,10 +774,10 @@ export default function Typeing_Step() {
   };
 
   /* =======================================================
-     TYPING
+     HANDLE KEYBOARD
   ======================================================= */
 
-  const handleTyping = (
+  const handleKeyDown = (
     event
   ) => {
     if (
@@ -724,322 +787,375 @@ export default function Typeing_Step() {
       return;
     }
 
-    initAudio();
-
-    const value =
-      event.target.value;
-
-    const target =
-      lesson.text || "";
-
-    /* START */
+    /* Ignore modifiers */
 
     if (
-      value.length === 1 &&
-      !startTime
+      event.key === "Shift" ||
+      event.key === "Control" ||
+      event.key === "Alt" ||
+      event.key === "Meta" ||
+      event.key === "CapsLock" ||
+      event.key === "Tab" ||
+      event.key === "Escape"
     ) {
-      setStartTime(
-        Date.now()
-      );
-
-      setIsPaused(false);
+      return;
     }
 
-    /* DETECT LAST CHARACTER */
+    event.preventDefault();
+
+    initAudio();
+
+    /* =====================================
+       BACKSPACE
+    ===================================== */
 
     if (
-      value.length >
-      typedText.length
+      event.key ===
+      "Backspace"
     ) {
-      const newChar =
-        value[value.length - 1];
-
-      animateKey(
-        newChar
-      );
-
-      const expected =
-        target[
-          value.length - 1
-        ];
-
       if (
-        newChar === expected
+        typedText.length > 0
       ) {
-        playCorrectSound();
-      } else {
-        playIncorrectSound();
+        playBackspaceSound();
+
+        setTypedText(
+          (prev) =>
+            prev.slice(
+              0,
+              -1
+            )
+        );
+      }
+
+      return;
+    }
+
+    /* =====================================
+       ONLY CHARACTERS
+    ===================================== */
+
+    if (
+      event.key.length !== 1
+    ) {
+      return;
+    }
+
+    const newChar =
+      event.key;
+
+    const currentIndex =
+      typedText.length;
+
+    const expected =
+      targetText[
+        currentIndex
+      ];
+
+    /* =====================================
+       START TIMER
+    ===================================== */
+
+    if (isPaused) {
+      setIsPaused(false);
+
+      if (!startTime) {
+        setStartTime(
+          Date.now()
+        );
       }
     }
 
-    /* BACKSPACE */
+    /* =====================================
+       KEY ANIMATION
+    ===================================== */
+
+    animateKey(
+      newChar
+    );
+
+    /* =====================================
+       CORRECT / WRONG SOUND
+    ===================================== */
 
     if (
-      value.length <
-      typedText.length
+      newChar ===
+      expected
     ) {
-      playBackspaceSound();
+      playCorrectSound();
+    } else {
+      playIncorrectSound();
     }
 
-    /* COUNT CORRECT */
+    /* =====================================
+       NEW TEXT
+    ===================================== */
 
-    let correct = 0;
+    const newTypedText =
+      typedText +
+      newChar;
+
+    /* =====================================
+       CORRECT CHARACTERS
+    ===================================== */
+
+    let newCorrectCount = 0;
 
     for (
       let i = 0;
-      i < value.length;
+      i <
+      newTypedText.length;
       i++
     ) {
       if (
-        value[i] ===
-        target[i]
+        newTypedText[i] ===
+        targetText[i]
       ) {
-        correct++;
+        newCorrectCount++;
       }
     }
 
     setCorrectCharacters(
-      correct
+      newCorrectCount
     );
 
-    setTypedText(value);
+    setTypedText(
+      newTypedText
+    );
 
-    /* COMPLETE */
+    /* =====================================
+       FINISHED
+    ===================================== */
 
     if (
-      value === target &&
-      target.length > 0
+      newTypedText.length >=
+        targetText.length &&
+      targetText.length > 0
     ) {
       const finishTime =
         Date.now();
 
-      const finalStart =
+      const finalStartTime =
         startTime ||
         finishTime;
 
-      const finalElapsed =
-        Math.floor(
-          (finishTime -
-            finalStart) /
-            1000
+      const finalElapsedTime =
+        Math.max(
+          0,
+          Math.floor(
+            (finishTime -
+              finalStartTime) /
+              1000
+          )
         );
 
+      const finalAccuracy =
+        targetText.length > 0
+          ? Math.round(
+              (newCorrectCount /
+                targetText.length) *
+                100
+            )
+          : 100;
+
+      const finalWords =
+        newTypedText
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean)
+          .length;
+
+      const finalMinutes =
+        finalElapsedTime /
+        60;
+
+      const finalWpm =
+        finalMinutes > 0
+          ? Math.round(
+              finalWords /
+                finalMinutes
+            )
+          : 0;
+
+      /* Update state */
+
       setElapsedTime(
-        finalElapsed
+        finalElapsedTime
       );
 
-      setIsFinished(true);
+      setCorrectCharacters(
+        newCorrectCount
+      );
+
       setIsPaused(true);
 
+      setIsFinished(true);
+
       playCompleteSound();
-    }
-  };
 
-  /* =======================================================
-     KEYBOARD PHYSICAL KEY
-  ======================================================= */
+      /* ===================================
+         SAVE COMPLETED LESSON
+      =================================== */
 
-  useEffect(() => {
-    const handleKeyDown =
-      (event) => {
-        if (
-          isFinished
-        ) {
-          return;
-        }
-
-        if (
-          event.key ===
-          " "
-        ) {
-          event.preventDefault();
-        }
-
-        initAudio();
-
-        if (
-          event.key ===
-          "Backspace"
-        ) {
-          return;
-        }
-
-        if (
-          event.key.length ===
-          1
-        ) {
-          animateKey(
-            event.key
-          );
-        }
-      };
-
-    window.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
-
-    return () =>
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
-  }, [
-    isFinished,
-  ]);
-
-  /* =======================================================
-     SAVE COMPLETED LESSON
-  ======================================================= */
-
-  const saveCompletedLesson =
-    () => {
-      if (!lesson) return;
-
-      const id =
-        String(lesson.id);
+      const lessonId =
+        String(
+          lesson.id
+        );
 
       try {
-        let completed = [];
+        let completedLessons =
+          [];
 
         try {
-          const saved =
+          completedLessons =
             JSON.parse(
               localStorage.getItem(
                 "completedLessons"
               ) || "[]"
             );
-
-          if (
-            Array.isArray(saved)
-          ) {
-            completed =
-              saved.map(String);
-          }
         } catch {
-          completed = [];
+          completedLessons =
+            [];
         }
 
         if (
-          !completed.includes(id)
+          !Array.isArray(
+            completedLessons
+          )
         ) {
-          completed.push(id);
+          completedLessons =
+            [];
+        }
+
+        if (
+          !completedLessons.includes(
+            lessonId
+          )
+        ) {
+          completedLessons.push(
+            lessonId
+          );
         }
 
         localStorage.setItem(
           "completedLessons",
           JSON.stringify(
-            completed
+            completedLessons
           )
         );
 
-        let results = {};
+        let lessonResults =
+          {};
 
         try {
-          const saved =
+          lessonResults =
             JSON.parse(
               localStorage.getItem(
                 "lessonResults"
               ) || "{}"
             );
-
-          if (
-            saved &&
-            typeof saved ===
-              "object" &&
-            !Array.isArray(saved)
-          ) {
-            results = saved;
-          }
         } catch {
-          results = {};
+          lessonResults =
+            {};
         }
 
-        results[id] = {
+        const finalResult = {
           lessonId:
             lesson.id,
 
           title:
-            lesson.title || "",
+            lesson.title ||
+            "",
 
           level:
-            lesson.level || "",
-
-          type:
-            lesson.type || "",
-
-          difficulty:
-            lesson.difficulty ||
+            lesson.level ||
             "",
 
           text:
-            lesson.text || "",
+            lesson.text ||
+            "",
 
           completed:
             true,
 
-          progress: 100,
+          progress:
+            100,
 
           typedCharacters:
-            typedText.length,
+            newTypedText.length,
 
           totalCharacters:
             targetText.length,
 
           correctCharacters:
-            correctCharacters,
+            newCorrectCount,
 
-          accuracy,
+          accuracy:
+            finalAccuracy,
 
-          wpm,
+          wpm:
+            finalWpm,
 
-          elapsedTime,
+          elapsedTime:
+            finalElapsedTime,
 
-          score: 10,
+          score:
+            10,
 
           completedAt:
             new Date().toISOString(),
         };
 
+        lessonResults[
+          lessonId
+        ] = finalResult;
+
         localStorage.setItem(
           "lessonResults",
           JSON.stringify(
-            results
+            lessonResults
           )
         );
 
         localStorage.setItem(
           "lastCompletedLesson",
           JSON.stringify(
-            results[id]
+            finalResult
           )
         );
-      } catch (err) {
+      } catch (saveError) {
         console.error(
-          "Could not save:",
-          err
+          "Could not save lesson:",
+          saveError
         );
       }
-    };
+    }
+  };
 
   /* =======================================================
-     SAVE WHEN FINISHED
+     GLOBAL KEYBOARD EVENT
   ======================================================= */
 
   useEffect(() => {
-    if (
-      !isFinished ||
-      !lesson ||
-      completionHandledRef.current
-    ) {
-      return;
-    }
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
 
-    completionHandledRef.current =
-      true;
-
-    saveCompletedLesson();
-  }, [isFinished]);
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+    };
+  }, [
+    lesson,
+    isFinished,
+    isPaused,
+    typedText,
+    targetText,
+    startTime,
+    isMuted,
+  ]);
 
   /* =======================================================
      RESTART
@@ -1047,24 +1163,23 @@ export default function Typeing_Step() {
 
   const restartLesson =
     () => {
-      completionHandledRef.current =
-        false;
-
       setTypedText("");
       setStartTime(null);
       setElapsedTime(0);
       setCorrectCharacters(0);
+
       setIsFinished(false);
       setIsPaused(true);
+
       setActiveKey(null);
 
       setTimeout(() => {
-        inputRef.current?.focus();
+        typingAreaRef.current?.focus();
       }, 100);
     };
 
   /* =======================================================
-     BACK
+     GO BACK
   ======================================================= */
 
   const goBack =
@@ -1087,19 +1202,33 @@ export default function Typeing_Step() {
             `${API_BASE_URL}/api/lessons`
           );
 
+        if (!response.ok) {
+          throw new Error(
+            "Could not load lessons"
+          );
+        }
+
         const data =
           await response.json();
 
         const lessons =
           Array.isArray(data)
             ? data
-            : data.lessons || [];
+            : Array.isArray(
+                data.lessons
+              )
+            ? data.lessons
+            : [];
 
         const index =
           lessons.findIndex(
             (item) =>
-              String(item.id) ===
-              String(lesson.id)
+              String(
+                item.id
+              ) ===
+              String(
+                lesson.id
+              )
           );
 
         if (
@@ -1114,7 +1243,9 @@ export default function Typeing_Step() {
 
           localStorage.setItem(
             "selectedLessonId",
-            String(next.id)
+            String(
+              next.id
+            )
           );
 
           window.location.href =
@@ -1124,41 +1255,97 @@ export default function Typeing_Step() {
         }
       } catch (err) {
         console.error(err);
+
         goBack();
       }
     };
 
   /* =======================================================
-     LOADING
+     LOADING PAGE
   ======================================================= */
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#fdf4c7] flex items-center justify-center">
+      <div
+        className="
+          min-h-screen
+          bg-[#fdf4c7]
+          flex
+          items-center
+          justify-center
+        "
+      >
         <div className="text-center">
-          <div className="w-14 h-14 border-4 border-pink-300 border-t-pink-600 rounded-full animate-spin mx-auto" />
 
-          <p className="mt-5 text-gray-600 font-bold">
+          <div
+            className="
+              w-14
+              h-14
+              border-4
+              border-pink-300
+              border-t-pink-600
+              rounded-full
+              animate-spin
+              mx-auto
+            "
+          />
+
+          <p
+            dir="rtl"
+            className="
+              mt-5
+              text-gray-600
+              font-bold
+            "
+          >
             درس بارول کېږي...
           </p>
+
         </div>
       </div>
     );
   }
 
   /* =======================================================
-     ERROR
+     ERROR PAGE
   ======================================================= */
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#fdf4c7] flex items-center justify-center p-5">
-        <div className="bg-white rounded-2xl shadow-xl p-8 text-center max-w-md w-full">
+      <div
+        className="
+          min-h-screen
+          bg-[#fdf4c7]
+          flex
+          items-center
+          justify-center
+          p-5
+        "
+      >
+        <div
+          className="
+            bg-white
+            rounded-2xl
+            shadow-xl
+            p-8
+            text-center
+            max-w-md
+            w-full
+          "
+        >
+
           <div className="text-5xl mb-5">
             ⚠️
           </div>
 
-          <h2 className="text-2xl font-bold text-red-500">
+          <h2
+            dir="rtl"
+            className="
+              text-2xl
+              font-bold
+              text-red-500
+            "
+          >
             ستونزه رامنځته شوه
           </h2>
 
@@ -1167,31 +1354,592 @@ export default function Typeing_Step() {
           </p>
 
           <div className="flex gap-3 justify-center mt-6">
+
             <button
-              onClick={fetchLesson}
-              className="px-5 py-3 bg-pink-500 text-white rounded-xl font-bold"
+              onClick={
+                fetchLesson
+              }
+              className="
+                px-5
+                py-3
+                bg-pink-500
+                text-white
+                rounded-xl
+                font-bold
+              "
             >
               بیا هڅه
             </button>
 
             <button
               onClick={goBack}
-              className="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold"
+              className="
+                px-5
+                py-3
+                bg-gray-100
+                text-gray-600
+                rounded-xl
+                font-bold
+              "
             >
               بېرته
             </button>
+
           </div>
+
         </div>
       </div>
     );
   }
 
   /* =======================================================
-     MAIN
+     COMPLETION PAGE
+  ======================================================= */
+
+  if (isFinished) {
+    return (
+      <div
+        className="
+          min-h-screen
+          bg-[#fdf4c7]
+          relative
+          overflow-hidden
+          flex
+          items-center
+          justify-center
+          px-5
+          py-10
+        "
+      >
+
+        {/* CLOUDS */}
+
+        <div
+          className="
+            absolute
+            top-[10%]
+            left-[7%]
+            w-36
+            h-14
+            bg-white/60
+            rounded-full
+          "
+        />
+
+        <div
+          className="
+            absolute
+            top-[6%]
+            left-[11%]
+            w-20
+            h-20
+            bg-white/60
+            rounded-full
+          "
+        />
+
+        <div
+          className="
+            absolute
+            top-[16%]
+            right-[8%]
+            w-44
+            h-14
+            bg-white/60
+            rounded-full
+          "
+        />
+
+        <div
+          className="
+            absolute
+            top-[10%]
+            right-[15%]
+            w-20
+            h-20
+            bg-white/60
+            rounded-full
+          "
+        />
+
+        {/* DECORATIONS */}
+
+        <div
+          className="
+            absolute
+            top-[18%]
+            left-[18%]
+            text-3xl
+            animate-bounce
+          "
+        >
+          ⭐
+        </div>
+
+        <div
+          className="
+            absolute
+            top-[25%]
+            right-[20%]
+            text-3xl
+            animate-pulse
+          "
+        >
+          ✨
+        </div>
+
+        <div
+          className="
+            absolute
+            bottom-[18%]
+            left-[12%]
+            text-3xl
+            animate-pulse
+          "
+        >
+          🎈
+        </div>
+
+        <div
+          className="
+            absolute
+            bottom-[22%]
+            right-[12%]
+            text-3xl
+            animate-bounce
+          "
+        >
+          ⭐
+        </div>
+
+        {/* CARD */}
+
+        <div
+          className="
+            relative
+            z-20
+            w-full
+            max-w-[760px]
+            bg-white/95
+            backdrop-blur-xl
+            rounded-[30px]
+            shadow-[0_25px_80px_rgba(0,0,0,0.15)]
+            border
+            border-white
+            p-6
+            sm:p-10
+          "
+        >
+
+          {/* SUCCESS ICON */}
+
+          <div className="flex justify-center">
+
+            <div
+              className="
+                w-24
+                h-24
+                sm:w-28
+                sm:h-28
+                rounded-full
+                bg-green-100
+                border-8
+                border-green-200
+                flex
+                items-center
+                justify-center
+                text-5xl
+                sm:text-6xl
+                shadow-lg
+              "
+            >
+              🎉
+            </div>
+
+          </div>
+
+          {/* TITLE */}
+
+          <div
+            dir="rtl"
+            className="
+              text-center
+              mt-5
+            "
+          >
+
+            <p
+              className="
+                text-green-500
+                font-bold
+                text-lg
+                mb-1
+              "
+            >
+              ډېر ښه! 👏
+            </p>
+
+            <h1
+              className="
+                text-3xl
+                sm:text-4xl
+                font-extrabold
+                text-gray-700
+              "
+            >
+              درس بشپړ شو!
+            </h1>
+
+            <p
+              dir="ltr"
+              className="
+                text-gray-400
+                mt-2
+                font-medium
+              "
+            >
+              Lesson {lesson?.id}:{" "}
+              {lesson?.title ||
+                "Pashto Typing"}
+            </p>
+
+          </div>
+
+          {/* PROGRESS */}
+
+          <div className="mt-7">
+
+            <div
+              className="
+                flex
+                justify-between
+                text-sm
+                font-bold
+                text-gray-500
+                mb-2
+              "
+            >
+              <span>
+                Progress
+              </span>
+
+              <span className="text-green-500">
+                100%
+              </span>
+            </div>
+
+            <div
+              className="
+                h-4
+                bg-gray-100
+                rounded-full
+                overflow-hidden
+              "
+            >
+
+              <div
+                className="
+                  h-full
+                  w-full
+                  bg-gradient-to-r
+                  from-pink-400
+                  to-green-400
+                  rounded-full
+                "
+              />
+
+            </div>
+
+          </div>
+
+          {/* RESULTS */}
+
+          <div
+            className="
+              grid
+              grid-cols-2
+              md:grid-cols-4
+              gap-3
+              mt-7
+            "
+          >
+
+            {/* WPM */}
+
+            <div
+              className="
+                bg-pink-50
+                rounded-2xl
+                p-4
+                text-center
+                border
+                border-pink-100
+              "
+            >
+
+              <div className="text-2xl">
+                ⚡
+              </div>
+
+              <div
+                className="
+                  text-2xl
+                  font-extrabold
+                  text-pink-500
+                  mt-1
+                "
+              >
+                {wpm}
+              </div>
+
+              <div className="text-xs font-bold text-gray-400">
+                WPM
+              </div>
+
+            </div>
+
+            {/* ACCURACY */}
+
+            <div
+              className="
+                bg-green-50
+                rounded-2xl
+                p-4
+                text-center
+                border
+                border-green-100
+              "
+            >
+
+              <div className="text-2xl">
+                🎯
+              </div>
+
+              <div
+                className="
+                  text-2xl
+                  font-extrabold
+                  text-green-500
+                  mt-1
+                "
+              >
+                {accuracy}%
+              </div>
+
+              <div className="text-xs font-bold text-gray-400">
+                Accuracy
+              </div>
+
+            </div>
+
+            {/* TIME */}
+
+            <div
+              className="
+                bg-blue-50
+                rounded-2xl
+                p-4
+                text-center
+                border
+                border-blue-100
+              "
+            >
+
+              <div className="text-2xl">
+                ⏱️
+              </div>
+
+              <div
+                className="
+                  text-2xl
+                  font-extrabold
+                  text-blue-500
+                  mt-1
+                "
+              >
+                {formatTime(
+                  elapsedTime
+                )}
+              </div>
+
+              <div className="text-xs font-bold text-gray-400">
+                Time
+              </div>
+
+            </div>
+
+            {/* CORRECT */}
+
+            <div
+              className="
+                bg-yellow-50
+                rounded-2xl
+                p-4
+                text-center
+                border
+                border-yellow-100
+              "
+            >
+
+              <div className="text-2xl">
+                ⌨️
+              </div>
+
+              <div
+                className="
+                  text-2xl
+                  font-extrabold
+                  text-yellow-500
+                  mt-1
+                "
+              >
+                {correctCharacters}
+              </div>
+
+              <div className="text-xs font-bold text-gray-400">
+                Correct
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* EXTRA RESULTS */}
+
+          <div
+            className="
+              mt-5
+              bg-gray-50
+              rounded-2xl
+              p-4
+              flex
+              flex-wrap
+              justify-center
+              gap-x-7
+              gap-y-2
+              text-sm
+              font-bold
+              text-gray-500
+            "
+          >
+
+            <span>
+              Characters:{" "}
+              {totalCharacters}
+            </span>
+
+            <span>
+              Correct:{" "}
+              {correctCharacters}
+            </span>
+
+            <span>
+              Score:{" "}
+              <span className="text-pink-500">
+                10/10
+              </span>
+            </span>
+
+          </div>
+
+          {/* BUTTONS */}
+
+          <div
+            className="
+              grid
+              grid-cols-1
+              sm:grid-cols-3
+              gap-3
+              mt-7
+            "
+          >
+
+            <button
+              onClick={
+                restartLesson
+              }
+              className="
+                py-3.5
+                px-5
+                rounded-xl
+                bg-gray-100
+                hover:bg-gray-200
+                text-gray-600
+                font-bold
+                transition
+                active:scale-95
+              "
+            >
+              🔄 بیا تمرین
+            </button>
+
+            <button
+              onClick={goBack}
+              className="
+                py-3.5
+                px-5
+                rounded-xl
+                bg-blue-500
+                hover:bg-blue-600
+                text-white
+                font-bold
+                transition
+                shadow-md
+                active:scale-95
+              "
+            >
+              📚 ټول درسونه
+            </button>
+
+            <button
+              onClick={
+                nextLesson
+              }
+              className="
+                py-3.5
+                px-5
+                rounded-xl
+                bg-pink-500
+                hover:bg-pink-600
+                text-white
+                font-bold
+                transition
+                shadow-md
+                active:scale-95
+              "
+            >
+              بل درس →
+            </button>
+
+          </div>
+
+          <div
+            dir="rtl"
+            className="
+              text-center
+              mt-6
+              text-sm
+              text-gray-400
+              font-medium
+            "
+          >
+            ستا پایله په اوتومات ډول خوندي شوه. 💾
+          </div>
+
+        </div>
+
+      </div>
+    );
+  }
+
+  /* =======================================================
+     MAIN TYPING PAGE
   ======================================================= */
 
   return (
     <div
+      ref={typingAreaRef}
+      tabIndex={0}
       className="
         relative
         h-screen
@@ -1199,8 +1947,10 @@ export default function Typeing_Step() {
         bg-[#fdf4c7]
         text-gray-700
         font-sans
+        outline-none
       "
     >
+
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -1223,9 +1973,18 @@ export default function Typeing_Step() {
           z-50
         "
       >
+
         {/* LEFT */}
 
-        <div className="relative flex items-center gap-4">
+        <div
+          className="
+            relative
+            flex
+            items-center
+            gap-4
+          "
+        >
+
           <button
             onClick={() =>
               setShowMenu(
@@ -1256,7 +2015,7 @@ export default function Typeing_Step() {
               "Pashto Typing"}
           </div>
 
-          {/* DROPDOWN */}
+          {/* MENU */}
 
           {showMenu && (
             <div
@@ -1274,9 +2033,11 @@ export default function Typeing_Step() {
                 z-[100]
               "
             >
+
               <button
                 onClick={() => {
                   restartLesson();
+
                   setShowMenu(
                     false
                   );
@@ -1298,6 +2059,7 @@ export default function Typeing_Step() {
                   setIsMuted(
                     !isMuted
                   );
+
                   setShowMenu(
                     false
                   );
@@ -1321,6 +2083,7 @@ export default function Typeing_Step() {
                   setIsKeyboardVisible(
                     !isKeyboardVisible
                   );
+
                   setShowMenu(
                     false
                   );
@@ -1338,7 +2101,9 @@ export default function Typeing_Step() {
               </button>
 
               <button
-                onClick={goBack}
+                onClick={() => {
+                  goBack();
+                }}
                 className="
                   w-full
                   text-left
@@ -1350,40 +2115,49 @@ export default function Typeing_Step() {
               >
                 ← Lessons
               </button>
+
             </div>
           )}
+
         </div>
 
-        {/* CENTER */}
+        {/* CENTER CONTROLS */}
 
-        <div className="flex items-center gap-5">
+        <div
+          className="
+            flex
+            items-center
+            gap-5
+          "
+        >
+
           <button
             onClick={() => {
               initAudio();
 
-              if (isFinished) {
-                restartLesson();
-                return;
-              }
+              if (isPaused) {
+                setIsPaused(
+                  false
+                );
 
-              setIsPaused(
-                !isPaused
-              );
-
-              if (
-                isPaused &&
-                !startTime
-              ) {
-                setStartTime(
-                  Date.now()
+                if (!startTime) {
+                  setStartTime(
+                    Date.now()
+                  );
+                }
+              } else {
+                setIsPaused(
+                  true
                 );
               }
 
-              setTimeout(() => {
-                inputRef.current?.focus();
-              }, 50);
+              typingAreaRef.current?.focus();
             }}
-            className="text-gray-500 hover:text-gray-800 text-lg"
+            className="
+              text-gray-500
+              hover:text-gray-800
+              text-lg
+            "
           >
             {isPaused
               ? "▶"
@@ -1391,8 +2165,14 @@ export default function Typeing_Step() {
           </button>
 
           <button
-            onClick={restartLesson}
-            className="text-gray-500 hover:text-gray-800 text-xl"
+            onClick={
+              restartLesson
+            }
+            className="
+              text-gray-500
+              hover:text-gray-800
+              text-xl
+            "
           >
             ⟳
           </button>
@@ -1403,53 +2183,47 @@ export default function Typeing_Step() {
                 !isKeyboardVisible
               )
             }
-            className="text-gray-500 hover:text-gray-800 text-xl"
+            className="
+              text-gray-500
+              hover:text-gray-800
+              text-xl
+            "
           >
             ⌨
           </button>
 
           <button
-            onClick={() =>
-              alert(
-                "Finger guide will be added here."
-              )
-            }
-            className="hidden sm:block text-gray-500 hover:text-gray-800"
-          >
-            👆
-          </button>
-
-          <button
             onClick={() => {
               initAudio();
+
               setIsMuted(
                 !isMuted
               );
             }}
-            className="text-gray-500 hover:text-gray-800"
+            className="
+              text-gray-500
+              hover:text-gray-800
+            "
           >
             {isMuted
               ? "🔇"
               : "🔊"}
           </button>
 
-          <button
-            onClick={() =>
-              alert(
-                "Settings panel will be added here."
-              )
-            }
-            className="text-gray-500 hover:text-gray-800"
-          >
-            ⚙
-          </button>
         </div>
 
         {/* USER */}
 
-        <div className="font-bold text-gray-500 text-sm">
+        <div
+          className="
+            font-bold
+            text-gray-500
+            text-sm
+          "
+        >
           Fazlahmad
         </div>
+
       </header>
 
       {/* =====================================================
@@ -1465,7 +2239,6 @@ export default function Typeing_Step() {
           h-12
           bg-white/60
           rounded-full
-          z-0
         "
       />
 
@@ -1518,147 +2291,7 @@ export default function Typeing_Step() {
       />
 
       {/* =====================================================
-          SIGNPOST
-      ===================================================== */}
-
-      <div
-        className="
-          hidden
-          lg:flex
-          absolute
-          left-10
-          bottom-14
-          flex-col
-          items-center
-          z-10
-        "
-      >
-        <div className="relative w-2.5 h-48 bg-gray-400 rounded-full">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-gray-400 rounded-full" />
-
-          <div
-            className="
-              absolute
-              top-7
-              -left-16
-              bg-pink-300
-              px-4
-              py-2
-              rounded-md
-              text-xs
-              font-bold
-              shadow-md
-              -rotate-3
-              whitespace-nowrap
-            "
-          >
-            Keyboard
-          </div>
-
-          <div
-            className="
-              absolute
-              top-20
-              -left-12
-              bg-yellow-200
-              px-4
-              py-2
-              rounded-md
-              text-xs
-              font-bold
-              shadow-md
-              rotate-2
-              whitespace-nowrap
-            "
-          >
-            Home Row
-          </div>
-
-          <div
-            className="
-              absolute
-              top-32
-              -left-20
-              bg-blue-300
-              px-4
-              py-2
-              rounded-md
-              text-xs
-              font-bold
-              shadow-md
-              -rotate-2
-              whitespace-nowrap
-            "
-          >
-            Typing City
-          </div>
-        </div>
-      </div>
-
-      {/* =====================================================
-          TAXI
-      ===================================================== */}
-
-      <div
-        className="
-          hidden
-          lg:block
-          absolute
-          right-12
-          bottom-10
-          w-40
-          h-20
-          z-10
-        "
-      >
-        <div
-          className="
-            absolute
-            bottom-0
-            w-full
-            h-14
-            bg-yellow-400
-            rounded-[25px_35px_8px_8px]
-            shadow-inner
-          "
-        />
-
-        <div
-          className="
-            absolute
-            -top-5
-            right-5
-            w-20
-            h-8
-            bg-sky-300
-            rounded-t-[20px]
-            border-4
-            border-yellow-400
-          "
-        />
-
-        <div
-          className="
-            absolute
-            -top-3
-            left-5
-            bg-yellow-400
-            rounded-t
-            px-2
-            text-[7px]
-            font-bold
-          "
-        >
-          TAXI
-        </div>
-
-        <div className="absolute bottom-[-7px] left-5 w-6 h-6 bg-gray-800 rounded-full border-4 border-gray-500" />
-
-        <div className="absolute bottom-[-7px] right-5 w-6 h-6 bg-gray-800 rounded-full border-4 border-gray-500" />
-      </div>
-
-      {/* =====================================================
-          MAIN APPLICATION
+          MAIN
       ===================================================== */}
 
       <main
@@ -1674,6 +2307,7 @@ export default function Typeing_Step() {
           pb-3
         "
       >
+
         <div
           className="
             w-full
@@ -1683,35 +2317,30 @@ export default function Typeing_Step() {
             items-center
           "
         >
-          {/* =================================================
-              START TOOLTIP
-          ================================================= */}
+
+          {/* START */}
 
           <button
             onClick={() => {
               initAudio();
 
-              if (isFinished) {
-                restartLesson();
-                return;
-              }
+              if (isPaused) {
+                setIsPaused(
+                  false
+                );
 
-              setIsPaused(
-                !isPaused
-              );
-
-              if (
-                isPaused &&
-                !startTime
-              ) {
-                setStartTime(
-                  Date.now()
+                if (!startTime) {
+                  setStartTime(
+                    Date.now()
+                  );
+                }
+              } else {
+                setIsPaused(
+                  true
                 );
               }
 
-              setTimeout(() => {
-                inputRef.current?.focus();
-              }, 50);
+              typingAreaRef.current?.focus();
             }}
             className="
               self-start
@@ -1731,9 +2360,7 @@ export default function Typeing_Step() {
               transition
             "
           >
-            {isFinished
-              ? "🎉 Lesson Complete!"
-              : isPaused
+            {isPaused
               ? "▶ Start Typing"
               : "⏸ Typing..."}
           </button>
@@ -1746,20 +2373,25 @@ export default function Typeing_Step() {
             dir="ltr"
             className="
               w-full
-              min-h-[145px]
+              min-h-[180px]
               px-[7%]
               flex
               items-center
               justify-center
+              cursor-text
             "
+            onClick={() => {
+              typingAreaRef.current?.focus();
+            }}
           >
+
             <div
               className="
                 font-['Fredoka']
-                text-[32px]
-                sm:text-[40px]
-                md:text-[46px]
-                leading-[1.45]
+                text-[34px]
+                sm:text-[43px]
+                md:text-[52px]
+                leading-[1.5]
                 tracking-wide
                 text-gray-700
                 text-left
@@ -1767,6 +2399,7 @@ export default function Typeing_Step() {
                 w-full
               "
             >
+
               {targetText
                 .split("")
                 .map(
@@ -1774,8 +2407,11 @@ export default function Typeing_Step() {
                     char,
                     index
                   ) => {
+
                     let className =
-                      "text-gray-500";
+                      "text-gray-400";
+
+                    /* Already typed */
 
                     if (
                       index <
@@ -1789,6 +2425,8 @@ export default function Typeing_Step() {
                           : "text-red-500 bg-red-100 rounded-md";
                     }
 
+                    /* Current character */
+
                     if (
                       index ===
                       typedText.length
@@ -1799,82 +2437,23 @@ export default function Typeing_Step() {
 
                     return (
                       <span
-                        key={
-                          index
-                        }
+                        key={index}
                         className={`
                           transition-all
                           duration-100
                           ${className}
                         `}
                       >
-                        {char ===
-                        " "
+                        {char === " "
                           ? "\u00A0"
                           : char}
                       </span>
                     );
                   }
                 )}
+
             </div>
-          </div>
 
-          {/* =================================================
-              INPUT
-          ================================================= */}
-
-          <div
-            className="
-              w-[86%]
-              mt-1
-              mb-2
-            "
-          >
-            <textarea
-              ref={
-                inputRef
-              }
-              value={
-                typedText
-              }
-              onChange={
-                handleTyping
-              }
-              disabled={
-                isFinished ||
-                isPaused
-              }
-              spellCheck={
-                false
-              }
-              autoFocus
-              dir="ltr"
-              placeholder={
-                isPaused
-                  ? "▶ Start typing..."
-                  : ""
-              }
-              className="
-                w-full
-                h-[100px]
-                resize-none
-                outline-none
-                bg-white/60
-                border-2
-                border-white
-                focus:border-blue-300
-                rounded-xl
-                px-6
-                py-4
-                text-[26px]
-                sm:text-[32px]
-                font-['Fredoka']
-                text-gray-700
-                shadow-inner
-                text-left
-                transition
-              "
-            />
           </div>
 
           {/* =================================================
@@ -1890,7 +2469,17 @@ export default function Typeing_Step() {
               mb-2
             "
           >
-            <div className="flex-1 h-2 bg-white/50 rounded-full overflow-hidden">
+
+            <div
+              className="
+                flex-1
+                h-2
+                bg-white/50
+                rounded-full
+                overflow-hidden
+              "
+            >
+
               <div
                 className="
                   h-full
@@ -1900,24 +2489,39 @@ export default function Typeing_Step() {
                   duration-200
                 "
                 style={{
-                  width: `${progress}%`,
+                  width:
+                    `${progress}%`,
                 }}
               />
+
             </div>
 
-            <span className="text-xs font-bold text-gray-500">
+            <span
+              className="
+                text-xs
+                font-bold
+                text-gray-500
+              "
+            >
               {progress}%
             </span>
 
-            <span className="text-xs font-bold text-gray-500">
+            <span
+              className="
+                text-xs
+                font-bold
+                text-gray-500
+              "
+            >
               {formatTime(
                 elapsedTime
               )}
             </span>
+
           </div>
 
           {/* =================================================
-              KEYBOARD
+              PASHTO KEYBOARD
           ================================================= */}
 
           {isKeyboardVisible && (
@@ -1935,12 +2539,11 @@ export default function Typeing_Step() {
                 backdrop-blur-sm
               "
             >
+
               {keyboardLayout.map(
                 (row) => (
                   <div
-                    key={
-                      row.id
-                    }
+                    key={row.id}
                     className="
                       flex
                       justify-center
@@ -1949,10 +2552,10 @@ export default function Typeing_Step() {
                       mb-1.5
                     "
                   >
+
                     {row.keys.map(
-                      (
-                        key
-                      ) => {
+                      (key) => {
+
                         const active =
                           isKeyActive(
                             key
@@ -1960,9 +2563,9 @@ export default function Typeing_Step() {
 
                         const pressed =
                           activeKey ===
-                          key.en ||
+                            key.en ||
                           activeKey ===
-                          key.ps;
+                            key.ps;
 
                         return (
                           <div
@@ -2010,20 +2613,26 @@ export default function Typeing_Step() {
                               }
                             `}
                           >
-                            {
-                              key.ps
-                            }
+                            {key.ps}
                           </div>
                         );
                       }
                     )}
+
                   </div>
                 )
               )}
 
               {/* SPACE */}
 
-              <div className="flex justify-center mt-1">
+              <div
+                className="
+                  flex
+                  justify-center
+                  mt-1
+                "
+              >
+
                 <div
                   className={`
                     w-[45%]
@@ -2057,90 +2666,61 @@ export default function Typeing_Step() {
                 >
                   SPACE
                 </div>
+
               </div>
+
             </div>
           )}
 
           {/* =================================================
-              FINISHED MESSAGE
+              STATS
           ================================================= */}
 
-          {isFinished && (
+          <div
+            className="
+              absolute
+              right-5
+              top-[62px]
+              hidden
+              md:flex
+              gap-3
+            "
+          >
+
             <div
               className="
-                absolute
-                bottom-2
-                bg-yellow-200
-                border
-                border-yellow-300
-                px-6
-                py-2
-                rounded-xl
-                shadow-md
-                text-sm
+                bg-white/70
+                px-3
+                py-1
+                rounded-lg
+                text-xs
                 font-bold
-                text-gray-600
-                flex
-                items-center
-                gap-5
+                text-gray-500
               "
             >
-              <span>
-                🎉 درس بشپړ شو!
-              </span>
-
-              <span>
-                {wpm} WPM
-              </span>
-
-              <span>
-                {accuracy}%
-              </span>
-
-              <button
-                onClick={
-                  nextLesson
-                }
-                className="
-                  bg-pink-500
-                  hover:bg-pink-600
-                  text-white
-                  px-4
-                  py-1.5
-                  rounded-lg
-                "
-              >
-                بل درس →
-              </button>
+              🎯 {accuracy}%
             </div>
-          )}
 
-          {/* =================================================
-              SMALL STATS
-          ================================================= */}
-
-          {!isFinished && (
             <div
               className="
-                absolute
-                right-5
-                top-[62px]
-                hidden
-                md:flex
-                gap-3
+                bg-white/70
+                px-3
+                py-1
+                rounded-lg
+                text-xs
+                font-bold
+                text-gray-500
               "
             >
-              <div className="bg-white/70 px-3 py-1 rounded-lg text-xs font-bold text-gray-500">
-                🎯 {accuracy}%
-              </div>
-
-              <div className="bg-white/70 px-3 py-1 rounded-lg text-xs font-bold text-gray-500">
-                ⚡ {wpm} WPM
-              </div>
+              ⚡ {wpm} WPM
             </div>
-          )}
+
+          </div>
+
         </div>
+
       </main>
+
     </div>
   );
 }
