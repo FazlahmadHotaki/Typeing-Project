@@ -2007,7 +2007,7 @@ export default function Typeing_Step() {
               sm:block
               font-extrabold
               text-gray-600
-              text-sm
+              text-sm rtl:text-right
             "
           >
             Lesson {lesson?.id}:{" "}
@@ -2049,9 +2049,12 @@ export default function Typeing_Step() {
                   py-2
                   hover:bg-[#fdf4c7]
                   text-sm
+                  rtl:text-right
+
+                  
                 "
               >
-                🔄 Restart Lesson
+                <img className="inline" width={20} src="https://img.icons8.com/?size=100&id=bDkQlpOV2TWB&format=png&color=000000" alt="" /> له سره پیل کړه
               </button>
 
               <button
@@ -2071,11 +2074,23 @@ export default function Typeing_Step() {
                   py-2
                   hover:bg-[#fdf4c7]
                   text-sm
+                  rtl:text-right
                 "
               >
-                {isMuted
-                  ? "🔇 Enable Sound"
-                  : "🔊 Mute Sound"}
+                
+                 {isMuted
+                  ? (
+                    <>
+<img className="inline" width={20} src="https://img.icons8.com/?size=100&id=NbXdDWS68ggb&format=png&color=000000" alt="" />
+          غږ بند کړه
+       </> )
+                  : (
+                    <>
+<img className="inline " width={20} src="https://img.icons8.com/?size=100&id=FV0C4YFGl7TK&format=png&color=000000" alt="" />
+                                                   غږ فعال کړه
+      </>
+                )}
+                 
               </button>
 
               <button
@@ -2095,9 +2110,10 @@ export default function Typeing_Step() {
                   py-2
                   hover:bg-[#fdf4c7]
                   text-sm
+                  rtl:text-right
                 "
               >
-                ⌨️ Toggle Keyboard
+                <img width={25} className=" inline" src="https://img.icons8.com/?size=100&id=mnLsovgnDgTt&format=png&color=000000" alt="" /> کیبورډ چالان/بند کړه
               </button>
 
               <button
@@ -2160,8 +2176,12 @@ export default function Typeing_Step() {
             "
           >
             {isPaused
-              ? "▶"
-              : "⏸"}
+              ? (
+                <img width={23} src="https://img.icons8.com/?size=100&id=TB4ZgJum4Woc&format=png&color=000000" alt="" />
+              )
+              : (
+                <img width={23} src="https://img.icons8.com/?size=100&id=Z2aInWmsldJ6&format=png&color=000000" alt="" />
+              )}
           </button>
 
           <button
@@ -2174,7 +2194,7 @@ export default function Typeing_Step() {
               text-xl
             "
           >
-            ⟳
+            <img width={23} src="https://img.icons8.com/?size=100&id=t7r2A42vsY6O&format=png&color=000000" alt="" />
           </button>
 
           <button
@@ -2189,10 +2209,10 @@ export default function Typeing_Step() {
               text-xl
             "
           >
-            ⌨
+            <img width={25} src="https://img.icons8.com/?size=100&id=58RG2mzbDIPX&format=png&color=000000" alt="" />
           </button>
 
-          <button
+          <button 
             onClick={() => {
               initAudio();
 
@@ -2203,11 +2223,16 @@ export default function Typeing_Step() {
             className="
               text-gray-500
               hover:text-gray-800
+
             "
           >
             {isMuted
-              ? "🔇"
-              : "🔊"}
+              ? (
+                <img width={23} src="https://img.icons8.com/?size=100&id=ZaGj3ZYdtFZX&format=png&color=000000"></img>
+              )
+              : (
+                <img width={23} src="https://img.icons8.com/?size=100&id=tAby2g2M-Yna&format=png&color=000000" alt="" />
+              )}
           </button>
 
         </div>
