@@ -2127,9 +2127,10 @@ export default function Typeing_Step() {
                   py-2
                   hover:bg-[#fdf4c7]
                   text-sm
+                  rtl:text-right
                 "
               >
-                ← Lessons
+                <img className="inline" width={20} src="https://img.icons8.com/?size=100&id=qa0dQBGXMZfO&format=png&color=000000" alt="" />درسونه
               </button>
 
             </div>
