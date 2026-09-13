@@ -1,7 +1,7 @@
 // App.js
 import React, { useState, useEffect } from 'react';
 import Nav from './components/Nav';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route,Navigate } from 'react-router-dom';
 import TypingTest from './pages/Typeing_Step';
 import Hero from './components/Hero';
 import PashtoTyping from "./components/PashtoTyping"
@@ -173,10 +173,14 @@ function App() {
               </div>
             }
           />
-          <Route
-            path='/dashboard'
-            element={<KeyTrackDashboard formData={formData} usersing={usersing} />}
-          />
+         <Route
+  path='/dashboard'
+  element={
+    localStorage.getItem("user")
+      ? <KeyTrackDashboard formData={formData} usersing={usersing} />
+      : <Navigate to="/login" replace />
+  }
+/>
           <Route
             path='/login'
             element={

@@ -202,7 +202,7 @@ const translations = {
   },
   
   ps: {
-      "login.title": "Welcome Back aganin!!",
+      "login.title": "بیا ښه راغلاست!",
     "signup.title": "حساب جوړول",
     "brand.name": "ټایپټون",
     "nav.dashboard":"ډشبورډ",
@@ -420,7 +420,7 @@ const translations = {
   },
   
   da: {
-      "login.title": "Welcome Back aganin!!!",
+      "login.title": "خوش آمدید!",
     "signup.title": "ایجاد حساب کاربری",
     "brand.name": "TypeTone",
     "nav.dashboard": "داشبورد",
