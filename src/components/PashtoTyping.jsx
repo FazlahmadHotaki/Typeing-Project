@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 // ==========================================
 
 const API_BASE_URL =
-  "https://the-typetone-api.onrender.com";
+  "https://the-typetone-api-wzm4.onrender.com";
 
 // ==========================================
 // MAIN COMPONENT
