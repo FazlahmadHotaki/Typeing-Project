@@ -2368,26 +2368,27 @@ export default function Typeing_Step() {
 
               typingAreaRef.current?.focus();
             }}
+            dir="rtl"
             className="
-              self-start
-              ml-[7%]
-              mb-2
-              bg-yellow-200
-              border
-              border-yellow-300
-              px-5
-              py-2
-              rounded-lg
-              text-gray-600
-              font-bold
-              text-sm
-              shadow-sm
-              hover:bg-yellow-300
-              transition
+             mr-[7%]
+         mb-2
+         bg-yellow-200
+         border
+         border-yellow-300
+         px-5
+         py-2
+         rounded-lg
+         text-gray-600
+         font-bold
+         text-sm
+         shadow-sm
+         hover:bg-yellow-300
+         transition
+         text-right
             "
           >
             {isPaused
-              ? "▶ Start Typing"
+              ? " Start Typing"
               : "⏸ Typing..."}
           </button>
 
@@ -2423,6 +2424,7 @@ export default function Typeing_Step() {
                 text-left
                 break-words
                 w-full
+                text-right
               "
             >
 
