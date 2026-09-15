@@ -1396,538 +1396,329 @@ export default function Typeing_Step() {
      COMPLETION PAGE
   ======================================================= */
 
+  /* =======================================================
+     COMPLETION PAGE
+  ======================================================= */
+
   if (isFinished) {
+    const scoreOutOfTen = Math.max(
+      0,
+      Math.min(10, Math.round((accuracy / 100) * 10))
+    );
+
+    const requiredAccuracy = 80;
+    const passed = accuracy >= requiredAccuracy;
+
+    const r = 45;
+    const circ = 2 * Math.PI * r;
+
     return (
       <div
-        className="
-          min-h-screen
-          bg-[#fdf4c7]
-          relative
-          overflow-hidden
-          flex
-          items-center
-          justify-center
-          px-5
-          py-10
-        "
+        dir="rtl"
+        className="relative flex h-screen w-full flex-col overflow-hidden bg-[#3B5B88] font-sans"
       >
-
-        {/* CLOUDS */}
-
-        <div
-          className="
-            absolute
-            top-[10%]
-            left-[7%]
-            w-36
-            h-14
-            bg-white/60
-            rounded-full
-          "
-        />
-
-        <div
-          className="
-            absolute
-            top-[6%]
-            left-[11%]
-            w-20
-            h-20
-            bg-white/60
-            rounded-full
-          "
-        />
-
-        <div
-          className="
-            absolute
-            top-[16%]
-            right-[8%]
-            w-44
-            h-14
-            bg-white/60
-            rounded-full
-          "
-        />
-
-        <div
-          className="
-            absolute
-            top-[10%]
-            right-[15%]
-            w-20
-            h-20
-            bg-white/60
-            rounded-full
-          "
-        />
-
-        {/* DECORATIONS */}
-
-        <div
-          className="
-            absolute
-            top-[18%]
-            left-[18%]
-            text-3xl
-            animate-bounce
-          "
-        >
-          ⭐
-        </div>
-
-        <div
-          className="
-            absolute
-            top-[25%]
-            right-[20%]
-            text-3xl
-            animate-pulse
-          "
-        >
-          ✨
-        </div>
-
-        <div
-          className="
-            absolute
-            bottom-[18%]
-            left-[12%]
-            text-3xl
-            animate-pulse
-          "
-        >
-          🎈
-        </div>
-
-        <div
-          className="
-            absolute
-            bottom-[22%]
-            right-[12%]
-            text-3xl
-            animate-bounce
-          "
-        >
-          ⭐
-        </div>
-
-        {/* CARD */}
-
-        <div
-          className="
-            relative
-            z-20
-            w-full
-            max-w-[760px]
-            bg-white/95
-            backdrop-blur-xl
-            rounded-[30px]
-            shadow-[0_25px_80px_rgba(0,0,0,0.15)]
-            border
-            border-white
-            p-6
-            sm:p-10
-          "
-        >
-
-          {/* SUCCESS ICON */}
-
-          <div className="flex justify-center">
-
-            <div
-              className="
-                w-24
-                h-24
-                sm:w-28
-                sm:h-28
-                rounded-full
-                bg-green-100
-                border-8
-                border-green-200
-                flex
-                items-center
-                justify-center
-                text-5xl
-                sm:text-6xl
-                shadow-lg
-              "
-            >
-              🎉
-            </div>
-
-          </div>
-
-          {/* TITLE */}
-
-          <div
-            dir="rtl"
-            className="
-              text-center
-              mt-5
-            "
-          >
-
-            <p
-              className="
-                text-green-500
-                font-bold
-                text-lg
-                mb-1
-              "
-            >
-              ډېر ښه! 👏
-            </p>
-
-            <h1
-              className="
-                text-3xl
-                sm:text-4xl
-                font-extrabold
-                text-gray-700
-              "
-            >
-              درس بشپړ شو!
-            </h1>
-
-            <p
-              dir="ltr"
-              className="
-                text-gray-400
-                mt-2
-                font-medium
-              "
-            >
-              Lesson {lesson?.id}:{" "}
-              {lesson?.title ||
-                "Pashto Typing"}
-            </p>
-
-          </div>
-
-          {/* PROGRESS */}
-
-          <div className="mt-7">
-
-            <div
-              className="
-                flex
-                justify-between
-                text-sm
-                font-bold
-                text-gray-500
-                mb-2
-              "
-            >
-              <span>
-                Progress
-              </span>
-
-              <span className="text-green-500">
-                100%
-              </span>
-            </div>
-
-            <div
-              className="
-                h-4
-                bg-gray-100
-                rounded-full
-                overflow-hidden
-              "
-            >
-
-              <div
-                className="
-                  h-full
-                  w-full
-                  bg-gradient-to-r
-                  from-pink-400
-                  to-green-400
-                  rounded-full
-                "
-              />
-
-            </div>
-
-          </div>
-
-          {/* RESULTS */}
-
-          <div
-            className="
-              grid
-              grid-cols-2
-              md:grid-cols-4
-              gap-3
-              mt-7
-            "
-          >
-
-            {/* WPM */}
-
-            <div
-              className="
-                bg-pink-50
-                rounded-2xl
-                p-4
-                text-center
-                border
-                border-pink-100
-              "
-            >
-
-              <div className="text-2xl">
-                ⚡
-              </div>
-
-              <div
-                className="
-                  text-2xl
-                  font-extrabold
-                  text-pink-500
-                  mt-1
-                "
-              >
-                {wpm}
-              </div>
-
-              <div className="text-xs font-bold text-gray-400">
-                WPM
-              </div>
-
-            </div>
-
-            {/* ACCURACY */}
-
-            <div
-              className="
-                bg-green-50
-                rounded-2xl
-                p-4
-                text-center
-                border
-                border-green-100
-              "
-            >
-
-              <div className="text-2xl">
-                🎯
-              </div>
-
-              <div
-                className="
-                  text-2xl
-                  font-extrabold
-                  text-green-500
-                  mt-1
-                "
-              >
-                {accuracy}%
-              </div>
-
-              <div className="text-xs font-bold text-gray-400">
-                Accuracy
-              </div>
-
-            </div>
-
-            {/* TIME */}
-
-            <div
-              className="
-                bg-blue-50
-                rounded-2xl
-                p-4
-                text-center
-                border
-                border-blue-100
-              "
-            >
-
-              <div className="text-2xl">
-                ⏱️
-              </div>
-
-              <div
-                className="
-                  text-2xl
-                  font-extrabold
-                  text-blue-500
-                  mt-1
-                "
-              >
-                {formatTime(
-                  elapsedTime
-                )}
-              </div>
-
-              <div className="text-xs font-bold text-gray-400">
-                Time
-              </div>
-
-            </div>
-
-            {/* CORRECT */}
-
-            <div
-              className="
-                bg-yellow-50
-                rounded-2xl
-                p-4
-                text-center
-                border
-                border-yellow-100
-              "
-            >
-
-              <div className="text-2xl">
-                ⌨️
-              </div>
-
-              <div
-                className="
-                  text-2xl
-                  font-extrabold
-                  text-yellow-500
-                  mt-1
-                "
-              >
-                {correctCharacters}
-              </div>
-
-              <div className="text-xs font-bold text-gray-400">
-                Correct
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* EXTRA RESULTS */}
-
-          <div
-            className="
-              mt-5
-              bg-gray-50
-              rounded-2xl
-              p-4
-              flex
-              flex-wrap
-              justify-center
-              gap-x-7
-              gap-y-2
-              text-sm
-              font-bold
-              text-gray-500
-            "
-          >
-
-            <span>
-              Characters:{" "}
-              {totalCharacters}
-            </span>
-
-            <span>
-              Correct:{" "}
-              {correctCharacters}
-            </span>
-
-            <span>
-              Score:{" "}
-              <span className="text-pink-500">
-                10/10
-              </span>
-            </span>
-
-          </div>
-
-          {/* BUTTONS */}
-
-          <div
-            className="
-              grid
-              grid-cols-1
-              sm:grid-cols-3
-              gap-3
-              mt-7
-            "
-          >
-
-            <button
-              onClick={
-                restartLesson
-              }
-              className="
-                py-3.5
-                px-5
-                rounded-xl
-                bg-gray-100
-                hover:bg-gray-200
-                text-gray-600
-                font-bold
-                transition
-                active:scale-95
-              "
-            >
-              🔄 بیا تمرین
-            </button>
-
+        {/* ================= TOP BAR ================= */}
+        <div className="z-10 flex items-center justify-between px-6 py-5 text-white/90">
+          <div className="flex items-center gap-4">
             <button
               onClick={goBack}
-              className="
-                py-3.5
-                px-5
-                rounded-xl
-                bg-blue-500
-                hover:bg-blue-600
-                text-white
-                font-bold
-                transition
-                shadow-md
-                active:scale-95
-              "
+              className="rounded-lg p-1 transition hover:bg-white/10 active:scale-95"
+              aria-label="بېرته"
             >
-              📚 ټول درسونه
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
             </button>
-
-            <button
-              onClick={
-                nextLesson
-              }
-              className="
-                py-3.5
-                px-5
-                rounded-xl
-                bg-pink-500
-                hover:bg-pink-600
-                text-white
-                font-bold
-                transition
-                shadow-md
-                active:scale-95
-              "
-            >
-              بل درس →
-            </button>
-
+            <span className="text-sm font-bold tracking-wide">
+              درس {lesson?.id}: {lesson?.title || "پښتو ټایپینګ"}
+            </span>
           </div>
-
-          <div
-            dir="rtl"
-            className="
-              text-center
-              mt-6
-              text-sm
-              text-gray-400
-              font-medium
-            "
-          >
-            ستا پایله په اوتومات ډول خوندي شوه. 💾
-          </div>
-
         </div>
 
+        {/* ================= MAIN CONTENT ================= */}
+        <div className="z-10 flex flex-1 flex-col items-center justify-center pb-56">
+          {/* STARS */}
+          <div className="flex gap-2.5">
+            {[...Array(5)].map((_, i) => {
+              const filled = i < Math.round(scoreOutOfTen / 2);
+              return (
+                <svg
+                  key={i}
+                  className={`h-14 w-14 sm:h-16 sm:w-16 ${
+                    filled ? "text-yellow-400" : "text-[#4a6fa5]"
+                  }`}
+                  fill={filled ? "currentColor" : "none"}
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                  />
+                </svg>
+              );
+            })}
+          </div>
+
+          {/* SCORE */}
+          <div className="mt-5 flex flex-col items-center">
+            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#a3c2f0]">
+              ستاسو نمره
+            </span>
+            <span className="mt-1 text-6xl font-black text-white">
+              {scoreOutOfTen}
+            </span>
+          </div>
+
+          {/* GAUGES */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-14 sm:gap-20">
+            {/* ── ACCURACY ── */}
+            <div className="relative flex flex-col items-center">
+              <div className="relative h-36 w-36">
+                <svg
+                  className="h-full w-full -rotate-90"
+                  viewBox="0 0 100 100"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r={r}
+                    stroke="#2d4b73"
+                    strokeWidth="7"
+                    fill="none"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r={r}
+                    stroke={passed ? "#4ade80" : "#f87171"}
+                    strokeWidth="7"
+                    fill="none"
+                    strokeDasharray={circ}
+                    strokeDashoffset={circ * (1 - accuracy / 100)}
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-3xl font-black text-white">
+                    {accuracy}%
+                  </span>
+                  <span className="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-[#a3c2f0]">
+                    ریښتینې دقت
+                  </span>
+                </div>
+              </div>
+              <div className="absolute top-1/2 -left-8 -translate-y-1/2 text-[10px] font-bold text-[#a3c2f0]">
+                {requiredAccuracy}%
+              </div>
+              <span className="mt-3 text-[11px] font-black uppercase tracking-[0.15em] text-[#a3c2f0]">
+                دقت
+              </span>
+            </div>
+
+            {/* ── DURATION ── */}
+            <div className="relative flex flex-col items-center">
+              <div className="relative h-36 w-36">
+                <svg
+                  className="h-full w-full -rotate-90"
+                  viewBox="0 0 100 100"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r={r}
+                    stroke="#a3c2f0"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeDasharray="5 5"
+                    opacity={0.4}
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="38"
+                    stroke="#2d4b73"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-2xl font-black text-white">
+                    {formatTime(elapsedTime)}
+                  </span>
+                  <span className="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-[#a3c2f0]">
+                    دقیقه ثانیه
+                  </span>
+                </div>
+              </div>
+              <span className="mt-3 text-[11px] font-black uppercase tracking-[0.15em] text-[#a3c2f0]">
+                موده
+              </span>
+            </div>
+
+            {/* ── SPEED ── */}
+            <div className="relative flex flex-col items-center">
+              <div className="relative h-36 w-36">
+                <svg
+                  className="h-full w-full -rotate-90"
+                  viewBox="0 0 100 100"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r={r}
+                    stroke="#2d4b73"
+                    strokeWidth="7"
+                    fill="none"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r={r}
+                    stroke="#facc15"
+                    strokeWidth="7"
+                    fill="none"
+                    strokeDasharray={circ}
+                    strokeDashoffset={
+                      circ * (1 - Math.min(100, wpm) / 100)
+                    }
+                    strokeLinecap="round"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="52"
+                    stroke="#a3c2f0"
+                    strokeWidth="1"
+                    fill="none"
+                    strokeDasharray="3 4"
+                    opacity={0.5}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-3xl font-black text-white">
+                    {wpm}
+                  </span>
+                  <span className="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-[#a3c2f0]">
+                    WPM
+                  </span>
+                </div>
+              </div>
+              <div className="absolute top-1/2 -right-14 -translate-y-1/2 flex flex-col gap-0.5 text-[9px] font-bold leading-tight">
+                <span className="text-[#a3c2f0]">{wpm} wpm</span>
+                <span className="text-white/50">اړتیا ۱۰ wpm</span>
+              </div>
+              <span className="mt-3 text-[11px] font-black uppercase tracking-[0.15em] text-[#a3c2f0]">
+                سرعت
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* ================= BOTTOM CARD ================= */}
+        <div className="absolute bottom-0 left-1/2 z-20 w-full max-w-6xl -translate-x-1/2">
+          <div className="flex flex-col overflow-hidden rounded-t-[2rem] bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.18)]">
+            {/* SAVE BANNER */}
+            <div className="flex items-center justify-center gap-2 border-b border-[#FDE047]/40 bg-[#FEF9C3] px-6 py-2.5 text-sm text-[#854D0E]">
+              <span className="font-bold text-[#166534]">✓</span>
+              <span className="font-semibold">
+                ستا پایله په اوتومات ډول خوندي شوه.
+              </span>
+            </div>
+
+            {/* ACTION BAR */}
+            <div className="flex flex-wrap items-center justify-center gap-3 p-5 sm:gap-4 sm:p-6">
+              {/* All Lessons */}
+              <button
+                onClick={goBack}
+                className="group flex items-center justify-center gap-2.5 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-black text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800 hover:shadow-md active:scale-95"
+              >
+                <svg
+                  className="h-4 w-4 transition-transform group-hover:scale-110"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+                ټول درسونه
+              </button>
+
+              {/* Try Again */}
+              <button
+                onClick={restartLesson}
+                className="group flex items-center justify-center gap-2.5 rounded-full bg-emerald-500 px-6 py-3 text-sm font-black text-white shadow-md shadow-emerald-300/40 transition hover:-translate-y-0.5 hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-400/50 active:scale-95"
+              >
+                <svg
+                  className="h-4 w-4 transition-transform duration-500 group-hover:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.4}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                  <path d="M21 3v5h-5" />
+                  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                  <path d="M3 21v-5h5" />
+                </svg>
+                بیا هڅه وکړه
+              </button>
+
+              {/* Next Lesson */}
+              <button
+                onClick={nextLesson}
+                className="group flex items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3 text-sm font-black text-white shadow-md shadow-indigo-300/40 transition hover:-translate-y-0.5 hover:from-violet-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-indigo-400/50 active:scale-95"
+              >
+                بل درس
+                <svg
+                  className="h-4 w-4 transition-transform group-hover:-translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.4}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M19 12H5" />
+                  <path d="m12 19-7-7 7-7" />
+                </svg>
+              </button>
+            </div>
+
+            {/* FEEDBACK */}
+            <p className="border-t border-gray-100 px-6 py-3 text-center text-xs font-medium text-gray-500">
+              {passed ? (
+                <>
+                  ډېر ښه! تاسو لږ تر لږه {requiredAccuracy}٪ دقت ترلاسه کړ.
+                  راتلونکي درس ته لاړ شئ.
+                </>
+              ) : (
+                <>
+                  دا درس لږ تر لږه {requiredAccuracy}٪ دقت لري. په راتلونکې
+                  هڅه کې هڅه وکړه چې ۱۰۰٪ دقت ترلاسه کړې.
+                </>
+              )}
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
