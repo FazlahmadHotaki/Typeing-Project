@@ -88,7 +88,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#0A1424] z-50">
+      <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#fdfcdc] z-50">
         <div className="loader">
           <svg
             className="container"
