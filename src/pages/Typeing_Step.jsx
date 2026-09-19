@@ -1,15 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 /* =========================================================
    API
 ========================================================= */
 
-const API_BASE_URL =
-  "https://the-typetone-api.onrender.com";
+const API_BASE_URL = "https://the-typetone-api.onrender.com";
 
 /* =========================================================
    PASHTO KEYBOARD
@@ -109,8 +104,7 @@ export default function Typeing_Step() {
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  const [correctCharacters, setCorrectCharacters] =
-    useState(0);
+  const [correctCharacters, setCorrectCharacters] = useState(0);
 
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
@@ -121,8 +115,7 @@ export default function Typeing_Step() {
 
   const [isMuted, setIsMuted] = useState(false);
 
-  const [isKeyboardVisible, setIsKeyboardVisible] =
-    useState(true);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(true);
 
   const [activeKey, setActiveKey] = useState(null);
 
@@ -144,20 +137,16 @@ export default function Typeing_Step() {
 
   const initAudio = () => {
     if (!audioContextRef.current) {
-      const AudioContext =
-        window.AudioContext ||
-        window.webkitAudioContext;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
 
       if (AudioContext) {
-        audioContextRef.current =
-          new AudioContext();
+        audioContextRef.current = new AudioContext();
       }
     }
 
     if (
       audioContextRef.current &&
-      audioContextRef.current.state ===
-        "suspended"
+      audioContextRef.current.state === "suspended"
     ) {
       audioContextRef.current.resume();
     }
@@ -172,53 +161,33 @@ export default function Typeing_Step() {
 
     initAudio();
 
-    const ctx =
-      audioContextRef.current;
+    const ctx = audioContextRef.current;
 
     if (!ctx) return;
 
-    const now =
-      ctx.currentTime;
+    const now = ctx.currentTime;
 
-    const oscillator =
-      ctx.createOscillator();
+    const oscillator = ctx.createOscillator();
 
-    const gain =
-      ctx.createGain();
+    const gain = ctx.createGain();
 
     oscillator.type = "sine";
 
-    oscillator.frequency.setValueAtTime(
-      900,
-      now
-    );
+    oscillator.frequency.setValueAtTime(900, now);
 
-    oscillator.frequency.exponentialRampToValueAtTime(
-      550,
-      now + 0.06
-    );
+    oscillator.frequency.exponentialRampToValueAtTime(550, now + 0.06);
 
-    gain.gain.setValueAtTime(
-      0.09,
-      now
-    );
+    gain.gain.setValueAtTime(0.09, now);
 
-    gain.gain.exponentialRampToValueAtTime(
-      0.001,
-      now + 0.06
-    );
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
 
     oscillator.connect(gain);
 
-    gain.connect(
-      ctx.destination
-    );
+    gain.connect(ctx.destination);
 
     oscillator.start(now);
 
-    oscillator.stop(
-      now + 0.06
-    );
+    oscillator.stop(now + 0.06);
   };
 
   /* =======================================================
@@ -230,72 +199,40 @@ export default function Typeing_Step() {
 
     initAudio();
 
-    const ctx =
-      audioContextRef.current;
+    const ctx = audioContextRef.current;
 
     if (!ctx) return;
 
-    const now =
-      ctx.currentTime;
+    const now = ctx.currentTime;
 
-    const master =
-      ctx.createGain();
+    const master = ctx.createGain();
 
-    master.gain.setValueAtTime(
-      0.14,
-      now
-    );
+    master.gain.setValueAtTime(0.14, now);
 
-    master.gain.exponentialRampToValueAtTime(
-      0.001,
-      now + 0.18
-    );
+    master.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
 
-    master.connect(
-      ctx.destination
-    );
+    master.connect(ctx.destination);
 
-    const osc1 =
-      ctx.createOscillator();
+    const osc1 = ctx.createOscillator();
 
-    const osc2 =
-      ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
 
     osc1.type = "sawtooth";
     osc2.type = "sawtooth";
 
-    osc1.frequency.setValueAtTime(
-      220,
-      now
-    );
+    osc1.frequency.setValueAtTime(220, now);
 
-    osc2.frequency.setValueAtTime(
-      227,
-      now
-    );
+    osc2.frequency.setValueAtTime(227, now);
 
-    osc1.frequency.exponentialRampToValueAtTime(
-      110,
-      now + 0.15
-    );
+    osc1.frequency.exponentialRampToValueAtTime(110, now + 0.15);
 
-    osc2.frequency.exponentialRampToValueAtTime(
-      113,
-      now + 0.15
-    );
+    osc2.frequency.exponentialRampToValueAtTime(113, now + 0.15);
 
-    const oscGain =
-      ctx.createGain();
+    const oscGain = ctx.createGain();
 
-    oscGain.gain.setValueAtTime(
-      0.35,
-      now
-    );
+    oscGain.gain.setValueAtTime(0.35, now);
 
-    oscGain.gain.exponentialRampToValueAtTime(
-      0.001,
-      now + 0.16
-    );
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
 
     osc1.connect(oscGain);
     osc2.connect(oscGain);
@@ -305,13 +242,9 @@ export default function Typeing_Step() {
     osc1.start(now);
     osc2.start(now);
 
-    osc1.stop(
-      now + 0.18
-    );
+    osc1.stop(now + 0.18);
 
-    osc2.stop(
-      now + 0.18
-    );
+    osc2.stop(now + 0.18);
   };
 
   /* =======================================================
@@ -323,53 +256,33 @@ export default function Typeing_Step() {
 
     initAudio();
 
-    const ctx =
-      audioContextRef.current;
+    const ctx = audioContextRef.current;
 
     if (!ctx) return;
 
-    const now =
-      ctx.currentTime;
+    const now = ctx.currentTime;
 
-    const oscillator =
-      ctx.createOscillator();
+    const oscillator = ctx.createOscillator();
 
-    const gain =
-      ctx.createGain();
+    const gain = ctx.createGain();
 
     oscillator.type = "sine";
 
-    oscillator.frequency.setValueAtTime(
-      300,
-      now
-    );
+    oscillator.frequency.setValueAtTime(300, now);
 
-    oscillator.frequency.exponentialRampToValueAtTime(
-      500,
-      now + 0.08
-    );
+    oscillator.frequency.exponentialRampToValueAtTime(500, now + 0.08);
 
-    gain.gain.setValueAtTime(
-      0.08,
-      now
-    );
+    gain.gain.setValueAtTime(0.08, now);
 
-    gain.gain.exponentialRampToValueAtTime(
-      0.001,
-      now + 0.08
-    );
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
     oscillator.connect(gain);
 
-    gain.connect(
-      ctx.destination
-    );
+    gain.connect(ctx.destination);
 
     oscillator.start(now);
 
-    oscillator.stop(
-      now + 0.08
-    );
+    oscillator.stop(now + 0.08);
   };
 
   /* =======================================================
@@ -381,65 +294,37 @@ export default function Typeing_Step() {
 
     initAudio();
 
-    const ctx =
-      audioContextRef.current;
+    const ctx = audioContextRef.current;
 
     if (!ctx) return;
 
-    const notes = [
-      523.25,
-      659.25,
-      784,
-      1046.5,
-    ];
+    const notes = [523.25, 659.25, 784, 1046.5];
 
-    notes.forEach(
-      (
-        frequency,
-        index
-      ) => {
-        setTimeout(() => {
-          const now =
-            ctx.currentTime;
+    notes.forEach((frequency, index) => {
+      setTimeout(() => {
+        const now = ctx.currentTime;
 
-          const oscillator =
-            ctx.createOscillator();
+        const oscillator = ctx.createOscillator();
 
-          const gain =
-            ctx.createGain();
+        const gain = ctx.createGain();
 
-          oscillator.type =
-            "triangle";
+        oscillator.type = "triangle";
 
-          oscillator.frequency.setValueAtTime(
-            frequency,
-            now
-          );
+        oscillator.frequency.setValueAtTime(frequency, now);
 
-          gain.gain.setValueAtTime(
-            0.12,
-            now
-          );
+        gain.gain.setValueAtTime(0.12, now);
 
-          gain.gain.exponentialRampToValueAtTime(
-            0.001,
-            now + 0.35
-          );
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
-          oscillator.connect(gain);
+        oscillator.connect(gain);
 
-          gain.connect(
-            ctx.destination
-          );
+        gain.connect(ctx.destination);
 
-          oscillator.start(now);
+        oscillator.start(now);
 
-          oscillator.stop(
-            now + 0.35
-          );
-        }, index * 100);
-      }
-    );
+        oscillator.stop(now + 0.35);
+      }, index * 100);
+    });
   };
 
   /* =======================================================
@@ -448,28 +333,17 @@ export default function Typeing_Step() {
 
   const getLessonId = () => {
     try {
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
+      const params = new URLSearchParams(window.location.search);
 
-      const urlLesson =
-        params.get("lesson");
+      const urlLesson = params.get("lesson");
 
       if (urlLesson) {
-        return String(
-          urlLesson
-        );
+        return String(urlLesson);
       }
 
-      const saved =
-        localStorage.getItem(
-          "selectedLessonId"
-        );
+      const saved = localStorage.getItem("selectedLessonId");
 
-      return saved
-        ? String(saved)
-        : null;
+      return saved ? String(saved) : null;
     } catch {
       return null;
     }
@@ -479,95 +353,63 @@ export default function Typeing_Step() {
      FETCH LESSON
   ======================================================= */
 
-  const fetchLesson =
-    async () => {
-      setIsLoading(true);
-      setError(null);
+  const fetchLesson = async () => {
+    setIsLoading(true);
+    setError(null);
 
-      try {
-        const response =
-          await fetch(
-            `${API_BASE_URL}/api/lessons`
-          );
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/lessons`);
 
-        if (!response.ok) {
-          throw new Error(
-            `HTTP Error: ${response.status}`
-          );
-        }
-
-        const data =
-          await response.json();
-
-        const lessons =
-          Array.isArray(data)
-            ? data
-            : Array.isArray(
-                data.lessons
-              )
-            ? data.lessons
-            : [];
-
-        if (!lessons.length) {
-          throw new Error(
-            "درسونه پیدا نه شول."
-          );
-        }
-
-        const lessonId =
-          getLessonId();
-
-        let selectedLesson =
-          null;
-
-        if (lessonId) {
-          selectedLesson =
-            lessons.find(
-              (item) =>
-                String(
-                  item.id
-                ) ===
-                String(
-                  lessonId
-                )
-            );
-        }
-
-        if (!selectedLesson) {
-          selectedLesson =
-            lessons[0];
-        }
-
-        localStorage.setItem(
-          "selectedLessonId",
-          String(
-            selectedLesson.id
-          )
-        );
-
-        setLesson(
-          selectedLesson
-        );
-
-        setTypedText("");
-        setStartTime(null);
-        setElapsedTime(0);
-        setCorrectCharacters(0);
-
-        setIsFinished(false);
-        setIsPaused(true);
-        setActiveKey(null);
-      } catch (err) {
-        console.error(err);
-
-        setError(
-          err.message ||
-            "د درس په ترلاسه کولو کې ستونزه رامنځته شوه."
-        );
-      } finally {
-        setIsLoading(false);
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
       }
-    };
+
+      const data = await response.json();
+
+      const lessons = Array.isArray(data)
+        ? data
+        : Array.isArray(data.lessons)
+          ? data.lessons
+          : [];
+
+      if (!lessons.length) {
+        throw new Error("درسونه پیدا نه شول.");
+      }
+
+      const lessonId = getLessonId();
+
+      let selectedLesson = null;
+
+      if (lessonId) {
+        selectedLesson = lessons.find(
+          (item) => String(item.id) === String(lessonId),
+        );
+      }
+
+      if (!selectedLesson) {
+        selectedLesson = lessons[0];
+      }
+
+      localStorage.setItem("selectedLessonId", String(selectedLesson.id));
+
+      setLesson(selectedLesson);
+
+      setTypedText("");
+      setStartTime(null);
+      setElapsedTime(0);
+      setCorrectCharacters(0);
+
+      setIsFinished(false);
+      setIsPaused(true);
+      setActiveKey(null);
+    } catch (err) {
+      console.error(err);
+
+      setError(err.message || "د درس په ترلاسه کولو کې ستونزه رامنځته شوه.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   /* =======================================================
      INITIAL LOAD
@@ -577,12 +419,8 @@ export default function Typeing_Step() {
     fetchLesson();
 
     return () => {
-      if (
-        keyboardTimer.current
-      ) {
-        clearTimeout(
-          keyboardTimer.current
-        );
+      if (keyboardTimer.current) {
+        clearTimeout(keyboardTimer.current);
       }
     };
   }, []);
@@ -592,49 +430,26 @@ export default function Typeing_Step() {
   ======================================================= */
 
   useEffect(() => {
-    if (
-      !startTime ||
-      isFinished ||
-      isPaused
-    ) {
+    if (!startTime || isFinished || isPaused) {
       return;
     }
 
-    const timer =
-      setInterval(() => {
-        setElapsedTime(
-          Math.floor(
-            (Date.now() -
-              startTime) /
-              1000
-          )
-        );
-      }, 1000);
+    const timer = setInterval(() => {
+      setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
 
-    return () =>
-      clearInterval(
-        timer
-      );
-  }, [
-    startTime,
-    isFinished,
-    isPaused,
-  ]);
+    return () => clearInterval(timer);
+  }, [startTime, isFinished, isPaused]);
 
   /* =======================================================
      LESSON DATA
   ======================================================= */
 
-  const targetText =
-    lesson?.text || "";
+  const targetText = lesson?.text || "";
 
-  const totalCharacters =
-    targetText.length;
+  const totalCharacters = targetText.length;
 
-  const currentCharacter =
-    targetText[
-      typedText.length
-    ] || "";
+  const currentCharacter = targetText[typedText.length] || "";
 
   /* =======================================================
      PROGRESS
@@ -642,14 +457,7 @@ export default function Typeing_Step() {
 
   const progress =
     totalCharacters > 0
-      ? Math.min(
-          100,
-          Math.round(
-            (typedText.length /
-              totalCharacters) *
-              100
-          )
-        )
+      ? Math.min(100, Math.round((typedText.length / totalCharacters) * 100))
       : 0;
 
   /* =======================================================
@@ -658,11 +466,7 @@ export default function Typeing_Step() {
 
   const accuracy =
     typedText.length > 0
-      ? Math.round(
-          (correctCharacters /
-            typedText.length) *
-            100
-        )
+      ? Math.round((correctCharacters / typedText.length) * 100)
       : 100;
 
   /* =======================================================
@@ -671,119 +475,67 @@ export default function Typeing_Step() {
 
   const words =
     typedText.trim().length > 0
-      ? typedText
-          .trim()
-          .split(/\s+/)
-          .filter(Boolean)
-          .length
+      ? typedText.trim().split(/\s+/).filter(Boolean).length
       : 0;
 
-  const minutes =
-    elapsedTime / 60;
+  const minutes = elapsedTime / 60;
 
-  const wpm =
-    minutes > 0
-      ? Math.round(
-          words / minutes
-        )
-      : 0;
+  const wpm = minutes > 0 ? Math.round(words / minutes) : 0;
 
   /* =======================================================
      TIME FORMAT
   ======================================================= */
 
-  const formatTime = (
-    seconds
-  ) => {
-    const mins =
-      Math.floor(
-        seconds / 60
-      );
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
 
-    const secs =
-      seconds % 60;
+    const secs = seconds % 60;
 
-    return `${String(
-      mins
-    ).padStart(
-      2,
-      "0"
-    )}:${String(
-      secs
-    ).padStart(
-      2,
-      "0"
-    )}`;
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
   /* =======================================================
      ACTIVE KEY
   ======================================================= */
 
-  const isKeyActive = (
-    key
-  ) => {
-    if (
-      !currentCharacter
-    ) {
+  const isKeyActive = (key) => {
+    if (!currentCharacter) {
       return false;
     }
 
-    if (
-      currentCharacter ===
-      " "
-    ) {
+    if (currentCharacter === " ") {
       return false;
     }
 
-    return [
-      key.en,
-      key.en.toLowerCase(),
-      key.ps,
-      key.da,
-    ].includes(
-      currentCharacter
+    return [key.en, key.en.toLowerCase(), key.ps, key.da].includes(
+      currentCharacter,
     );
   };
 
-  const isSpaceActive =
-    currentCharacter ===
-    " ";
+  const isSpaceActive = currentCharacter === " ";
 
   /* =======================================================
      KEY ANIMATION
   ======================================================= */
 
-  const animateKey = (
-    char
-  ) => {
+  const animateKey = (char) => {
     setActiveKey(char);
 
-    if (
-      keyboardTimer.current
-    ) {
-      clearTimeout(
-        keyboardTimer.current
-      );
+    if (keyboardTimer.current) {
+      clearTimeout(keyboardTimer.current);
     }
 
-    keyboardTimer.current =
-      setTimeout(() => {
-        setActiveKey(null);
-      }, 180);
+    keyboardTimer.current = setTimeout(() => {
+      setActiveKey(null);
+    }, 180);
   };
 
   /* =======================================================
      HANDLE KEYBOARD
   ======================================================= */
 
-  const handleKeyDown = (
-    event
-  ) => {
-    if (
-      !lesson ||
-      isFinished
-    ) {
+  const handleKeyDown = (event) => {
+    if (!lesson || isFinished) {
       return;
     }
 
@@ -809,22 +561,11 @@ export default function Typeing_Step() {
        BACKSPACE
     ===================================== */
 
-    if (
-      event.key ===
-      "Backspace"
-    ) {
-      if (
-        typedText.length > 0
-      ) {
+    if (event.key === "Backspace") {
+      if (typedText.length > 0) {
         playBackspaceSound();
 
-        setTypedText(
-          (prev) =>
-            prev.slice(
-              0,
-              -1
-            )
-        );
+        setTypedText((prev) => prev.slice(0, -1));
       }
 
       return;
@@ -834,22 +575,15 @@ export default function Typeing_Step() {
        ONLY CHARACTERS
     ===================================== */
 
-    if (
-      event.key.length !== 1
-    ) {
+    if (event.key.length !== 1) {
       return;
     }
 
-    const newChar =
-      event.key;
+    const newChar = event.key;
 
-    const currentIndex =
-      typedText.length;
+    const currentIndex = typedText.length;
 
-    const expected =
-      targetText[
-        currentIndex
-      ];
+    const expected = targetText[currentIndex];
 
     /* =====================================
        START TIMER
@@ -859,9 +593,7 @@ export default function Typeing_Step() {
       setIsPaused(false);
 
       if (!startTime) {
-        setStartTime(
-          Date.now()
-        );
+        setStartTime(Date.now());
       }
     }
 
@@ -869,18 +601,13 @@ export default function Typeing_Step() {
        KEY ANIMATION
     ===================================== */
 
-    animateKey(
-      newChar
-    );
+    animateKey(newChar);
 
     /* =====================================
        CORRECT / WRONG SOUND
     ===================================== */
 
-    if (
-      newChar ===
-      expected
-    ) {
+    if (newChar === expected) {
       playCorrectSound();
     } else {
       playIncorrectSound();
@@ -890,9 +617,7 @@ export default function Typeing_Step() {
        NEW TEXT
     ===================================== */
 
-    const newTypedText =
-      typedText +
-      newChar;
+    const newTypedText = typedText + newChar;
 
     /* =====================================
        CORRECT CHARACTERS
@@ -900,91 +625,50 @@ export default function Typeing_Step() {
 
     let newCorrectCount = 0;
 
-    for (
-      let i = 0;
-      i <
-      newTypedText.length;
-      i++
-    ) {
-      if (
-        newTypedText[i] ===
-        targetText[i]
-      ) {
+    for (let i = 0; i < newTypedText.length; i++) {
+      if (newTypedText[i] === targetText[i]) {
         newCorrectCount++;
       }
     }
 
-    setCorrectCharacters(
-      newCorrectCount
-    );
+    setCorrectCharacters(newCorrectCount);
 
-    setTypedText(
-      newTypedText
-    );
+    setTypedText(newTypedText);
 
     /* =====================================
        FINISHED
     ===================================== */
 
-    if (
-      newTypedText.length >=
-        targetText.length &&
-      targetText.length > 0
-    ) {
-      const finishTime =
-        Date.now();
+    if (newTypedText.length >= targetText.length && targetText.length > 0) {
+      const finishTime = Date.now();
 
-      const finalStartTime =
-        startTime ||
-        finishTime;
+      const finalStartTime = startTime || finishTime;
 
-      const finalElapsedTime =
-        Math.max(
-          0,
-          Math.floor(
-            (finishTime -
-              finalStartTime) /
-              1000
-          )
-        );
+      const finalElapsedTime = Math.max(
+        0,
+        Math.floor((finishTime - finalStartTime) / 1000),
+      );
 
       const finalAccuracy =
         targetText.length > 0
-          ? Math.round(
-              (newCorrectCount /
-                targetText.length) *
-                100
-            )
+          ? Math.round((newCorrectCount / targetText.length) * 100)
           : 100;
 
-      const finalWords =
-        newTypedText
-          .trim()
-          .split(/\s+/)
-          .filter(Boolean)
-          .length;
+      const finalWords = newTypedText
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean).length;
 
-      const finalMinutes =
-        finalElapsedTime /
-        60;
+      const finalMinutes = finalElapsedTime / 60;
 
       const finalWpm =
-        finalMinutes > 0
-          ? Math.round(
-              finalWords /
-                finalMinutes
-            )
-          : 0;
+        finalMinutes > 0 ? Math.round(finalWords / finalMinutes) : 0;
 
       /* Update state */
 
-      setElapsedTime(
-        finalElapsedTime
-      );
+      setElapsedTime(finalElapsedTime);
 
-      setCorrectCharacters(
-        newCorrectCount
-      );
+      setCorrectCharacters(newCorrectCount);
 
       setIsPaused(true);
 
@@ -996,137 +680,82 @@ export default function Typeing_Step() {
          SAVE COMPLETED LESSON
       =================================== */
 
-      const lessonId =
-        String(
-          lesson.id
-        );
+      const lessonId = String(lesson.id);
 
       try {
-        let completedLessons =
-          [];
+        let completedLessons = [];
 
         try {
-          completedLessons =
-            JSON.parse(
-              localStorage.getItem(
-                "completedLessons"
-              ) || "[]"
-            );
-        } catch {
-          completedLessons =
-            [];
-        }
-
-        if (
-          !Array.isArray(
-            completedLessons
-          )
-        ) {
-          completedLessons =
-            [];
-        }
-
-        if (
-          !completedLessons.includes(
-            lessonId
-          )
-        ) {
-          completedLessons.push(
-            lessonId
+          completedLessons = JSON.parse(
+            localStorage.getItem("completedLessons") || "[]",
           );
+        } catch {
+          completedLessons = [];
+        }
+
+        if (!Array.isArray(completedLessons)) {
+          completedLessons = [];
+        }
+
+        if (!completedLessons.includes(lessonId)) {
+          completedLessons.push(lessonId);
         }
 
         localStorage.setItem(
           "completedLessons",
-          JSON.stringify(
-            completedLessons
-          )
+          JSON.stringify(completedLessons),
         );
 
-        let lessonResults =
-          {};
+        let lessonResults = {};
 
         try {
-          lessonResults =
-            JSON.parse(
-              localStorage.getItem(
-                "lessonResults"
-              ) || "{}"
-            );
+          lessonResults = JSON.parse(
+            localStorage.getItem("lessonResults") || "{}",
+          );
         } catch {
-          lessonResults =
-            {};
+          lessonResults = {};
         }
 
         const finalResult = {
-          lessonId:
-            lesson.id,
+          lessonId: lesson.id,
 
-          title:
-            lesson.title ||
-            "",
+          title: lesson.title || "",
 
-          level:
-            lesson.level ||
-            "",
+          level: lesson.level || "",
 
-          text:
-            lesson.text ||
-            "",
+          text: lesson.text || "",
 
-          completed:
-            true,
+          completed: true,
 
-          progress:
-            100,
+          progress: 100,
 
-          typedCharacters:
-            newTypedText.length,
+          typedCharacters: newTypedText.length,
 
-          totalCharacters:
-            targetText.length,
+          totalCharacters: targetText.length,
 
-          correctCharacters:
-            newCorrectCount,
+          correctCharacters: newCorrectCount,
 
-          accuracy:
-            finalAccuracy,
+          accuracy: finalAccuracy,
 
-          wpm:
-            finalWpm,
+          wpm: finalWpm,
 
-          elapsedTime:
-            finalElapsedTime,
+          elapsedTime: finalElapsedTime,
 
-          score:
-            10,
+          score: 10,
 
-          completedAt:
-            new Date().toISOString(),
+          completedAt: new Date().toISOString(),
         };
 
-        lessonResults[
-          lessonId
-        ] = finalResult;
+        lessonResults[lessonId] = finalResult;
 
-        localStorage.setItem(
-          "lessonResults",
-          JSON.stringify(
-            lessonResults
-          )
-        );
+        localStorage.setItem("lessonResults", JSON.stringify(lessonResults));
 
         localStorage.setItem(
           "lastCompletedLesson",
-          JSON.stringify(
-            finalResult
-          )
+          JSON.stringify(finalResult),
         );
       } catch (saveError) {
-        console.error(
-          "Could not save lesson:",
-          saveError
-        );
+        console.error("Could not save lesson:", saveError);
       }
     }
   };
@@ -1136,129 +765,82 @@ export default function Typeing_Step() {
   ======================================================= */
 
   useEffect(() => {
-    window.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [
-    lesson,
-    isFinished,
-    isPaused,
-    typedText,
-    targetText,
-    startTime,
-    isMuted,
-  ]);
+  }, [lesson, isFinished, isPaused, typedText, targetText, startTime, isMuted]);
 
   /* =======================================================
      RESTART
   ======================================================= */
 
-  const restartLesson =
-    () => {
-      setTypedText("");
-      setStartTime(null);
-      setElapsedTime(0);
-      setCorrectCharacters(0);
+  const restartLesson = () => {
+    setTypedText("");
+    setStartTime(null);
+    setElapsedTime(0);
+    setCorrectCharacters(0);
 
-      setIsFinished(false);
-      setIsPaused(true);
+    setIsFinished(false);
+    setIsPaused(true);
 
-      setActiveKey(null);
+    setActiveKey(null);
 
-      setTimeout(() => {
-        typingAreaRef.current?.focus();
-      }, 100);
-    };
+    setTimeout(() => {
+      typingAreaRef.current?.focus();
+    }, 100);
+  };
 
   /* =======================================================
      GO BACK
   ======================================================= */
 
-  const goBack =
-    () => {
-      window.location.href =
-        "/dashboard/steps-pashto";
-    };
+  const goBack = () => {
+    window.location.href = "/dashboard/steps-pashto";
+  };
 
   /* =======================================================
      NEXT LESSON
   ======================================================= */
 
-  const nextLesson =
-    async () => {
-      if (!lesson) return;
+  const nextLesson = async () => {
+    if (!lesson) return;
 
-      try {
-        const response =
-          await fetch(
-            `${API_BASE_URL}/api/lessons`
-          );
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/lessons`);
 
-        if (!response.ok) {
-          throw new Error(
-            "Could not load lessons"
-          );
-        }
+      if (!response.ok) {
+        throw new Error("Could not load lessons");
+      }
 
-        const data =
-          await response.json();
+      const data = await response.json();
 
-        const lessons =
-          Array.isArray(data)
-            ? data
-            : Array.isArray(
-                data.lessons
-              )
-            ? data.lessons
-            : [];
+      const lessons = Array.isArray(data)
+        ? data
+        : Array.isArray(data.lessons)
+          ? data.lessons
+          : [];
 
-        const index =
-          lessons.findIndex(
-            (item) =>
-              String(
-                item.id
-              ) ===
-              String(
-                lesson.id
-              )
-          );
+      const index = lessons.findIndex(
+        (item) => String(item.id) === String(lesson.id),
+      );
 
-        if (
-          index >= 0 &&
-          index <
-            lessons.length - 1
-        ) {
-          const next =
-            lessons[
-              index + 1
-            ];
+      if (index >= 0 && index < lessons.length - 1) {
+        const next = lessons[index + 1];
 
-          localStorage.setItem(
-            "selectedLessonId",
-            String(
-              next.id
-            )
-          );
+        localStorage.setItem("selectedLessonId", String(next.id));
 
-          window.location.href =
-            `/Typeing_Step?lesson=${next.id}`;
-        } else {
-          goBack();
-        }
-      } catch (err) {
-        console.error(err);
-
+        window.location.href = `/Typeing_Step?lesson=${next.id}`;
+      } else {
         goBack();
       }
-    };
+    } catch (err) {
+      console.error(err);
+
+      goBack();
+    }
+  };
 
   /* =======================================================
      LOADING PAGE
@@ -1276,7 +858,6 @@ export default function Typeing_Step() {
         "
       >
         <div className="text-center">
-
           <div
             className="
               w-14
@@ -1300,7 +881,6 @@ export default function Typeing_Step() {
           >
             درس بارول کېږي...
           </p>
-
         </div>
       </div>
     );
@@ -1333,10 +913,7 @@ export default function Typeing_Step() {
             w-full
           "
         >
-
-          <div className="text-5xl mb-5">
-            ⚠️
-          </div>
+          <div className="text-5xl mb-5">⚠️</div>
 
           <h2
             dir="rtl"
@@ -1349,16 +926,11 @@ export default function Typeing_Step() {
             ستونزه رامنځته شوه
           </h2>
 
-          <p className="text-gray-500 mt-3">
-            {error}
-          </p>
+          <p className="text-gray-500 mt-3">{error}</p>
 
           <div className="flex gap-3 justify-center mt-6">
-
             <button
-              onClick={
-                fetchLesson
-              }
+              onClick={fetchLesson}
               className="
                 px-5
                 py-3
@@ -1384,9 +956,7 @@ export default function Typeing_Step() {
             >
               بېرته
             </button>
-
           </div>
-
         </div>
       </div>
     );
@@ -1403,7 +973,7 @@ export default function Typeing_Step() {
   if (isFinished) {
     const scoreOutOfTen = Math.max(
       0,
-      Math.min(10, Math.round((accuracy / 100) * 10))
+      Math.min(10, Math.round((accuracy / 100) * 10)),
     );
 
     const requiredAccuracy = 80;
@@ -1487,10 +1057,7 @@ export default function Typeing_Step() {
             {/* ── ACCURACY ── */}
             <div className="relative flex flex-col items-center">
               <div className="relative h-36 w-36">
-                <svg
-                  className="h-full w-full -rotate-90"
-                  viewBox="0 0 100 100"
-                >
+                <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
                   <circle
                     cx="50"
                     cy="50"
@@ -1531,10 +1098,7 @@ export default function Typeing_Step() {
             {/* ── DURATION ── */}
             <div className="relative flex flex-col items-center">
               <div className="relative h-36 w-36">
-                <svg
-                  className="h-full w-full -rotate-90"
-                  viewBox="0 0 100 100"
-                >
+                <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
                   <circle
                     cx="50"
                     cy="50"
@@ -1571,10 +1135,7 @@ export default function Typeing_Step() {
             {/* ── SPEED ── */}
             <div className="relative flex flex-col items-center">
               <div className="relative h-36 w-36">
-                <svg
-                  className="h-full w-full -rotate-90"
-                  viewBox="0 0 100 100"
-                >
+                <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
                   <circle
                     cx="50"
                     cy="50"
@@ -1591,9 +1152,7 @@ export default function Typeing_Step() {
                     strokeWidth="7"
                     fill="none"
                     strokeDasharray={circ}
-                    strokeDashoffset={
-                      circ * (1 - Math.min(100, wpm) / 100)
-                    }
+                    strokeDashoffset={circ * (1 - Math.min(100, wpm) / 100)}
                     strokeLinecap="round"
                   />
                   <circle
@@ -1608,9 +1167,7 @@ export default function Typeing_Step() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-3xl font-black text-white">
-                    {wpm}
-                  </span>
+                  <span className="text-3xl font-black text-white">{wpm}</span>
                   <span className="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-[#a3c2f0]">
                     WPM
                   </span>
@@ -1712,8 +1269,8 @@ export default function Typeing_Step() {
                 </>
               ) : (
                 <>
-                  دا درس لږ تر لږه {requiredAccuracy}٪ دقت لري. په راتلونکې
-                  هڅه کې هڅه وکړه چې ۱۰۰٪ دقت ترلاسه کړې.
+                  دا درس لږ تر لږه {requiredAccuracy}٪ دقت لري. په راتلونکې هڅه
+                  کې هڅه وکړه چې ۱۰۰٪ دقت ترلاسه کړې.
                 </>
               )}
             </p>
@@ -1741,7 +1298,6 @@ export default function Typeing_Step() {
         outline-none
       "
     >
-
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -1764,7 +1320,6 @@ export default function Typeing_Step() {
           z-50
         "
       >
-
         {/* LEFT */}
 
         <div
@@ -1775,13 +1330,8 @@ export default function Typeing_Step() {
             gap-4
           "
         >
-
           <button
-            onClick={() =>
-              setShowMenu(
-                !showMenu
-              )
-            }
+            onClick={() => setShowMenu(!showMenu)}
             className="
               text-gray-500
               text-xl
@@ -1801,9 +1351,7 @@ export default function Typeing_Step() {
               text-sm rtl:text-right
             "
           >
-            Lesson {lesson?.id}:{" "}
-            {lesson?.title ||
-              "Pashto Typing"}
+            Lesson {lesson?.id}: {lesson?.title || "Pashto Typing"}
           </div>
 
           {/* MENU */}
@@ -1824,14 +1372,11 @@ export default function Typeing_Step() {
                 z-[100]
               "
             >
-
               <button
                 onClick={() => {
                   restartLesson();
 
-                  setShowMenu(
-                    false
-                  );
+                  setShowMenu(false);
                 }}
                 className="
                   w-full
@@ -1845,18 +1390,20 @@ export default function Typeing_Step() {
                   
                 "
               >
-                <img className="inline" width={20} src="https://img.icons8.com/?size=100&id=bDkQlpOV2TWB&format=png&color=000000" alt="" /> له سره پیل کړه
+                <img
+                  className="inline"
+                  width={20}
+                  src="https://img.icons8.com/?size=100&id=bDkQlpOV2TWB&format=png&color=000000"
+                  alt=""
+                />{" "}
+                له سره پیل کړه
               </button>
 
               <button
                 onClick={() => {
-                  setIsMuted(
-                    !isMuted
-                  );
+                  setIsMuted(!isMuted);
 
-                  setShowMenu(
-                    false
-                  );
+                  setShowMenu(false);
                 }}
                 className="
                   w-full
@@ -1868,31 +1415,34 @@ export default function Typeing_Step() {
                   rtl:text-right
                 "
               >
-                
-                 {isMuted
-                  ? (
-                    <>
-<img className="inline" width={20} src="https://img.icons8.com/?size=100&id=NbXdDWS68ggb&format=png&color=000000" alt="" />
-          غږ بند کړه
-       </> )
-                  : (
-                    <>
-<img className="inline " width={20} src="https://img.icons8.com/?size=100&id=FV0C4YFGl7TK&format=png&color=000000" alt="" />
-                                                   غږ فعال کړه
-      </>
+                {isMuted ? (
+                  <>
+                    <img
+                      className="inline"
+                      width={20}
+                      src="https://img.icons8.com/?size=100&id=NbXdDWS68ggb&format=png&color=000000"
+                      alt=""
+                    />
+                    غږ بند کړه
+                  </>
+                ) : (
+                  <>
+                    <img
+                      className="inline "
+                      width={20}
+                      src="https://img.icons8.com/?size=100&id=FV0C4YFGl7TK&format=png&color=000000"
+                      alt=""
+                    />
+                    غږ فعال کړه
+                  </>
                 )}
-                 
               </button>
 
               <button
                 onClick={() => {
-                  setIsKeyboardVisible(
-                    !isKeyboardVisible
-                  );
+                  setIsKeyboardVisible(!isKeyboardVisible);
 
-                  setShowMenu(
-                    false
-                  );
+                  setShowMenu(false);
                 }}
                 className="
                   w-full
@@ -1904,7 +1454,13 @@ export default function Typeing_Step() {
                   rtl:text-right
                 "
               >
-                <img width={25} className=" inline" src="https://img.icons8.com/?size=100&id=mnLsovgnDgTt&format=png&color=000000" alt="" /> کیبورډ چالان/بند کړه
+                <img
+                  width={25}
+                  className=" inline"
+                  src="https://img.icons8.com/?size=100&id=mnLsovgnDgTt&format=png&color=000000"
+                  alt=""
+                />{" "}
+                کیبورډ چالان/بند کړه
               </button>
 
               <button
@@ -1921,12 +1477,16 @@ export default function Typeing_Step() {
                   rtl:text-right
                 "
               >
-                <img className="inline" width={20} src="https://img.icons8.com/?size=100&id=qa0dQBGXMZfO&format=png&color=000000" alt="" />درسونه
+                <img
+                  className="inline"
+                  width={20}
+                  src="https://img.icons8.com/?size=100&id=qa0dQBGXMZfO&format=png&color=000000"
+                  alt=""
+                />
+                درسونه
               </button>
-
             </div>
           )}
-
         </div>
 
         {/* CENTER CONTROLS */}
@@ -1938,25 +1498,18 @@ export default function Typeing_Step() {
             gap-5
           "
         >
-
           <button
             onClick={() => {
               initAudio();
 
               if (isPaused) {
-                setIsPaused(
-                  false
-                );
+                setIsPaused(false);
 
                 if (!startTime) {
-                  setStartTime(
-                    Date.now()
-                  );
+                  setStartTime(Date.now());
                 }
               } else {
-                setIsPaused(
-                  true
-                );
+                setIsPaused(true);
               }
 
               typingAreaRef.current?.focus();
@@ -1967,50 +1520,56 @@ export default function Typeing_Step() {
               text-lg
             "
           >
-            {isPaused
-              ? (
-                <img width={23} src="https://img.icons8.com/?size=100&id=TB4ZgJum4Woc&format=png&color=000000" alt="" />
-              )
-              : (
-                <img width={23} src="https://img.icons8.com/?size=100&id=Z2aInWmsldJ6&format=png&color=000000" alt="" />
-              )}
+            {isPaused ? (
+              <img
+                width={23}
+                src="https://img.icons8.com/?size=100&id=TB4ZgJum4Woc&format=png&color=000000"
+                alt=""
+              />
+            ) : (
+              <img
+                width={23}
+                src="https://img.icons8.com/?size=100&id=Z2aInWmsldJ6&format=png&color=000000"
+                alt=""
+              />
+            )}
           </button>
 
           <button
-            onClick={
-              restartLesson
-            }
+            onClick={restartLesson}
             className="
               text-gray-500
               hover:text-gray-800
               text-xl
             "
           >
-            <img width={23} src="https://img.icons8.com/?size=100&id=t7r2A42vsY6O&format=png&color=000000" alt="" />
+            <img
+              width={23}
+              src="https://img.icons8.com/?size=100&id=t7r2A42vsY6O&format=png&color=000000"
+              alt=""
+            />
           </button>
 
           <button
-            onClick={() =>
-              setIsKeyboardVisible(
-                !isKeyboardVisible
-              )
-            }
+            onClick={() => setIsKeyboardVisible(!isKeyboardVisible)}
             className="
               text-gray-500
               hover:text-gray-800
               text-xl
             "
           >
-            <img width={25} src="https://img.icons8.com/?size=100&id=58RG2mzbDIPX&format=png&color=000000" alt="" />
+            <img
+              width={25}
+              src="https://img.icons8.com/?size=100&id=58RG2mzbDIPX&format=png&color=000000"
+              alt=""
+            />
           </button>
 
-          <button 
+          <button
             onClick={() => {
               initAudio();
 
-              setIsMuted(
-                !isMuted
-              );
+              setIsMuted(!isMuted);
             }}
             className="
               text-gray-500
@@ -2018,15 +1577,19 @@ export default function Typeing_Step() {
 
             "
           >
-            {isMuted
-              ? (
-                <img width={23} src="https://img.icons8.com/?size=100&id=ZaGj3ZYdtFZX&format=png&color=000000"></img>
-              )
-              : (
-                <img width={23} src="https://img.icons8.com/?size=100&id=tAby2g2M-Yna&format=png&color=000000" alt="" />
-              )}
+            {isMuted ? (
+              <img
+                width={23}
+                src="https://img.icons8.com/?size=100&id=ZaGj3ZYdtFZX&format=png&color=000000"
+              ></img>
+            ) : (
+              <img
+                width={23}
+                src="https://img.icons8.com/?size=100&id=tAby2g2M-Yna&format=png&color=000000"
+                alt=""
+              />
+            )}
           </button>
-
         </div>
 
         {/* USER */}
@@ -2040,7 +1603,6 @@ export default function Typeing_Step() {
         >
           Fazlahmad
         </div>
-
       </header>
 
       {/* =====================================================
@@ -2124,7 +1686,6 @@ export default function Typeing_Step() {
           pb-3
         "
       >
-
         <div
           className="
             w-full
@@ -2134,7 +1695,6 @@ export default function Typeing_Step() {
             items-center
           "
         >
-
           {/* START */}
 
           <button
@@ -2142,19 +1702,13 @@ export default function Typeing_Step() {
               initAudio();
 
               if (isPaused) {
-                setIsPaused(
-                  false
-                );
+                setIsPaused(false);
 
                 if (!startTime) {
-                  setStartTime(
-                    Date.now()
-                  );
+                  setStartTime(Date.now());
                 }
               } else {
-                setIsPaused(
-                  true
-                );
+                setIsPaused(true);
               }
 
               typingAreaRef.current?.focus();
@@ -2178,9 +1732,7 @@ export default function Typeing_Step() {
          text-right
             "
           >
-            {isPaused
-              ? " Start Typing"
-              : "⏸ Typing..."}
+            {isPaused ? " Start Typing" : "⏸ Typing..."}
           </button>
 
           {/* =================================================
@@ -2202,7 +1754,6 @@ export default function Typeing_Step() {
               typingAreaRef.current?.focus();
             }}
           >
-
             <div
               className="
                 font-['Fredoka']
@@ -2216,63 +1767,44 @@ export default function Typeing_Step() {
                 break-words
                 w-full
                 text-right
+                 inline-block
+                
               "
+              // fsdkfdj lesson writeing
             >
+              {targetText.split("").map((char, index) => {
+                let className = "text-gray-400";
 
-              {targetText
-                .split("")
-                .map(
-                  (
-                    char,
-                    index
-                  ) => {
+                /* Already typed */
 
-                    let className =
-                      "text-gray-400";
+                if (index < typedText.length) {
+                  className =
+                    typedText[index] === char
+                      ? "text-gray-700"
+                      : "text-red-500 bg-red-100 rounded-md";
+                }
 
-                    /* Already typed */
+                /* Current character */
 
-                    if (
-                      index <
-                      typedText.length
-                    ) {
-                      className =
-                        typedText[
-                          index
-                        ] === char
-                          ? "text-gray-700"
-                          : "text-red-500 bg-red-100 rounded-md";
-                    }
+                if (index === typedText.length) {
+                  className = "text-pink-500 border-b-4 border-blue-400";
+                }
 
-                    /* Current character */
-
-                    if (
-                      index ===
-                      typedText.length
-                    ) {
-                      className =
-                        "text-pink-500 border-b-4 border-blue-400";
-                    }
-
-                    return (
-                      <span
-                        key={index}
-                        className={`
+                return (
+                  <span
+                    key={index}
+                    className={`
                           transition-all
                           duration-100
                           ${className}
+                        
                         `}
-                      >
-                        {char === " "
-                          ? "\u00A0"
-                          : char}
-                      </span>
-                    );
-                  }
-                )}
-
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </span>
+                );
+              })}
             </div>
-
           </div>
 
           {/* =================================================
@@ -2288,7 +1820,6 @@ export default function Typeing_Step() {
               mb-2
             "
           >
-
             <div
               className="
                 flex-1
@@ -2298,7 +1829,6 @@ export default function Typeing_Step() {
                 overflow-hidden
               "
             >
-
               <div
                 className="
                   h-full
@@ -2308,11 +1838,9 @@ export default function Typeing_Step() {
                   duration-200
                 "
                 style={{
-                  width:
-                    `${progress}%`,
+                  width: `${progress}%`,
                 }}
               />
-
             </div>
 
             <span
@@ -2332,11 +1860,8 @@ export default function Typeing_Step() {
                 text-gray-500
               "
             >
-              {formatTime(
-                elapsedTime
-              )}
+              {formatTime(elapsedTime)}
             </span>
-
           </div>
 
           {/* =================================================
@@ -2358,38 +1883,27 @@ export default function Typeing_Step() {
                 backdrop-blur-sm
               "
             >
-
-              {keyboardLayout.map(
-                (row) => (
-                  <div
-                    key={row.id}
-                    className="
+              {keyboardLayout.map((row) => (
+                <div
+                  key={row.id}
+                  className="
                       flex
                       justify-center
                       gap-1
                       sm:gap-1.5
                       mb-1.5
                     "
-                  >
+                >
+                  {row.keys.map((key) => {
+                    const active = isKeyActive(key);
 
-                    {row.keys.map(
-                      (key) => {
+                    const pressed =
+                      activeKey === key.en || activeKey === key.ps;
 
-                        const active =
-                          isKeyActive(
-                            key
-                          );
-
-                        const pressed =
-                          activeKey ===
-                            key.en ||
-                          activeKey ===
-                            key.ps;
-
-                        return (
-                          <div
-                            key={`${row.id}-${key.en}`}
-                            className={`
+                    return (
+                      <div
+                        key={`${row.id}-${key.en}`}
+                        className={`
                               flex
                               items-center
                               justify-center
@@ -2425,22 +1939,15 @@ export default function Typeing_Step() {
                                   `
                               }
 
-                              ${
-                                pressed
-                                  ? "scale-110"
-                                  : ""
-                              }
+                              ${pressed ? "scale-110" : ""}
                             `}
-                          >
-                            {key.ps}
-                          </div>
-                        );
-                      }
-                    )}
-
-                  </div>
-                )
-              )}
+                      >
+                        {key.ps}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
 
               {/* SPACE */}
 
@@ -2451,7 +1958,6 @@ export default function Typeing_Step() {
                   mt-1
                 "
               >
-
                 <div
                   className={`
                     w-[45%]
@@ -2485,9 +1991,7 @@ export default function Typeing_Step() {
                 >
                   SPACE
                 </div>
-
               </div>
-
             </div>
           )}
 
@@ -2505,7 +2009,6 @@ export default function Typeing_Step() {
               gap-3
             "
           >
-
             <div
               className="
                 bg-white/70
@@ -2533,13 +2036,9 @@ export default function Typeing_Step() {
             >
               ⚡ {wpm} WPM
             </div>
-
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 }
