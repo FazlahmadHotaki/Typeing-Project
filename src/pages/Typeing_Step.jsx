@@ -534,29 +534,40 @@ export default function Typeing_Step() {
      HANDLE KEYBOARD
   ======================================================= */
 
-  const handleKeyDown = (event) => {
-    if (!lesson || isFinished) {
-      return;
-    }
+const handleKeyDown = (event) => {
+  if (!lesson) {
+    return;
+  }
 
-    /* Ignore modifiers */
-
-    if (
-      event.key === "Shift" ||
-      event.key === "Control" ||
-      event.key === "Alt" ||
-      event.key === "Meta" ||
-      event.key === "CapsLock" ||
-      event.key === "Tab" ||
-      event.key === "Escape"
-    ) {
-      return;
-    }
-
+  // Press Enter on the completion screen = Next Lesson
+  if (event.key === "Enter" && isFinished) {
     event.preventDefault();
+    nextLesson();
+    return;
+  }
 
-    initAudio();
+  // Don't type after the lesson is finished
+  if (isFinished) {
+    return;
+  }
 
+  if (
+    event.key === "Shift" ||
+    event.key === "Control" ||
+    event.key === "Alt" ||
+    event.key === "Meta" ||
+    event.key === "CapsLock" ||
+    event.key === "Tab" ||
+    event.key === "Escape"
+  ) {
+    return;
+  }
+
+  event.preventDefault();
+
+  initAudio();
+
+  // ... keep the rest of your existing code here
     /* =====================================
        BACKSPACE
     ===================================== */
@@ -1863,7 +1874,7 @@ export default function Typeing_Step() {
               {formatTime(elapsedTime)}
             </span>
           </div>
-
+چ
           {/* =================================================
               PASHTO KEYBOARD
           ================================================= */}

@@ -1,6 +1,15 @@
 // lessons.js
 export  const LESSONS = [
   {
+    icon: "پ",
+    color: "#C97BD1",
+    title: { en: "Pashto Typing", ps: "د پښتو ټایپ", fa: "تایپ پشتو" },
+    sub: { en: "Pashto script", ps: "پښتو لیک", fa: "خط پشتو" },
+    score: "9,420",
+    stars: 12,
+    progress: 15,
+  },
+  {
     icon: "⌨",
     color: "#5B8DEF",
     title: { en: "Typing Jungle", ps: "د ټایپ ځنګل", fa: "جنگل تایپ" },
@@ -18,15 +27,7 @@ export  const LESSONS = [
     stars: 35,
     progress: 22,
   },
-  {
-    icon: "پ",
-    color: "#C97BD1",
-    title: { en: "Pashto Typing", ps: "د پښتو ټایپ", fa: "تایپ پشتو" },
-    sub: { en: "Pashto script", ps: "پښتو لیک", fa: "خط پشتو" },
-    score: "9,420",
-    stars: 12,
-    progress: 15,
-  },
+  
   {
     icon: "V",
     color: "#E8615A",
