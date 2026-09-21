@@ -1766,6 +1766,7 @@ const handleKeyDown = (event) => {
             }}
           >
             <div
+            dir="rtl"
               className="
                 font-['Fredoka']
                 text-[34px]
@@ -1779,12 +1780,14 @@ const handleKeyDown = (event) => {
                 w-full
                 text-right
                  inline-block
+                 max-h-[300px]
+                 overflow-hidden
                 
               "
               // fsdkfdj lesson writeing
             >
               {targetText.split("").map((char, index) => {
-                let className = "text-gray-400";
+                let className = "text-gray-400 whitespace-normal ";
 
                 /* Already typed */
 
