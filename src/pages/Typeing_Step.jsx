@@ -1785,7 +1785,7 @@ const handleKeyDown = (event) => {
     text-right
     
   `}
-  // fjsklda
+  //
 >
   {(() => {
     const parts = targetText.split(/(\s+)/);
