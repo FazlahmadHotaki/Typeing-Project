@@ -1632,8 +1632,7 @@ const handleKeyDown = (event) => {
         "
       />
 
-      <div
-        className="
+      <div className="
           absolute
           top-[9%]
           left-[9%]
@@ -1641,8 +1640,7 @@ const handleKeyDown = (event) => {
           h-16
           bg-white/60
           rounded-full
-        "
-      />
+        " />
 
       <div
         className="
@@ -1766,59 +1764,80 @@ const handleKeyDown = (event) => {
             }}
           >
             <div
-            dir="rtl"
-              className="
-                font-['Fredoka']
-                text-[34px]
-                sm:text-[43px]
-                md:text-[52px]
-                leading-[1.5]
-                tracking-wide
-                text-gray-700
-                text-left
-                break-words
-                w-full
-                text-right
-                 inline-block
-                 max-h-[300px]
-                 overflow-hidden
-                
-              "
-              // fsdkfdj lesson writeing
-            >
-              {targetText.split("").map((char, index) => {
-                let className = "text-gray-400 whitespace-normal ";
+  dir="rtl"
+  className="
+    font-['Fredoka']
+    text-[34px]
+    sm:text-[43px]
+    md:text-[52px]
+    leading-[1.5]
+    tracking-wide
+    text-gray-700
+    whitespace-normal
+    border-2
+    border-green-800
+    border-solid
+    p-4
+    w-full
+    max-w-[1050px]
+    h-80
+    overflow-hidden
+    text-right
+  "
+>
+  {(() => {
+    const parts = targetText.split(/(\s+)/);
+    let characterIndex = 0;
 
-                /* Already typed */
+    return parts.map((part, partIndex) => {
+      // Keep spaces
+      if (/^\s+$/.test(part)) {
+        characterIndex += part.length;
 
-                if (index < typedText.length) {
-                  className =
-                    typedText[index] === char
-                      ? "text-gray-700"
-                      : "text-red-500 bg-red-100 rounded-md";
-                }
+        return (
+          <span key={`space-${partIndex}`}>
+            {part}
+          </span>
+        );
+      }
 
-                /* Current character */
+      // Don't allow a word to split
+      const wordStart = characterIndex;
 
-                if (index === typedText.length) {
-                  className = "text-pink-500 border-b-4 border-blue-400";
-                }
+      characterIndex += part.length;
 
-                return (
-                  <span
-                    key={index}
-                    className={`
-                          transition-all
-                          duration-100
-                          ${className}
-                        
-                        `}
-                  >
-                    {char === " " ? "\u00A0" : char}
-                  </span>
-                );
-              })}
-            </div>
+      return (
+        <span
+          key={`word-${partIndex}`}
+          className="whitespace-nowrap"
+        >
+          {part.split("").map((char, charIndex) => {
+            const index = wordStart + charIndex;
+
+            let color = "text-gray-400";
+
+            if (index < typedText.length) {
+              if (typedText[index] === targetText[index]) {
+                color = "text-green-700";
+              } else {
+                color = "text-red-600";
+              }
+            }
+
+            return (
+              <span
+                key={`char-${partIndex}-${charIndex}`}
+                className={color}
+              >
+                {char}
+              </span>
+            );
+          })}
+        </span>
+      );
+    });
+  })()}
+</div>
           </div>
 
           {/* =================================================
