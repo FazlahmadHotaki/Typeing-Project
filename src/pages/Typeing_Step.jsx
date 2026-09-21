@@ -1785,7 +1785,7 @@ const handleKeyDown = (event) => {
     text-right
     
   `}
-  //
+  
 >
   {(() => {
     const parts = targetText.split(/(\s+)/);
