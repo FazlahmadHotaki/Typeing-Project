@@ -1765,7 +1765,7 @@ const handleKeyDown = (event) => {
           >
             <div
   dir="rtl"
-  className="
+  className ={`
     font-['Fredoka']
     text-[34px]
     sm:text-[43px]
@@ -1780,10 +1780,12 @@ const handleKeyDown = (event) => {
     p-4
     w-full
     max-w-[1050px]
-    h-80
+    h-[320px]
     overflow-hidden
     text-right
-  "
+    
+  `}
+  // fjsklda
 >
   {(() => {
     const parts = targetText.split(/(\s+)/);
