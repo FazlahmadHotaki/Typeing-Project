@@ -1855,29 +1855,33 @@ export default function Typeing_Step() {
 
                   return (
                     <span key={`word-${partIndex}`} className="whitespace-nowrap">
-                      {part.split("").map((char, charIndex) => {
-                        const index = wordStart + charIndex;
+                     {part.split("").map((char, charIndex) => {
+  const index = wordStart + charIndex;
 
-                        let color = "text-gray-400";
+  let color = "text-gray-400";
+  let highlight = "";
 
-                        if (index < typedText.length) {
-                          if (typedText[index] === targetText[index]) {
-                            color = "text-[#3EB489]";
-                          } else {
-                            color = "text-red-600";
-                          }
-                        }
+  if (index < typedText.length) {
+    /* Already typed */
+    if (typedText[index] === targetText[index]) {
+      color = "text-green-700";
+    } else {
+      color = "text-red-600";
+    }
+  } else if (index === typedText.length) {
+    /* 👇 The NEXT character to type — highlight it */
+highlight = "bg-amber-200/80 ring-2 ring-amber-500/70 rounded-md -mx-[0.5px] px-[0.5px]";  }
 
-                        return (
-                          <span
-                            key={`char-${partIndex}-${charIndex}`}
-                            data-char-index={index}
-                            className={color}
-                          >
-                            {char}
-                          </span>
-                        );
-                      })}
+  return (
+    <span
+      key={`char-${partIndex}-${charIndex}`}
+      data-char-index={index}
+      className={`${color} ${highlight} transition-colors duration-100`}
+    >
+      {char}
+    </span>
+  );
+})}
                     </span>
                   );
                 });
