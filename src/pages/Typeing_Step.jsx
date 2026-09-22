@@ -131,6 +131,9 @@ export default function Typeing_Step() {
 
   const audioContextRef = useRef(null);
 
+  /* 👇 NEW: text container ref for auto-scroll */
+  const textContainerRef = useRef(null);
+
   /* =======================================================
      AUDIO
   ======================================================= */
@@ -243,7 +246,6 @@ export default function Typeing_Step() {
     osc2.start(now);
 
     osc1.stop(now + 0.18);
-
     osc2.stop(now + 0.18);
   };
 
@@ -402,6 +404,11 @@ export default function Typeing_Step() {
       setIsFinished(false);
       setIsPaused(true);
       setActiveKey(null);
+
+      /* 👇 NEW: reset text scroll */
+      if (textContainerRef.current) {
+        textContainerRef.current.scrollTop = 0;
+      }
     } catch (err) {
       console.error(err);
 
@@ -531,43 +538,86 @@ export default function Typeing_Step() {
   };
 
   /* =======================================================
+     AUTO SCROLL TEXT  (pin current line to top)
+  ======================================================= */
+
+  useEffect(() => {
+    const container = textContainerRef.current;
+
+    if (!container) return;
+
+    /* Nothing typed yet -> back to the very top */
+    if (!typedText.length) {
+      container.scrollTo({ top: 0, behavior: "auto" });
+      return;
+    }
+
+    /* The character the user is about to type */
+    const activeChar =
+      container.querySelector(`[data-char-index="${typedText.length}"]`) ||
+      container.querySelector(`[data-char-index="${typedText.length - 1}"]`);
+
+    if (!activeChar) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const charRect = activeChar.getBoundingClientRect();
+
+    const computed = window.getComputedStyle(container);
+
+    const lineHeight =
+      parseFloat(computed.lineHeight) || charRect.height || 1;
+
+    /* Distance of the active character from the top of the CONTENT */
+    const offsetInContent =
+      charRect.top - containerRect.top + container.scrollTop;
+
+    /* Which line is it on? */
+    const lineIndex = Math.max(0, Math.round(offsetInContent / lineHeight));
+
+    const targetScroll = lineIndex * lineHeight;
+
+    if (Math.abs(container.scrollTop - targetScroll) > 1) {
+      container.scrollTo({ top: targetScroll, behavior: "smooth" });
+    }
+  }, [typedText, targetText]);
+
+  /* =======================================================
      HANDLE KEYBOARD
   ======================================================= */
 
-const handleKeyDown = (event) => {
-  if (!lesson) {
-    return;
-  }
+  const handleKeyDown = (event) => {
+    if (!lesson) {
+      return;
+    }
 
-  // Press Enter on the completion screen = Next Lesson
-  if (event.key === "Enter" && isFinished) {
+    // Press Enter on the completion screen = Next Lesson
+    if (event.key === "Enter" && isFinished) {
+      event.preventDefault();
+      nextLesson();
+      return;
+    }
+
+    // Don't type after the lesson is finished
+    if (isFinished) {
+      return;
+    }
+
+    if (
+      event.key === "Shift" ||
+      event.key === "Control" ||
+      event.key === "Alt" ||
+      event.key === "Meta" ||
+      event.key === "CapsLock" ||
+      event.key === "Tab" ||
+      event.key === "Escape"
+    ) {
+      return;
+    }
+
     event.preventDefault();
-    nextLesson();
-    return;
-  }
 
-  // Don't type after the lesson is finished
-  if (isFinished) {
-    return;
-  }
+    initAudio();
 
-  if (
-    event.key === "Shift" ||
-    event.key === "Control" ||
-    event.key === "Alt" ||
-    event.key === "Meta" ||
-    event.key === "CapsLock" ||
-    event.key === "Tab" ||
-    event.key === "Escape"
-  ) {
-    return;
-  }
-// 
-  event.preventDefault();
-
-  initAudio();
-
-  // ... keep the rest of your existing code here
     /* =====================================
        BACKSPACE
     ===================================== */
@@ -798,6 +848,11 @@ const handleKeyDown = (event) => {
 
     setActiveKey(null);
 
+    /* 👇 NEW: jump the text back to line 1 */
+    if (textContainerRef.current) {
+      textContainerRef.current.scrollTop = 0;
+    }
+
     setTimeout(() => {
       typingAreaRef.current?.focus();
     }, 100);
@@ -972,10 +1027,6 @@ const handleKeyDown = (event) => {
       </div>
     );
   }
-
-  /* =======================================================
-     COMPLETION PAGE
-  ======================================================= */
 
   /* =======================================================
      COMPLETION PAGE
@@ -1745,7 +1796,7 @@ const handleKeyDown = (event) => {
           </button>
 
           {/* =================================================
-              TEXT
+              TEXT  (auto-scroll, current line pinned to top)
           ================================================= */}
 
           <div
@@ -1764,82 +1815,74 @@ const handleKeyDown = (event) => {
             }}
           >
             <div
-  dir="rtl"
-  className ={`
-    font-['Fredoka']
-    text-[34px]
-    sm:text-[43px]
-    md:text-[52px]
-    leading-[1.5]
-    tracking-wide
-    text-gray-700
-    whitespace-normal
-    border-2
-    border-green-800
-    border-solid
-    p-4
-    w-full
-    max-w-[1050px]
-    h-[320px]
-    overflow-hidden
-    text-right
-    
-  `}
-  
->
-  {(() => {
-    const parts = targetText.split(/(\s+)/);
-    let characterIndex = 0;
+              ref={textContainerRef}
+              dir="rtl"
+              className={`
+                relative
+                font-['Fredoka']
+                text-[34px]
+                sm:text-[43px]
+                md:text-[52px]
+                leading-[1.5]
+                tracking-wide
+                text-gray-700
+                whitespace-normal
+                p-4
+                w-full
+                max-w-[1050px]
+                h-[320px]
+                overflow-hidden
+                text-right
+                scroll-smooth
+              `}
+            >
+              {(() => {
+                const parts = targetText.split(/(\s+)/);
+                let characterIndex = 0;
 
-    return parts.map((part, partIndex) => {
-      // Keep spaces
-      if (/^\s+$/.test(part)) {
-        characterIndex += part.length;
+                return parts.map((part, partIndex) => {
+                  // Keep spaces
+                  if (/^\s+$/.test(part)) {
+                    characterIndex += part.length;
 
-        return (
-          <span key={`space-${partIndex}`}>
-            {part}
-          </span>
-        );
-      }
+                    return <span key={`space-${partIndex}`}>{part}</span>;
+                  }
 
-      // Don't allow a word to split
-      const wordStart = characterIndex;
+                  // Don't allow a word to split
+                  const wordStart = characterIndex;
 
-      characterIndex += part.length;
+                  characterIndex += part.length;
 
-      return (
-        <span
-          key={`word-${partIndex}`}
-          className="whitespace-nowrap"
-        >
-          {part.split("").map((char, charIndex) => {
-            const index = wordStart + charIndex;
+                  return (
+                    <span key={`word-${partIndex}`} className="whitespace-nowrap">
+                      {part.split("").map((char, charIndex) => {
+                        const index = wordStart + charIndex;
 
-            let color = "text-gray-400";
+                        let color = "text-gray-400";
 
-            if (index < typedText.length) {
-              if (typedText[index] === targetText[index]) {
-                color = "text-green-700";
-              } else {
-                color = "text-red-600";
-              }
-            }
+                        if (index < typedText.length) {
+                          if (typedText[index] === targetText[index]) {
+                            color = "text-green-700";
+                          } else {
+                            color = "text-red-600";
+                          }
+                        }
 
-            return (
-              <span
-                key={`char-${partIndex}-${charIndex}`}
-                className={color}
-              >
-                {char}
-              </span>
-            );
-          })}
-        </span>
-      );
-    });
-  })()}
-</div>
+                        return (
+                          <span
+                            key={`char-${partIndex}-${charIndex}`}
+                            data-char-index={index}
+                            className={color}
+                          >
+                            {char}
+                          </span>
+                        );
+                      })}
+                    </span>
+                  );
+                });
+              })()}
+            </div>
           </div>
 
           {/* =================================================
@@ -1898,7 +1941,7 @@ const handleKeyDown = (event) => {
               {formatTime(elapsedTime)}
             </span>
           </div>
-چ
+
           {/* =================================================
               PASHTO KEYBOARD
           ================================================= */}
