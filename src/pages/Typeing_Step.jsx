@@ -104,6 +104,8 @@ export default function Typeing_Step() {
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
 
+  const REQUIRED_ACCURACY = 40;
+
   const [correctCharacters, setCorrectCharacters] = useState(0);
 
   const [isFinished, setIsFinished] = useState(false);
@@ -131,7 +133,7 @@ export default function Typeing_Step() {
 
   const audioContextRef = useRef(null);
 
-  /* 👇 NEW: text container ref for auto-scroll */
+  /* text container ref for auto-scroll */
   const textContainerRef = useRef(null);
 
   /* =======================================================
@@ -405,7 +407,7 @@ export default function Typeing_Step() {
       setIsPaused(true);
       setActiveKey(null);
 
-      /* 👇 NEW: reset text scroll */
+      /* reset text scroll */
       if (textContainerRef.current) {
         textContainerRef.current.scrollTop = 0;
       }
@@ -564,8 +566,7 @@ export default function Typeing_Step() {
 
     const computed = window.getComputedStyle(container);
 
-    const lineHeight =
-      parseFloat(computed.lineHeight) || charRect.height || 1;
+    const lineHeight = parseFloat(computed.lineHeight) || charRect.height || 1;
 
     /* Distance of the active character from the top of the CONTENT */
     const offsetInContent =
@@ -590,10 +591,19 @@ export default function Typeing_Step() {
       return;
     }
 
-    // Press Enter on the completion screen = Next Lesson
+    // Press Enter on the completion screen = Next Lesson (only if passed)
     if (event.key === "Enter" && isFinished) {
       event.preventDefault();
-      nextLesson();
+
+      const finalAccuracy =
+        targetText.length > 0
+          ? Math.round((correctCharacters / targetText.length) * 100)
+          : 100;
+
+      if (finalAccuracy >= REQUIRED_ACCURACY) {
+        nextLesson();
+      }
+
       return;
     }
 
@@ -848,7 +858,7 @@ export default function Typeing_Step() {
 
     setActiveKey(null);
 
-    /* 👇 NEW: jump the text back to line 1 */
+    /* jump the text back to line 1 */
     if (textContainerRef.current) {
       textContainerRef.current.scrollTop = 0;
     }
@@ -1038,8 +1048,7 @@ export default function Typeing_Step() {
       Math.min(10, Math.round((accuracy / 100) * 10)),
     );
 
-    const requiredAccuracy = 80;
-    const passed = accuracy >= requiredAccuracy;
+    const passed = accuracy >= REQUIRED_ACCURACY;
 
     const r = 45;
     const circ = 2 * Math.PI * r;
@@ -1150,7 +1159,7 @@ export default function Typeing_Step() {
                 </div>
               </div>
               <div className="absolute top-1/2 -left-8 -translate-y-1/2 text-[10px] font-bold text-[#a3c2f0]">
-                {requiredAccuracy}%
+                {REQUIRED_ACCURACY}%
               </div>
               <span className="mt-3 text-[11px] font-black uppercase tracking-[0.15em] text-[#a3c2f0]">
                 دقت
@@ -1301,38 +1310,47 @@ export default function Typeing_Step() {
                 بیا هڅه وکړه
               </button>
 
-              {/* Next Lesson */}
-              <button
-                onClick={nextLesson}
-                className="group flex items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3 text-sm font-black text-white shadow-md shadow-indigo-300/40 transition hover:-translate-y-0.5 hover:from-violet-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-indigo-400/50 active:scale-95"
-              >
-                بل درس
-                <svg
-                  className="h-4 w-4 transition-transform group-hover:-translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2.4}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              {/* Next Lesson — only shown when the user passes */}
+              {passed && (
+                <button
+                  onClick={nextLesson}
+                  className="group flex items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3 text-sm font-black text-white shadow-md shadow-indigo-300/40 transition hover:-translate-y-0.5 hover:from-violet-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-indigo-400/50 active:scale-95"
                 >
-                  <path d="M19 12H5" />
-                  <path d="m12 19-7-7 7-7" />
-                </svg>
-              </button>
+                  بل درس
+                  <svg
+                    className="h-4 w-4 transition-transform group-hover:-translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.4}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M19 12H5" />
+                    <path d="m12 19-7-7 7-7" />
+                  </svg>
+                </button>
+              )}
+
+              {/* Locked hint when not passed */}
+              {!passed && (
+                <div className="flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-5 py-3 text-sm font-bold text-amber-700">
+                  🔒 تر {REQUIRED_ACCURACY}٪ دقت پورې بل درس خلاص نه شي
+                </div>
+              )}
             </div>
 
             {/* FEEDBACK */}
             <p className="border-t border-gray-100 px-6 py-3 text-center text-xs font-medium text-gray-500">
               {passed ? (
                 <>
-                  ډېر ښه! تاسو لږ تر لږه {requiredAccuracy}٪ دقت ترلاسه کړ.
+                  ډېر ښه! تاسو لږ تر لږه {REQUIRED_ACCURACY}٪ دقت ترلاسه کړ.
                   راتلونکي درس ته لاړ شئ.
                 </>
               ) : (
                 <>
-                  دا درس لږ تر لږه {requiredAccuracy}٪ دقت لري. په راتلونکې هڅه
-                  کې هڅه وکړه چې ۱۰۰٪ دقت ترلاسه کړې.
+                  دا درس لږ تر لږه {REQUIRED_ACCURACY}٪ دقت لري. په راتلونکې هڅه
+                  کې هڅه وکړه چې {REQUIRED_ACCURACY}٪ دقت ترلاسه کړې.
                 </>
               )}
             </p>
@@ -1796,7 +1814,7 @@ export default function Typeing_Step() {
           </button>
 
           {/* =================================================
-              TEXT  (auto-scroll, current line pinned to top)
+              TEXT  (auto-scroll + next-char highlight)
           ================================================= */}
 
           <div
@@ -1841,11 +1859,33 @@ export default function Typeing_Step() {
                 let characterIndex = 0;
 
                 return parts.map((part, partIndex) => {
-                  // Keep spaces
+                  // Keep spaces (highlight the space if it's next)
                   if (/^\s+$/.test(part)) {
+                    const startIndex = characterIndex;
                     characterIndex += part.length;
 
-                    return <span key={`space-${partIndex}`}>{part}</span>;
+                    return (
+                      <span key={`space-${partIndex}`}>
+                        {part.split("").map((spaceChar, i) => {
+                          const index = startIndex + i;
+                          const isNext = index === typedText.length;
+
+                          return (
+                            <span
+                              key={`space-${partIndex}-${i}`}
+                              data-char-index={index}
+                              className={
+                                isNext
+                                  ? "bg-amber-200/80 rounded-md ring-2 ring-amber-500/70"
+                                  : ""
+                              }
+                            >
+                              {spaceChar}
+                            </span>
+                          );
+                        })}
+                      </span>
+                    );
                   }
 
                   // Don't allow a word to split
@@ -1855,33 +1895,36 @@ export default function Typeing_Step() {
 
                   return (
                     <span key={`word-${partIndex}`} className="whitespace-nowrap">
-                     {part.split("").map((char, charIndex) => {
-  const index = wordStart + charIndex;
+                      {part.split("").map((char, charIndex) => {
+                        const index = wordStart + charIndex;
 
-  let color = "text-gray-400";
-  let highlight = "";
+                        let color = "text-gray-400";
+                        let highlight = "";
 
-  if (index < typedText.length) {
-    /* Already typed */
-    if (typedText[index] === targetText[index]) {
-      color = "text-green-700";
-    } else {
-      color = "text-red-600";
-    }
-  } else if (index === typedText.length) {
-    /* 👇 The NEXT character to type — highlight it */
-highlight = "bg-amber-200/80 ring-2 ring-amber-500/70 rounded-md -mx-[0.5px] px-[0.5px]";  }
+                        if (index < typedText.length) {
+                          /* Already typed */
+                          if (typedText[index] === targetText[index]) {
+                            color = "text-green-700";
+                          } else {
+                            color = "text-red-600";
+                          }
+                        } else if (index === typedText.length) {
+                          /* The NEXT character to type — highlight it
+                             (no padding/margin → letter spacing unchanged) */
+                          highlight =
+                            "bg-amber-200/80 ring-2 ring-amber-500/70 rounded-md";
+                        }
 
-  return (
-    <span
-      key={`char-${partIndex}-${charIndex}`}
-      data-char-index={index}
-      className={`${color} ${highlight} transition-colors duration-100`}
-    >
-      {char}
-    </span>
-  );
-})}
+                        return (
+                          <span
+                            key={`char-${partIndex}-${charIndex}`}
+                            data-char-index={index}
+                            className={`${color} ${highlight}`}
+                          >
+                            {char}
+                          </span>
+                        );
+                      })}
                     </span>
                   );
                 });
