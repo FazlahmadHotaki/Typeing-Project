@@ -1862,7 +1862,7 @@ export default function Typeing_Step() {
 
                         if (index < typedText.length) {
                           if (typedText[index] === targetText[index]) {
-                            color = "text-green-400";
+                            color = "text-[#3EB489]";
                           } else {
                             color = "text-red-600";
                           }
