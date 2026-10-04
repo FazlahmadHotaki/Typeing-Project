@@ -249,6 +249,19 @@ export default function HomeRowSteps() {
           formattedLessons
         );
 
+        // ✅ SAVE TOTAL LESSONS FOR THE DASHBOARD
+        try {
+          localStorage.setItem(
+            "totalLessonsCount",
+            String(formattedLessons.length)
+          );
+        } catch (err) {
+          console.error(
+            "Could not save totalLessonsCount:",
+            err
+          );
+        }
+
         console.log(
           `Total lessons loaded: ${formattedLessons.length}`
         );
@@ -515,8 +528,7 @@ export default function HomeRowSteps() {
 
     window.location.href =
       `/Typeing_Step?lesson=${
-        lesson.apiId ||
-        lesson.id
+        lesson.apiId || lesson.id
       }`;
   };
 

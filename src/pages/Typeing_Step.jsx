@@ -380,6 +380,19 @@ export default function Typeing_Step() {
         throw new Error("درسونه پیدا نه شول.");
       }
 
+      // ✅ SAVE TOTAL LESSONS FOR THE DASHBOARD
+      try {
+        localStorage.setItem(
+          "totalLessonsCount",
+          String(lessons.length)
+        );
+      } catch (err) {
+        console.error(
+          "Could not save totalLessonsCount:",
+          err
+        );
+      }
+
       const lessonId = getLessonId();
 
       let selectedLesson = null;

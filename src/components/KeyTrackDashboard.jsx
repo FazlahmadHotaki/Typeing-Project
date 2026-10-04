@@ -889,6 +889,101 @@ export default function KeyTrackDashboard({
     useState("");
 
   // ====================================================
+  // LIVE STATS FROM localStorage
+  // ====================================================
+
+  const [stats, setStats] = useState({
+    completed: 0,
+    total: 0,
+    progress: 0,
+    stars: 0,
+    score: 0,
+    accuracy: 100,
+    wpm: 0,
+    practiceMinutes: 0,
+  });
+
+  useEffect(() => {
+    const loadStats = () => {
+      try {
+        // 1. completed lessons
+        const completedRaw = JSON.parse(
+          localStorage.getItem("completedLessons") || "[]"
+        );
+
+        const completed = Array.isArray(completedRaw)
+          ? completedRaw.length
+          : 0;
+
+        // 2. lesson results
+        const results = JSON.parse(
+          localStorage.getItem("lessonResults") || "{}"
+        );
+
+        const resultValues = Object.values(results || {});
+
+        // 3. average accuracy + wpm
+        const accuracy =
+          resultValues.length > 0
+            ? Math.round(
+                resultValues.reduce(
+                  (s, r) => s + (r.accuracy || 0),
+                  0
+                ) / resultValues.length
+              )
+            : 100;
+
+        const wpm =
+          resultValues.length > 0
+            ? Math.round(
+                resultValues.reduce(
+                  (s, r) => s + (r.wpm || 0),
+                  0
+                ) / resultValues.length
+              )
+            : 0;
+
+        // 4. total practice time (seconds -> minutes)
+        const totalSeconds = resultValues.reduce(
+          (s, r) => s + (r.elapsedTime || 0),
+          0
+        );
+
+        const practiceMinutes = Math.round(totalSeconds / 60);
+
+        // 5. total lessons count
+        const totalLessons =
+          LESSONS?.length || completed || 1;
+
+        setStats({
+          completed,
+          total: totalLessons,
+          progress: Math.round(
+            (completed / totalLessons) * 100
+          ),
+          stars: Math.floor(completed / 10),
+          score: completed * 10,
+          accuracy,
+          wpm,
+          practiceMinutes,
+        });
+      } catch (err) {
+        console.error("Could not read stats:", err);
+      }
+    };
+
+    loadStats();
+
+    window.addEventListener("focus", loadStats);
+    window.addEventListener("storage", loadStats);
+
+    return () => {
+      window.removeEventListener("focus", loadStats);
+      window.removeEventListener("storage", loadStats);
+    };
+  }, []);
+
+  // ====================================================
   // LOAD USER DATA
   // ====================================================
 
@@ -1168,6 +1263,16 @@ export default function KeyTrackDashboard({
   };
 
   // ====================================================
+  // HELPERS
+  // ====================================================
+
+  const formatPracticeTime = (minutes) => {
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return `${h}h ${m}m`;
+  };
+
+  // ====================================================
   // LOGOUT
   // ====================================================
 
@@ -1181,9 +1286,10 @@ export default function KeyTrackDashboard({
     );
 
     localStorage.removeItem("keytrackUser");
-    localStorage.removeItem("user");          // ✅ ADD THIS
-    localStorage.removeItem("googleCredential"); // ✅ optional cleanup
-    localStorage.removeItem("showGetStarted");   // ✅ optional cleanup
+    localStorage.removeItem("user");
+    localStorage.removeItem("googleCredential");
+    localStorage.removeItem("showGetStarted");
+
     navigate("/");
   };
 
@@ -1639,10 +1745,10 @@ export default function KeyTrackDashboard({
 
               <div className="text-white text-2xl sm:text-3xl font-bold">
 
-                36{" "}
+                {stats.wpm || 0}
 
                 <span className="text-base sm:text-lg">
-                  WPM
+                  {" "}WPM
                 </span>
 
               </div>
@@ -1662,7 +1768,7 @@ export default function KeyTrackDashboard({
                 </span>
 
                 <span className="font-bold text-gray-800 bg-gray-100 px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg text-xs sm:text-sm">
-                  31 WPM
+                  {stats.wpm || 0} WPM
                 </span>
 
               </div>
@@ -1678,7 +1784,7 @@ export default function KeyTrackDashboard({
                 </span>
 
                 <span className="font-bold text-gray-800 bg-gray-100 px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg text-xs sm:text-sm">
-                  27 WPM
+                  {stats.wpm || 0} WPM
                 </span>
 
               </div>
@@ -1711,33 +1817,42 @@ export default function KeyTrackDashboard({
             <div className="flex justify-between gap-1 sm:gap-2">
 
               <Ring
-                pct={0}
+                pct={Math.min(
+                  100,
+                  stats.progress
+                )}
                 label={t(
                   "lastWeek_Dashboard"
                 )}
-                value={`0 ${t(
+                value={`${stats.practiceMinutes} ${t(
                   "minutes_Dashboard"
                 )}`}
                 color="#8B5CF6"
               />
 
               <Ring
-                pct={70}
+                pct={Math.min(
+                  100,
+                  stats.progress
+                )}
                 label={t(
                   "thisWeek_Dashboard"
                 )}
-                value={`42 ${t(
+                value={`${stats.practiceMinutes} ${t(
                   "minutes_Dashboard"
                 )}`}
                 color="#3B82F6"
               />
 
               <Ring
-                pct={60}
+                pct={Math.min(
+                  100,
+                  stats.accuracy
+                )}
                 label={t(
                   "today_Dashboard"
                 )}
-                value={`9 ${t(
+                value={`${stats.practiceMinutes} ${t(
                   "minutes_Dashboard"
                 )}`}
                 color="#EC4899"
@@ -1773,7 +1888,7 @@ export default function KeyTrackDashboard({
               <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center border border-orange-100">
 
                 <div className="text-2xl sm:text-3xl font-bold text-orange-500">
-                  74%
+                  {stats.progress}%
                 </div>
 
                 <div className="text-[10px] sm:text-xs text-gray-600 mt-0.5 sm:mt-1">
@@ -1789,7 +1904,7 @@ export default function KeyTrackDashboard({
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center border border-green-100">
 
                 <div className="text-2xl sm:text-3xl font-bold text-green-500">
-                  94%
+                  {stats.accuracy}%
                 </div>
 
                 <div className="text-[10px] sm:text-xs text-gray-600 mt-0.5 sm:mt-1">
@@ -1815,7 +1930,9 @@ export default function KeyTrackDashboard({
               </span>
 
               <span className="font-bold text-gray-800 bg-purple-100 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-purple-600 text-xs sm:text-sm">
-                31h 40m
+                {formatPracticeTime(
+                  stats.practiceMinutes
+                )}
               </span>
 
             </div>
