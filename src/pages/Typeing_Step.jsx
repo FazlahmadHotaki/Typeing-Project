@@ -2172,7 +2172,7 @@ export default function Typeing_Step() {
                 text-gray-500
               "
             >
-              {/* fllkj */}
+              {/* fllkj ll*/}
               ⚡ {wpm} WPM
             </div>
           </div>
