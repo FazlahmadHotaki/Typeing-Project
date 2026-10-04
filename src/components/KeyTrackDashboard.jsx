@@ -1275,7 +1275,7 @@ export default function KeyTrackDashboard({
 
             {/* Avatar */}
 
-            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-lg sm:text-xl font-bold shadow-lg flex-shrink-0">
+            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#f56416] flex items-center justify-center text-white text-lg sm:text-xl font-bold shadow-lg flex-shrink-0">
 
               {displayName
                 ? displayName
@@ -1377,7 +1377,7 @@ export default function KeyTrackDashboard({
                   true
                 )
               }
-              className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-200 transition-all duration-300 transform hover:-translate-y-0.5 text-sm sm:text-base"
+              className="w-full sm:w-auto bg-[#09bc8a] text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-200 transition-all duration-300 transform hover:-translate-y-0.5 text-sm sm:text-base"
             >
               {addPlanTranslations[
                 lang
@@ -1627,7 +1627,7 @@ export default function KeyTrackDashboard({
 
             </div>
 
-            <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4">
+            <div className="bg-[#00a6fb] rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4">
 
               <div className="text-white text-xs sm:text-sm mb-0.5 sm:mb-1">
 
