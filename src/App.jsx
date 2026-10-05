@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Nav from './components/Nav';
 import { BrowserRouter, Routes, Route,Navigate } from 'react-router-dom';
 import TypingTest from './pages/Typeing_Step';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import Hero from './components/Hero';
 import PashtoTyping from "./components/PashtoTyping"
 import Stats from './components/Stats';
@@ -145,6 +146,8 @@ function App() {
   return (
     <BrowserRouter>
       <LanguageProvider>
+          <SpeedInsights />
+
         {/* Login Modal */}
         {showLogin && (
           <Login />
