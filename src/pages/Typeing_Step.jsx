@@ -115,6 +115,7 @@ export default function Typeing_Step() {
      UI
   ======================================================= */
 
+
   const [isMuted, setIsMuted] = useState(false);
 
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(true);
@@ -937,40 +938,53 @@ export default function Typeing_Step() {
 
   if (isLoading) {
     return (
-      <div
-        className="
-          min-h-screen
-          bg-[#fdf4c7]
-          flex
-          items-center
-          justify-center
-        "
-      >
-        <div className="text-center">
-          <div
-            className="
-              w-14
-              h-14
-              border-4
-              border-pink-300
-              border-t-pink-600
-              rounded-full
-              animate-spin
-              mx-auto
-            "
-          />
-
-          <p
-            dir="rtl"
-            className="
-              mt-5
-              text-gray-600
-              font-bold
-            "
+      <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#fdfcdc] z-50">
+        <div className="loader">
+          <svg
+            className="container"
+            width="100"
+            height="100"
+            viewBox="0 0 64 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            درس بارول کېږي...
-          </p>
+            <rect
+              x="2" y="2" width="60" height="36" rx="4" ry="4"
+              pathLength="100" className="track"
+              stroke="#C9A15E" strokeWidth="2"
+            ></rect>
+            <rect
+              x="2" y="2" width="60" height="36" rx="4" ry="4"
+              pathLength="100" className="car"
+              stroke="#C9A15E" strokeWidth="2"
+              strokeDasharray="100" strokeDashoffset="94"
+            ></rect>
+            <g className="keys" fill="#C9A15E">
+              <rect x="8" y="8" width="6" height="5" rx="1"></rect>
+              <rect x="16" y="8" width="6" height="5" rx="1"></rect>
+              <rect x="24" y="8" width="6" height="5" rx="1"></rect>
+              <rect x="32" y="8" width="6" height="5" rx="1"></rect>
+              <rect x="40" y="8" width="6" height="5" rx="1"></rect>
+              <rect x="48" y="8" width="8" height="5" rx="1"></rect>
+              <rect x="8" y="16" width="6" height="5" rx="1"></rect>
+              <rect x="16" y="16" width="6" height="5" rx="1"></rect>
+              <rect x="24" y="16" width="6" height="5" rx="1"></rect>
+              <rect x="32" y="16" width="6" height="5" rx="1"></rect>
+              <rect x="40" y="16" width="6" height="5" rx="1"></rect>
+              <rect x="48" y="16" width="8" height="5" rx="1"></rect>
+              <rect x="8" y="24" width="8" height="5" rx="1"></rect>
+              <rect x="18" y="24" width="6" height="5" rx="1"></rect>
+              <rect x="26" y="24" width="18" height="5" rx="1"></rect>
+              <rect x="46" y="24" width="10" height="5" rx="1"></rect>
+            </g>
+          </svg>
         </div>
+        <p id="loadingText" className="text-xl font-semibold text-gold leading-tight mt-4">
+          <span className="dots"></span> بارېږي
+        </p>
+        <p className="text-sm text-slateink leading-relaxed mt-1">
+          ... مهرباني وکړئ انتظار وکړئ، موږ ستاسو مینځپانګه چمتو کوو
+        </p>
       </div>
     );
   }
