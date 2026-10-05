@@ -1885,7 +1885,7 @@ export default function KeyTrackDashboard({
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
 
-              <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center border border-orange-100">
+              <div className="bg-gradient-to-br from-orange-100 to-yellow-100 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center border border-orange-100">
 
                 <div className="text-2xl sm:text-3xl font-bold text-orange-500">
                   {stats.progress}%
@@ -1901,7 +1901,7 @@ export default function KeyTrackDashboard({
 
               </div>
 
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center border border-green-100">
+              <div className="bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center border border-green-100">
 
                 <div className="text-2xl sm:text-3xl font-bold text-green-500">
                   {stats.accuracy}%
