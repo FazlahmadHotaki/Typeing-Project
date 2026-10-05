@@ -1906,7 +1906,7 @@ export default function KeyTrackDashboard({
                 <div className="text-2xl sm:text-3xl font-bold text-green-500">
                   {stats.accuracy}%
                 </div>
-                {/* fd */}
+                {/* f */}
 
                 <div className="text-[10px] sm:text-xs text-gray-600 mt-0.5 sm:mt-1">
 
