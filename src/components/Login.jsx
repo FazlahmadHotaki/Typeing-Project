@@ -1,8 +1,6 @@
 // components/Login.jsx
-
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
-import { users } from "../data/users";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -92,32 +90,69 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
 
  
 
- const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const user = users.find(
-    (user) =>
-      user.email === email.trim() &&
-      user.password === password
-  );
+  try {
+    const response = await fetch("http://localhost:5000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email.trim(),
+        password: password,
+      }),
+    });
 
-  if (user) {
-    const userData = { name: user.name, email: user.email };
+    const data = await response.json();
 
-    // ✅ Save to the key Nav checks
+    // Login failed
+    if (!response.ok) {
+      alert(
+        translations[lang]?.["login.invalidCredentials"] ||
+        data.message ||
+        "Invalid email or password!"
+      );
+
+      return;
+    }
+
+    // Login successful
+    const userData = {
+      id: data.user.id,
+      name: data.user.name,
+      email: data.user.email,
+    };
+
+    // Save logged-in user
     localStorage.setItem("user", JSON.stringify(userData));
 
-    // ✅ Also save to the keys KeyTrackDashboard reads
+    // Save information used by other parts of TypeTone
     localStorage.setItem("formData", JSON.stringify(userData));
-    localStorage.setItem("usersing", user.name);
+    localStorage.setItem("usersing", data.user.name);
 
+    // Remember me
+    if (rememberMe) {
+      localStorage.setItem("rememberMe", "true");
+    } else {
+      localStorage.removeItem("rememberMe");
+    }
+
+    // Update React user state
+    setUser(data.user.name);
+
+    // Go to dashboard
     navigate("/dashboard");
+
+    // Close login window
     onClose();
-    setUser(user.name);
-  } else {
+
+  } catch (error) {
+    console.error("Login error:", error);
+
     alert(
-      translations[lang]?.["login.invalidCredentials"] ||
-      "Invalid email or password!"
+      "Could not connect to the server. Please make sure the backend is running."
     );
   }
 };

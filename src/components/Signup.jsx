@@ -21,28 +21,78 @@ const isRTL = lang === "ps" || lang === "da";
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Basic validation with translated error messages
-    const newErrors = {};
-    if (!formData.name) newErrors.name = t('signup.nameRequired');
-    if (!formData.email) newErrors.email = t('signup.emailRequired');
-    if (!formData.password) newErrors.password = t('signup.passwordRequired');
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = t('signup.passwordMismatch');
-    }
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Basic validation
+  const newErrors = {};
+
+  if (!formData.name) {
+    newErrors.name = t("signup.nameRequired");
+  }
+
+  if (!formData.email) {
+    newErrors.email = t("signup.emailRequired");
+  }
+
+  if (!formData.password) {
+    newErrors.password = t("signup.passwordRequired");
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    newErrors.confirmPassword = t("signup.passwordMismatch");
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  try {
+    // Send signup information to Node.js
+    const response = await fetch("http://localhost:5000/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
+
+    const data = await response.json();
+
+    // Server returned an error
+    if (!response.ok) {
+      alert(data.message);
       return;
     }
-  navigate("/dashboard");
-  setFindingTure(true);
-    // Here you would normally make an API call to register the user
-    // For demo, we'll just call the success callback
-    
-  };
+
+    // Account successfully created
+    alert(data.message);
+
+    const userData = {
+      name: formData.name,
+      email: formData.email,
+    };
+
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("formData", JSON.stringify(userData));
+    localStorage.setItem("usersing", formData.name);
+
+    // Go to dashboard
+    navigate("/dashboard");
+
+  } catch (error) {
+    console.error("Signup error:", error);
+
+    alert(
+      "Could not connect to the server. Please make sure the backend is running."
+    );
+  }
+};
 
   // Determine text direction based on language
 
