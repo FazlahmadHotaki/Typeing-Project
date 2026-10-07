@@ -9,7 +9,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="contact-section py-24">
+    <section id="contact" className="contact-section bg-white/60 py-24">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
         <div className="max-w-2xl mb-14">
           <p className="font-mono text-gold text-xs tracking-[0.25em] uppercase mb-3" data-i18n="contact.eyebrow">Get in touch</p>

@@ -27,7 +27,7 @@ const TypingTechniques = () => {
           </div>
         </div>
 
-        <div className="tech-card rounded-2xl bg-night3 border border-white/5 p-8 hover:border-gold/40">
+        <div className="tech-card rounded-2xl bg-night3 border border-white/5 p-8 hover:border-gold/40 hover:bg-[#fdf4c7]">
           <div className="flex items-center gap-3 mb-4">
             <span className="text-3xl">⌨️</span>
             <h3 className="font-display font-semibold text-2xl text-gold" data-i18n="techniques.touch.title">10-Finger Method</h3>
@@ -45,27 +45,27 @@ const TypingTechniques = () => {
         </div>
       </div>
 
-      <div className=" mt-16 rounded-2xl bg-[#d8d4f2] border border-white/5 overflow-hidden">
+      <div className=" mt-16 rounded-2xl bg-[#fdf4c7] border border-white/5 overflow-hidden">
         <div className="grid grid-cols-3 gap-px bg-white/5">
-          <div className="bg-night p-5 text-center font-display font-semibold text-gold text-sm" data-i18n="techniques.compare.feature">Feature</div>
-          <div className="bg-night p-5 text-center font-display font-semibold text-gold text-sm" data-i18n="techniques.compare.hunt">Hunt and Peck</div>
-          <div className="bg-night p-5 text-center font-display font-semibold text-gold text-sm" data-i18n="techniques.compare.touch">10-Finger Method</div>
+          <div className="bg-night p- font-bold p-5 text-center font-display font-semibold text-[#22577a] border-2 bprder-gray-900 text-sm" data-i18n="techniques.compare.feature">Feature</div>
+          <div className="bg-night p- font-bold p-5 text-center font-display font-semibold text-[#22577a] border-2 bprder-gray-900 text-sm" data-i18n="techniques.compare.hunt">Hunt and Peck</div>
+          <div className="bg-night p- font-bold p-5 text-center font-display font-semibold text-[#22577a] border-2 bprder-gray-900 text-sm" data-i18n="techniques.compare.touch">10-Finger Method</div>
           
-          <div className="bg-night/50 p-5 text-center text-sm text-slateink" data-i18n="techniques.compare.speed">Speed</div>
-          <div className="bg-night/50 p-5 text-center text-sm text-red-400">20–40 WPM</div>
-          <div className="bg-night/50 p-5 text-center text-sm text-green-400">60–120+ WPM</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-slateink" data-i18n="techniques.compare.speed">Speed</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-red-400">20–40 WPM</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-[#57cc99] font-bold">60–120+ WPM</div>
           
-          <div className="bg-night/50 p-5 text-center text-sm text-slateink" data-i18n="techniques.compare.accuracy">Accuracy</div>
-          <div className="bg-night/50 p-5 text-center text-sm text-red-400">Low (80–90%)</div>
-          <div className="bg-night/50 p-5 text-center text-sm text-green-400">High (95–99%)</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-slateink" data-i18n="techniques.compare.accuracy">Accuracy</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-red-400">Low (80–90%)</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-[#57cc99] font-bold">High (95–99%)</div>
           
-          <div className="bg-night/50 p-5 text-center text-sm text-slateink" data-i18n="techniques.compare.eyeStrain">Eye Strain</div>
-          <div className="bg-night/50 p-5 text-center text-sm text-red-400" data-i18n="techniques.compare.high">High (looking at keyboard)</div>
-          <div className="bg-night/50 p-5 text-center text-sm text-green-400" data-i18n="techniques.compare.low">Low (looking at screen)</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-slateink" data-i18n="techniques.compare.eyeStrain">Eye Strain</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-red-400" data-i18n="techniques.compare.high">High (looking at keyboard)</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-[#57cc99] font-bold" data-i18n="techniques.compare.low">Low (looking at screen)</div>
           
-          <div className="bg-night/50 p-5 text-center text-sm text-slateink" data-i18n="techniques.compare.learning">Learning Curve</div>
-          <div className="bg-night/50 p-5 text-center text-sm text-green-400" data-i18n="techniques.compare.easy">Easy to start</div>
-          <div className="bg-night/50 p-5 text-center text-sm text-yellow-400" data-i18n="techniques.compare.steep">Steeper but rewarding</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-slateink" data-i18n="techniques.compare.learning">Learning Curve</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-[#57cc99]" data-i18n="techniques.compare.easy">Easy to start</div>
+          <div className="bg-night/50 font-bold p-5 text-center text-sm text-[#57cc99] font-bold" data-i18n="techniques.compare.steep">Steeper but rewarding</div>
         </div>
       </div>
     </section>
