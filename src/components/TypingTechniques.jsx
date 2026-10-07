@@ -44,7 +44,7 @@ const TypingTechniques = () => {
           </div>
         </div>
       </div>
-{/* fasfsad */}
+{/* fasfssafdsad */}
       <div className=" mt-16 rounded-2xl bg-[#fdf4c7] border border-white/5 overflow-hidden">
         <div className="grid grid-cols-3 gap-px bg-white/5">
           <div className="bg-night p- font-bold p-5 text-center font-display font-semibold text-[#22577a] border-2 bprder-gray-900 text-sm" data-i18n="techniques.compare.feature">Feature</div>
