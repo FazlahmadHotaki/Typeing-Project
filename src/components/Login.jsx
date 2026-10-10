@@ -48,14 +48,15 @@ const translations = {
   },
 };
 
-const Login = ({ onClose, onSwitchToSignup, setUser,showGetStarted }) => {
+const Login = ({ onClose, onSwitchToSignup, setUser, showGetStarted }) => {
   const { lang } = useLanguage();
-  const navigate =useNavigate();
-  // ADD THIS after other useState declarations:
-const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
+  const navigate = useNavigate();
+
+  const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+
   const updateLanguage = (language) => {
     const currentLanguage = translations[language];
 
@@ -86,85 +87,82 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
     updateLanguage(lang);
   }, [lang]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    try {
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password,
+        }),
+      });
 
- 
+      const data = await response.json();
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+      // Login failed
+      if (!response.ok) {
+        alert(
+          translations[lang]?.["login.invalidCredentials"] ||
+            data.message ||
+            "Invalid email or password!"
+        );
+        return;
+      }
 
-  try {
-    const response = await fetch("http://localhost:5000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email.trim(),
-        password: password,
-      }),
-    });
+      // Login successful
+      const userData = {
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email,
+      };
 
-    const data = await response.json();
+      // Save logged-in user
+      localStorage.setItem("user", JSON.stringify(userData));
 
-    // Login failed
-    if (!response.ok) {
+      // Save information used by other parts of TypeTone
+      localStorage.setItem("formData", JSON.stringify(userData));
+      localStorage.setItem("usersing", data.user.name);
+
+      // Remember me
+      if (rememberMe) {
+        localStorage.setItem("rememberMe", "true");
+      } else {
+        localStorage.removeItem("rememberMe");
+      }
+
+      // Update React user state
+      setUser(data.user.name);
+
+      // Go to dashboard
+      navigate("/dashboard");
+
+      // Close login window
+      onClose();
+    } catch (error) {
+      console.error("Login error:", error);
+
       alert(
-        translations[lang]?.["login.invalidCredentials"] ||
-        data.message ||
-        "Invalid email or password!"
+        "Could not connect to the server. Please make sure the backend is running."
       );
-
-      return;
     }
+  };
 
-    // Login successful
-    const userData = {
-      id: data.user.id,
-      name: data.user.name,
-      email: data.user.email,
-    };
-
-    // Save logged-in user
-    localStorage.setItem("user", JSON.stringify(userData));
-
-    // Save information used by other parts of TypeTone
-    localStorage.setItem("formData", JSON.stringify(userData));
-    localStorage.setItem("usersing", data.user.name);
-
-    // Remember me
-    if (rememberMe) {
-      localStorage.setItem("rememberMe", "true");
-    } else {
-      localStorage.removeItem("rememberMe");
-    }
-
-    // Update React user state
-    setUser(data.user.name);
-
-    // Go to dashboard
-    navigate("/dashboard");
-
-    // Close login window
-    onClose();
-
-  } catch (error) {
-    console.error("Login error:", error);
-
-    alert(
-      "Could not connect to the server. Please make sure the backend is running."
-    );
-  }
-};
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center  text-white backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center text-stone-900 backdrop-blur-sm">
 
-      <div className="relative mx-4 w-full max-w-md rounded-2xl border border-white/10 bg-night3 p-8 shadow-2xl">
+      <div className="relative mx-4 w-full max-w-md rounded-2xl border border-stone-200 bg-[#fdf4c7] p-8 shadow-2xl">
 
         {/* Close Button */}
         <button
-          onClick={()=> {navigate('/')}}
-          className="absolute right-4 top-4 text-slateink transition hover:text-cloudwhite"
+          onClick={() => {
+            navigate("/");
+          }}
+          className="absolute right-4 top-4 text-stone-600 transition hover:text-stone-900"
         >
           ✕
         </button>
@@ -178,17 +176,16 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
               alt="logo"
             />
           </div>
-          
 
           <h2
-            className="mt-3 font-display text-2xl font-bold"
+            className="mt-3 font-display text-2xl font-bold text-stone-900"
             data-i18n="login.title"
           >
             Welcome Back
           </h2>
 
           <p
-            className="mt-1 text-sm text-slateink"
+            className="mt-1 text-sm text-stone-700"
             data-i18n="login.subtitle"
           >
             Sign in to continue your typing journey
@@ -203,7 +200,7 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
           <div>
 
             <label
-              className="mb-1.5 block text-sm font-medium text-slateink"
+              className="mb-1.5 block text-sm font-medium text-stone-700"
               data-i18n="login.email"
             >
               Email Address
@@ -225,7 +222,7 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
           <div>
 
             <label
-              className="mb-1.5 block text-sm font-medium text-slateink"
+              className="mb-1.5 block text-sm font-medium text-stone-700"
               data-i18n="login.password"
             >
               Password
@@ -246,13 +243,13 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
           {/* Remember Me + Forgot Password */}
           <div className="flex items-center justify-between">
 
-            <label className="flex items-center gap-2 text-sm text-slateink">
+            <label className="flex items-center gap-2 text-sm text-stone-700">
 
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="rounded border-white/10 bg-white/5 text-gold"
+                className="rounded border-stone-300 bg-white text-gold"
               />
 
               <span data-i18n="login.rememberMe">
@@ -275,58 +272,60 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
           <button
             type="submit"
             className="contact-submit"
-            data-i18n="login.signIn" >
+            data-i18n="login.signIn"
+          >
             Sign In
           </button>
 
-         <div className="text-center items-center justify-cneter">
-           <GoogleLogin
-  onSuccess={(credentialResponse) => {
-    console.log("Google login successful:", credentialResponse);
+          <div className="text-center items-center justify-center">
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                console.log("Google login successful:", credentialResponse);
 
-    // Save Google credential temporarily
-    localStorage.setItem(
-      "googleCredential",credentialResponse.credential
-    );
+                // Save Google credential temporarily
+                localStorage.setItem(
+                  "googleCredential",
+                  credentialResponse.credential
+                );
 
-    // Get Google user information
-    const payload = JSON.parse(
-      atob(credentialResponse.credential.split(".")[1])
-    );
+                // Get Google user information
+                const payload = JSON.parse(
+                  atob(credentialResponse.credential.split(".")[1])
+                );
 
-    const googleUser = {
-      name: payload.name,
-      email: payload.email,
-      picture: payload.picture,
-    };
+                const googleUser = {
+                  name: payload.name,
+                  email: payload.email,
+                  picture: payload.picture,
+                };
 
-   // Save user — the key Nav checks
-localStorage.setItem("user", JSON.stringify(googleUser));
+                // Save user — the key Nav checks
+                localStorage.setItem("user", JSON.stringify(googleUser));
 
-// ✅ ALSO save to the keys KeyTrackDashboard reads
-localStorage.setItem("formData", JSON.stringify(googleUser));
-localStorage.setItem("usersing", googleUser.name);
+                // ✅ ALSO save to the keys KeyTrackDashboard reads
+                localStorage.setItem("formData", JSON.stringify(googleUser));
+                localStorage.setItem("usersing", googleUser.name);
 
-localStorage.setItem("showGetStarted", "true");
-setUser(googleUser.name);
+                localStorage.setItem("showGetStarted", "true");
+                setUser(googleUser.name);
 
-    // Go to dashboard
-    navigate("/dashboard");
+                // Go to dashboard
+                navigate("/dashboard");
 
-    // Close login
-    onClose();
-  }}
-  onError={() => {
-    console.log("Google Login Failed");
-    alert("Google login failed. Please try again.");
-  }}
-/>
-         </div>
+                // Close login
+                onClose();
+              }}
+              onError={() => {
+                console.log("Google Login Failed");
+                alert("Google login failed. Please try again.");
+              }}
+            />
+          </div>
 
         </form>
 
         {/* Sign Up */}
-        <p className="mt-6 text-center text-sm text-slateink">
+        <p className="mt-6 text-center text-sm text-stone-700">
 
           <span data-i18n="login.noAccount">
             Don't have an account?
@@ -335,7 +334,9 @@ setUser(googleUser.name);
           {" "}
 
           <button
-            onClick={()=> { navigate('/signup')}}
+            onClick={() => {
+              navigate("/signup");
+            }}
             className="font-medium text-gold hover:underline"
             data-i18n="login.signUp"
           >

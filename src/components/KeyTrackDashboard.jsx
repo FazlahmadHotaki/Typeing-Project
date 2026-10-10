@@ -1298,7 +1298,7 @@ export default function KeyTrackDashboard({
   // ====================================================
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3 sm:p-6 lg:p-8"
+      className="min-h-screen bg-[#fdf4c7] p-3 sm:p-6 lg:p-8"
       dir={
         isRtl
           ? "rtl"

@@ -7,7 +7,7 @@ const HowItWorks = () => {
       <div className="max-w-2xl mb-14">
         <p className="font-mono text-gold text-xs tracking-[0.25em] uppercase mb-3" data-i18n="how.eyebrow">The learning path</p>
         <h2 className="font-display font-semibold text-3xl sm:text-4xl mb-4" data-i18n="how.title">Four rows, one keyboard, at your pace.</h2>
-        <p className="text-slateink leading-relaxed" data-i18n="how.subtitle">Lessons follow the natural shape of the keyboard itself — you master one row before moving to the next, in whichever language you choose.</p>
+        <p className="text-black leading-relaxed" data-i18n="how.subtitle">Lessons follow the natural shape of the keyboard itself — you master one row before moving to the next, in whichever language you choose.</p>
       </div>
       <div className="grid md:grid-cols-4 gap-5">
         <div className="rounded-2xl bg-night3 border border-gray-600/5 p-6 hover:border-gold/40 transition">

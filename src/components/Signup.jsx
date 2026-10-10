@@ -4,16 +4,15 @@ import { useLanguage } from '../context/LanguageContext';
 import translations from '../data/translations';
 import { useNavigate } from 'react-router-dom';
 
-export default function Signup({formData, setFormData,setFindingTure}) {
+export default function Signup({ formData, setFormData, setFindingTure }) {
   const navigate = useNavigate();
-const { lang } = useLanguage();  // Translation function
- const t = (key) => {
-  return translations[lang]?.[key] || key;
-};
+  const { lang } = useLanguage();
+  const t = (key) => {
+    return translations[lang]?.[key] || key;
+  };
 
-const isRTL = lang === "ps" || lang === "da";
+  const isRTL = lang === "ps" || lang === "da";
 
-  
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -21,187 +20,252 @@ const isRTL = lang === "ps" || lang === "da";
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  // Basic validation
-  const newErrors = {};
+    // Basic validation
+    const newErrors = {};
 
-  if (!formData.name) {
-    newErrors.name = t("signup.nameRequired");
-  }
+    if (!formData.name) {
+      newErrors.name = t("signup.nameRequired");
+    }
 
-  if (!formData.email) {
-    newErrors.email = t("signup.emailRequired");
-  }
+    if (!formData.email) {
+      newErrors.email = t("signup.emailRequired");
+    }
 
-  if (!formData.password) {
-    newErrors.password = t("signup.passwordRequired");
-  }
+    if (!formData.password) {
+      newErrors.password = t("signup.passwordRequired");
+    }
 
-  if (formData.password !== formData.confirmPassword) {
-    newErrors.confirmPassword = t("signup.passwordMismatch");
-  }
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = t("signup.passwordMismatch");
+    }
 
-  if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    return;
-  }
-
-  try {
-    // Send signup information to Node.js
-    const response = await fetch("http://localhost:5000/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      }),
-    });
-
-    const data = await response.json();
-
-    // Server returned an error
-    if (!response.ok) {
-      alert(data.message);
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
-    // Account successfully created
-    alert(data.message);
+    try {
+      const response = await fetch("http://localhost:5000/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-    const userData = {
-      name: formData.name,
-      email: formData.email,
-    };
+      const data = await response.json();
 
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("formData", JSON.stringify(userData));
-    localStorage.setItem("usersing", formData.name);
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
 
-    // Go to dashboard
-    navigate("/dashboard");
+      alert(data.message);
 
-  } catch (error) {
-    console.error("Signup error:", error);
+      const userData = {
+        name: formData.name,
+        email: formData.email,
+      };
 
-    alert(
-      "Could not connect to the server. Please make sure the backend is running."
-    );
-  }
-};
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("formData", JSON.stringify(userData));
+      localStorage.setItem("usersing", formData.name);
 
-  // Determine text direction based on language
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Signup error:", error);
+
+      alert(
+        "Could not connect to the server. Please make sure the backend is running."
+      );
+    }
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div 
-        className="bg-[#1D212C] border border-[#2E3444] rounded-2xl w-full max-w-md p-6 relative animate-fadeIn"
-         dir={isRTL ? 'rtl' : 'ltr'}
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto text-stone-900 backdrop-blur-sm p-4 sm:p-6">
+
+      <div
+        className="relative my-auto w-full max-w-md rounded-2xl border border-stone-200 bg-[#fdf4c7] p-6 shadow-2xl sm:p-8 lg:max-w-2xl lg:p-12"
+        dir={isRTL ? 'rtl' : 'ltr'}
       >
-        {/* Close button */}
+
+        {/* Close Button */}
         <button
-          onClick={()=> {navigate('/')}}
-          className="absolute top-3 right-3 text-[#9AA1B4] hover:text-[#ECEEF3] transition-colors"
+          onClick={() => { navigate('/') }}
+          className="absolute right-4 top-4 text-lg text-stone-600 transition hover:text-stone-900 lg:right-5 lg:top-5 lg:text-xl"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          ✕
         </button>
 
-        <h2 className="text-2xl font-bold text-[#ECEEF3] mb-2" data-i18n="signup.title">
-          {t('signup.title')}
-        </h2>
-        <p className="text-[#9AA1B4] text-sm mb-6" data-i18n="signup.subtitle">
-          {t('signup.subtitle')}
-        </p>
+        {/* Header */}
+        <div className="mb-6 text-center sm:mb-8">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.fullName">
-              {t('signup.fullName')}
-            </label>
-            <input
-              type="text"
-  name="name"
-  placeholder={t("signup.namePlaceholder")}
-  data-i18n-placeholder="signup.namePlaceholder"
-              value={formData.name}
-              onChange={handleChange}
-              className={`w-full bg-[#0f1218] border ${errors.name ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gold lg:h-14 lg:w-14">
+            <img
+              src="https://img.icons8.com/?size=100&id=Mvoe3CJ3xK2P&format=png&color=000000"
+              alt="logo"
             />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
 
-          <div>
-            <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.email">
-              {t('signup.email')}
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full bg-[#0f1218] border ${errors.email ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
-              placeholder={t('signup.emailPlaceholder')}
-              data-i18n-placeholder="signup.emailPlaceholder"
-            />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-          </div>
-
-          <div>
-            <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.password">
-              {t('signup.password')}
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`w-full bg-[#0f1218] border ${errors.password ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
-              placeholder={t('signup.passwordPlaceholder')}
-            />
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
-          </div>
-
-          <div>
-            <label className="block text-[#9AA1B4] text-sm mb-2" data-i18n="signup.confirmPassword">
-              {t('signup.confirmPassword')}
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={`w-full bg-[#0f1218] border ${errors.confirmPassword ? 'border-red-500' : 'border-[#2E3444]'} rounded-lg px-4 py-2 text-[#ECEEF3] focus:outline-none focus:border-[#E8A33D] transition-colors`}
-              placeholder={t('signup.confirmPasswordPlaceholder')}
-            />
-            {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-[#E8A33D] text-[#1a1508] font-bold py-2.5 rounded-lg hover:bg-[#C9832A] transition-colors"
-            data-i18n="signup.submitButton"
+          <h2
+            className="mt-3 font-display text-2xl font-bold text-stone-900 lg:text-3xl"
+            data-i18n="signup.title"
           >
-            {t('signup.submitButton')}
-          </button>
+            {t('signup.title')}
+          </h2>
+
+          <p
+            className="mt-1 text-sm text-stone-700 lg:text-base"
+            data-i18n="signup.subtitle"
+          >
+            {t('signup.subtitle')}
+          </p>
+
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* On PC: name + email side by side */}
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+
+            {/* Full Name */}
+            <div>
+              <label
+                className="mb-1.5 block text-sm font-medium text-stone-700"
+                data-i18n="signup.fullName"
+              >
+                {t('signup.fullName')}
+              </label>
+
+              <input
+                type="text"
+                name="name"
+                placeholder={t("signup.namePlaceholder")}
+                data-i18n-placeholder="signup.namePlaceholder"
+                value={formData.name}
+                onChange={handleChange}
+                className={`contact-input ${errors.name ? 'border-red-500' : ''}`}
+              />
+
+              {errors.name && (
+                <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+              )}
+            </div>
+
+            {/* Email */}
+            <div>
+              <label
+                className="mb-1.5 block text-sm font-medium text-stone-700"
+                data-i18n="signup.email"
+              >
+                {t('signup.email')}
+              </label>
+
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`contact-input ${errors.email ? 'border-red-500' : ''}`}
+                placeholder={t('signup.emailPlaceholder')}
+                data-i18n-placeholder="signup.emailPlaceholder"
+              />
+
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
+            </div>
+
+          </div>
+
+          {/* On PC: password + confirm side by side */}
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+
+            {/* Password */}
+            <div>
+              <label
+                className="mb-1.5 block text-sm font-medium text-stone-700"
+                data-i18n="signup.password"
+              >
+                {t('signup.password')}
+              </label>
+
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`contact-input ${errors.password ? 'border-red-500' : ''}`}
+                placeholder={t('signup.passwordPlaceholder')}
+              />
+
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label
+                className="mb-1.5 block text-sm font-medium text-stone-700"
+                data-i18n="signup.confirmPassword"
+              >
+                {t('signup.confirmPassword')}
+              </label>
+
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={`contact-input ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                placeholder={t('signup.confirmPasswordPlaceholder')}
+              />
+
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+              )}
+            </div>
+
+          </div>
+
+          {/* Submit — max-width on PC so button isn't huge */}
+          <div className="lg:mx-auto lg:max-w-sm lg:pt-2">
+            <button
+              type="submit"
+              className="contact-submit w-full"
+              data-i18n="signup.submitButton"
+            >
+              {t('signup.submitButton')}
+            </button>
+          </div>
+
         </form>
 
-        <p className="text-[#9AA1B4] text-sm text-center mt-4">
-          <span data-i18n="signup.alreadyHaveAccount">{t('signup.alreadyHaveAccount')}</span>{' '}
-          <button 
-            onClick={()=> navigate('/login')}
-            className="text-[#E8A33D] hover:underline font-medium"
+        {/* Login link */}
+        <p className="mt-6 text-center text-sm text-stone-700">
+          <span data-i18n="signup.alreadyHaveAccount">
+            {t('signup.alreadyHaveAccount')}
+          </span>{' '}
+
+          <button
+            onClick={() => navigate('/login')}
+            className="font-medium text-gold hover:underline"
             data-i18n="signup.loginLink"
           >
             {t('signup.loginLink')}
           </button>
         </p>
+
       </div>
+
     </div>
   );
 }
