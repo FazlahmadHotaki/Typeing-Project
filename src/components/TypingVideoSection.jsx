@@ -1,6 +1,5 @@
 // components/KeyboardActivity.jsx
 // Technology: The Keyboard Activity
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import translations from '../data/translations';
@@ -28,7 +27,6 @@ const keyboardLayout = [
       { en: '=', ps: '=', da: '=' },
     ],
   },
-
   {
     id: 'top',
     keys: [
@@ -47,7 +45,6 @@ const keyboardLayout = [
       { en: '\\', ps: '\\', da: '\\' },
     ],
   },
-
   {
     id: 'middle',
     keys: [
@@ -64,7 +61,6 @@ const keyboardLayout = [
       { en: "'", ps: "'", da: "'" },
     ],
   },
-
   {
     id: 'bottom',
     keys: [
@@ -123,21 +119,28 @@ const KeyboardActivity = () => {
   const [hasPashtoChars, setHasPashtoChars] = useState(false);
 
   const inputRef = useRef(null);
-  const animationTimer = useRef(null);
 
   /* =========================================================
      FOCUS + CLEANUP
   ========================================================= */
 
+  // Autofocus the input WITHOUT scrolling the page to it.
+  // `preventScroll: true` keeps the viewport at the top of
+  // the document on load.
   useEffect(() => {
-    inputRef.current?.focus();
-
-    return () => {
-      if (animationTimer.current) {
-        clearTimeout(animationTimer.current);
-      }
-    };
+    inputRef.current?.focus({ preventScroll: true });
   }, []);
+
+  // Reset the "animate" flag after the key-press animation ends
+  useEffect(() => {
+    if (!isAnimating) return;
+
+    const id = setTimeout(() => {
+      setIsAnimating(false);
+    }, 600); // matches the `keyPress` animation duration
+
+    return () => clearTimeout(id);
+  }, [isAnimating, coloredKeys]);
 
   /* =========================================================
      UPDATE KEYBOARD
@@ -156,16 +159,28 @@ const KeyboardActivity = () => {
 
     keyboardLayout.forEach((row) => {
       row.keys.forEach((key) => {
-        const possibleCharacters = [
-          key.en,
-          key.en.toLowerCase(),
-          key.ps,
-          key.da,
-        ];
+        // Only compare against the active layout column so that
+        // identical letters across ps/da don't collide.
+        const target =
+          lang === 'ps'
+            ? key.ps
+            : lang === 'da'
+              ? key.da
+              : key.en;
 
-        const found = uniqueCharacters.some((char) =>
-          possibleCharacters.includes(char)
-        );
+        const found = uniqueCharacters.some((char) => {
+          if (char === target) return true;
+
+          // Case-insensitive match for the English layout
+          if (
+            lang === 'en' &&
+            char.toLowerCase() === key.en.toLowerCase()
+          ) {
+            return true;
+          }
+
+          return false;
+        });
 
         if (found) {
           matches.push(key.en);
@@ -175,14 +190,6 @@ const KeyboardActivity = () => {
 
     setColoredKeys(matches);
     setIsAnimating(true);
-
-    if (animationTimer.current) {
-      clearTimeout(animationTimer.current);
-    }
-
-    animationTimer.current = setTimeout(() => {
-      setIsAnimating(false);
-    }, 600);
   };
 
   /* =========================================================
@@ -205,10 +212,7 @@ const KeyboardActivity = () => {
     setHasEnglishChars(english);
     setHasPashtoChars(pashto);
 
-    if (
-      english &&
-      (lang === 'ps' || lang === 'da')
-    ) {
+    if (english && (lang === 'ps' || lang === 'da')) {
       setShowLangWarning(true);
     } else if (!english) {
       setShowLangWarning(false);
@@ -229,8 +233,9 @@ const KeyboardActivity = () => {
     setShowLangWarning(false);
     setIsAnimating(false);
 
+    // Refocus WITHOUT scrolling the page
     setTimeout(() => {
-      inputRef.current?.focus();
+      inputRef.current?.focus({ preventScroll: true });
     }, 50);
   };
 
@@ -284,6 +289,8 @@ const KeyboardActivity = () => {
     return null;
   };
 
+  const typingStatus = getTypingStatus();
+
   /* =========================================================
      RENDER
   ========================================================= */
@@ -309,7 +316,6 @@ const KeyboardActivity = () => {
               #f8f9fc 100%
             );
           color: #1f2937;
-          overflow: hidden;
         }
 
         .keyboard-container {
@@ -351,6 +357,7 @@ const KeyboardActivity = () => {
           justify-content: center;
           border-radius: 7px;
           background: #eef2ff;
+          overflow: hidden;
         }
 
         .hero-title {
@@ -427,6 +434,7 @@ const KeyboardActivity = () => {
           border-radius: 13px;
           background: #eef2ff;
           font-size: 19px;
+          overflow: hidden;
         }
 
         .section-heading h2 {
@@ -440,6 +448,14 @@ const KeyboardActivity = () => {
           margin: 3px 0 0;
           color: #9ca3af;
           font-size: 11px;
+        }
+
+        /* Icons */
+        .icon-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
         }
 
         /* ================================================
@@ -711,6 +727,7 @@ const KeyboardActivity = () => {
           font-size: 19px;
           box-shadow:
             0 8px 20px rgba(99, 102, 241, .22);
+          overflow: hidden;
         }
 
         .keyboard-title {
@@ -771,6 +788,7 @@ const KeyboardActivity = () => {
           justify-content: center;
           gap: 6px;
           margin-bottom: 8px;
+          min-width: 0;
         }
 
         /* ================================================
@@ -1089,7 +1107,11 @@ const KeyboardActivity = () => {
 
           <div className="hero-badge">
             <span className="hero-badge-icon">
-              <img src="https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000" alt="" />
+              <img
+                className="icon-img"
+                src="https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000"
+                alt=""
+              />
             </span>
 
             <span>
@@ -1184,7 +1206,11 @@ const KeyboardActivity = () => {
             <div className="section-heading">
 
               <div className="section-icon">
-              <img src="https://img.icons8.com/?size=100&id=YYPQ4qoxoTyN&format=png&color=000000" alt="" />
+                <img
+                  className="icon-img"
+                  src="https://img.icons8.com/?size=100&id=YYPQ4qoxoTyN&format=png&color=000000"
+                  alt=""
+                />
               </div>
 
               <div>
@@ -1255,9 +1281,9 @@ const KeyboardActivity = () => {
                 STATUS
             ============================================ */}
 
-            {getTypingStatus() && (
+            {typingStatus && (
               <div className="typing-status">
-                {getTypingStatus()}
+                {typingStatus}
               </div>
             )}
 
@@ -1314,7 +1340,11 @@ const KeyboardActivity = () => {
               <div className="keyboard-title-area">
 
                 <div className="keyboard-icon">
-              <img src="https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000" alt="" />
+                  <img
+                    className="icon-img"
+                    src="https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000"
+                    alt=""
+                  />
                 </div>
 
                 <div>

@@ -157,7 +157,7 @@ const [giveInformationToLogin, setGiveInformationToLogin] = useState(false);
   }
 };
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 text-white backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center  text-white backdrop-blur-sm">
 
       <div className="relative mx-4 w-full max-w-md rounded-2xl border border-white/10 bg-night3 p-8 shadow-2xl">
 

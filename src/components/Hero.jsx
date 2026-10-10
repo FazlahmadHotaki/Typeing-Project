@@ -1,14 +1,23 @@
 // components/Hero.js
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-
-const Hero = ({ onStartTyping ,showGetStarted}) => {
+const Hero = ({ onStartTyping, showGetStarted }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
+
+  // Re-check login state on every route change
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("user"));
+  }, [location.pathname]);
+
+  // Stars
   useEffect(() => {
     const container = document.getElementById('stars');
     if (!container) return;
+    container.innerHTML = '';
     for (let i = 0; i < 60; i++) {
       const s = document.createElement('div');
       s.className = 'star';
@@ -22,6 +31,10 @@ const Hero = ({ onStartTyping ,showGetStarted}) => {
       container.appendChild(s);
     }
   }, []);
+
+  const handlePrimaryClick = () => {
+    navigate(isLoggedIn ? '/dashboard' : '/login');
+  };
 
   return (
     <section id="top" className="hero-sky pt-16">
@@ -49,14 +62,15 @@ const Hero = ({ onStartTyping ,showGetStarted}) => {
           <h1 className="font-display titleofthe-page font-semibold leading-24 text-4xl sm:text-5xl lg:text-6xl mb-6 tracking-tight " data-i18n="hero.title">Type with confidence, in your own language.</h1>
           <p className="text-slateink text-lg leading-20 max-w-xl mx-auto mb-10" data-i18n="hero.subtitle">Free, interactive touch-typing lessons in English, Pashto, and Dari. Practice a few minutes a day and watch your speed and accuracy grow.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
-          
-          {showGetStarted && (
-            <button  onClick={()=> navigate('/login')} className="border border-white/15 hover:border-white/30 text-cloudwhite font-medium px-7 py-3.5 hover:bg-white rounded-full transition hover:text-gray-600 hover:font-bold" data-i18n="hero.ctaPrimary">Start typing free
-</button>
-  
-)} 
 
-          
+              <button
+                onClick={handlePrimaryClick}
+                className="border border-white/15 hover:border-white/30 text-cloudwhite font-medium px-7 py-3.5 hover:bg-white rounded-full transition hover:text-gray-600 hover:font-bold"
+                data-i18n="hero.ctaPrimary"
+              >
+                Start typing free
+              </button>
+
             <a href="#how" className="border border-white/15 hover:border-white/30 text-cloudwhite font-medium px-7 py-3.5 hover:bg-white rounded-full transition hover:text-gray-600 hover:font-bold" data-i18n="hero.ctaSecondary">See how it works</a>
           </div>
         </div>
@@ -65,7 +79,6 @@ const Hero = ({ onStartTyping ,showGetStarted}) => {
         <img className='mt-10' src="https://img.icons8.com/?size=100&id=pHQmM2cgTzW2&format=png&color=000000" alt="" />
       </div>
     </section>
-    
   );
 };
 
