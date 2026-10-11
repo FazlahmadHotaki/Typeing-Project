@@ -1373,9 +1373,9 @@ export default function KeyTrackDashboard({
           USER WELCOME BAR
       ================================================= */}
 
-      <div className="max-w-7xl mx-auto mt-4 sm:mt-6 mb-6 sm:mb-8">
+      <div className="max-w-7xl  mx-auto mt-4 sm:mt-6 mb-6 sm:mb-8">
 
-        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg shadow-purple-100 p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border border-purple-100">
+        <div className="bg-[#FED8B1] text-[#20354a] rounded-xl sm:rounded-2xl shadow-lg shadow-[#F7E7CE] p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border border-purple-100">
 
           <div className="flex items-center gap-3 sm:gap-4 w-full">
 
@@ -1395,7 +1395,7 @@ export default function KeyTrackDashboard({
 
             <div className="flex-1 min-w-0">
 
-              <h1 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
+              <h1 className="text-lg sm:text-2xl font-bold text-[#20354a] truncate">
 
                 {welcomeTranslations[
                   lang
@@ -1411,7 +1411,7 @@ export default function KeyTrackDashboard({
 
               </h1>
 
-              <p className="text-gray-500 text-xs sm:text-sm mt-0.5 sm:mt-1">
+              <p className="text-[#20354a] text-xs sm:text-sm mt-0.5 sm:mt-1">
 
                 {questionTranslations[
                   lang
@@ -1431,7 +1431,7 @@ export default function KeyTrackDashboard({
             onClick={
               handleLogout
             }
-            className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 bg-white border-2 border-gray-200 text-gray-700 rounded-lg sm:rounded-xl font-semibold hover:border-red-300 hover:text-red-500 hover:bg-red-50 transition-all duration-300 shadow-sm text-sm sm:text-base"
+            className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 bg-[#fb8b24] border-1 border-[#d4a373] text-[#20354a] rounded-lg sm:rounded-xl font-semibold hover:border-red-300 hover:text-white hover:bg-red-500 transition-all duration-300 shadow-sm text-sm sm:text-base"
           >
             {logoutTranslations[
               lang
@@ -1452,9 +1452,9 @@ export default function KeyTrackDashboard({
             LESSON LIST
         ================================================= */}
 
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl shadow-purple-100 p-4 sm:p-6 border border-purple-50">
+        <div className="bg-[#FED8B1]  rounded-2xl sm:rounded-3xl shadow-xl shadow-[#F7E7CE] p-4 sm:p-6 border border-purple-50">
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+          <div className="flex flex-col sm:flex-row   sm:items-center justify-between mb-4 sm:mb-6 gap-3">
 
             <div>
 
@@ -1495,7 +1495,7 @@ export default function KeyTrackDashboard({
 
           {/* Lesson cards */}
 
-          <div className="space-y-2 sm:space-y-3">
+          <div className="space-y-2 sm:space-y-3 ">
 
             {lessons.map(
               (
@@ -1520,7 +1520,7 @@ export default function KeyTrackDashboard({
                 return (
                   <div
                     key={index}
-                    className={`group bg-gradient-to-r ${gradientColors[gradientIndex]} rounded-xl sm:rounded-2xl p-3 sm:p-4 border hover:shadow-lg transition-all duration-300`}
+                    className={`group bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 border hover:shadow-lg transition-all duration-300`}
                   >
 
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
@@ -1578,7 +1578,7 @@ export default function KeyTrackDashboard({
 
                           {/* Progress */}
 
-                          <div className="mt-2 sm:mt-3 bg-white rounded-full h-1.5 sm:h-2 overflow-hidden shadow-inner">
+                          <div className="mt-2 sm:mt-3 bg-gray-200 rounded-full h-1.5 sm:h-2 overflow-hidden shadow-inner ">
 
                             <div
                               className="h-full rounded-full transition-all duration-500"
@@ -1599,7 +1599,7 @@ export default function KeyTrackDashboard({
 
                       {/* Score / Stars / Start */}
 
-                      <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2 sm:gap-2 pl-13 sm:pl-0">
+                      <div className="flex items-center  justify-between sm:flex-col sm:items-end gap-2 sm:gap-2 pl-13 sm:pl-0">
 
                         <div className="flex gap-4 sm:flex-col sm:gap-2 sm:text-right">
 
