@@ -88,12 +88,13 @@ const Nav = ({ onStartTyping, showGetStarted, darkText = false }) => {
 
             {menuOpen && (
               <div className="lang-dropdown absolute right-0 mt-2 w-40 rounded-xl bg-night3 border border-white/10 shadow-xl overflow-hidden">
+              <button onClick={() => { changeLanguage('ps'); setMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm hover:bg-white/5 flex items-center justify-between font-arabic">
+                  پښتو <span className="text-xs text-slateink">PS</span>
+                </button>
                 <button onClick={() => { changeLanguage('en'); setMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm hover:bg-white/5 flex items-center justify-between">
                   English <span className="text-xs text-slateink">EN</span>
                 </button>
-                <button onClick={() => { changeLanguage('ps'); setMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm hover:bg-white/5 flex items-center justify-between font-arabic">
-                  پښتو <span className="text-xs text-slateink">PS</span>
-                </button>
+               
                 <button onClick={() => { changeLanguage('da'); setMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm hover:bg-white/5 flex items-center justify-between font-arabic">
                   دری <span className="text-xs text-slateink">DA</span>
                 </button>
