@@ -155,7 +155,7 @@ const Login = ({ onClose, onSwitchToSignup, setUser, showGetStarted }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center text-stone-900 backdrop-blur-sm">
 
-      <div className="relative mx-4 w-full max-w-md rounded-2xl border border-stone-200 bg-[#fdf4c7] p-8 shadow-2xl">
+      <div className="relative mx-4 w-full max-w-md rounded-2xl border border-stone-200 bg-[#d8b86e] p-8 shadow-2xl">
 
         {/* Close Button */}
         <button
