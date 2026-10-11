@@ -330,3 +330,37 @@ body{
 
 
 
+.moon-img {
+  position: absolute;
+  top: 15%;              /* was 4rem — now lower */
+  left:0rem;
+  width: 350px;          /* was 140px — now bigger */
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  filter: drop-shadow(0 0 40px rgba(228, 228, 227, 0.486));
+  animation: moonFloat 7s ease-in-out infinite;
+}
+
+@keyframes moonFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+@media (max-width: 640px) {
+  .moon-img {
+    width: 180px;
+    top: 10%;  /* Adjusted for smaller screens */
+    left: 1.5rem;  /* Adjusted for smaller screens */
+  }
+}
+
+.cloud-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom;
+  pointer-events: none;
+  user-select: none;
+}

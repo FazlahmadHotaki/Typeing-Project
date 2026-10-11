@@ -39,7 +39,14 @@ const Hero = ({ onStartTyping, showGetStarted }) => {
   return (
     <section id="top" className="hero-sky pt-16">
       <div id="stars" className="absolute inset-0 overflow-hidden pointer-events-none"></div>
-      <div className="moon"></div>
+
+      {/* Moon PNG (replaces the old <div className="moon"></div>) */}
+      <img
+        src="/moon.png"
+        alt="Moon"
+        className="moon-img"
+        draggable="false"
+      />
 
       <div className="absolute inset-x-0 bottom-0 h-[42%] overflow-hidden pointer-events-none">
         <div className="cloud-layer cloud-back">
@@ -63,13 +70,13 @@ const Hero = ({ onStartTyping, showGetStarted }) => {
           <p className="text-slateink text-lg leading-20 max-w-xl mx-auto mb-10" data-i18n="hero.subtitle">Free, interactive touch-typing lessons in English, Pashto, and Dari. Practice a few minutes a day and watch your speed and accuracy grow.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
 
-              <button
-                onClick={handlePrimaryClick}
-                className="border border-white/15 hover:border-white/30 text-cloudwhite font-medium px-7 py-3.5 hover:bg-white rounded-full transition hover:text-gray-600 hover:font-bold"
-                data-i18n="hero.ctaPrimary"
-              >
-                Start typing free
-              </button>
+            <button
+              onClick={handlePrimaryClick}
+              className="border border-white/15 hover:border-white/30 text-cloudwhite font-medium px-7 py-3.5 hover:bg-white rounded-full transition hover:text-gray-600 hover:font-bold"
+              data-i18n="hero.ctaPrimary"
+            >
+              Start typing free
+            </button>
 
             <a href="#how" className="border border-white/15 hover:border-white/30 text-cloudwhite font-medium px-7 py-3.5 hover:bg-white rounded-full transition hover:text-gray-600 hover:font-bold" data-i18n="hero.ctaSecondary">See how it works</a>
           </div>
