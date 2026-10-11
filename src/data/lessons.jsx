@@ -1,13 +1,13 @@
 // lessons.js
 export  const LESSONS = [
   {
-    icon: "پ",
-    color: "#C97BD1",
+    icon: <img src="https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000" />,
+    color: "#fff8f0",
     title: { en: "Pashto Typing", ps: "د پښتو ټایپ", fa: "تایپ پشتو" },
     sub: { en: "Pashto script", ps: "پښتو لیک", fa: "خط پشتو" },
     score: "9,420",
     stars: 12,
-    progress: 15,
+    progress: 1,
   },
   {
     icon: "⌨",

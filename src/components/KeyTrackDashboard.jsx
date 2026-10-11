@@ -1246,13 +1246,7 @@ export default function KeyTrackDashboard({
     prs: "خروج",
   };
 
-  const addPlanTranslations = {
-    en: "Add Plan +",
-    ps: "پلان زیاته کړئ +",
-    fa: "افزودن برنامه +",
-    dr: "افزودن برنامه +",
-    prs: "افزودن برنامه +",
-  };
+
 
   const activeLessonsTranslations = {
     en: "Your active lessons",
@@ -1298,7 +1292,7 @@ export default function KeyTrackDashboard({
   // ====================================================
   return (
     <div
-      className="min-h-screen bg-[#fdf4c7] p-3 sm:p-6 lg:p-8"
+      className="min-h-screen bg-[#fdf4c7] p-3  lg:pt-10 sm:p-6 lg:p-8"
       dir={
         isRtl
           ? "rtl"
@@ -1375,19 +1369,15 @@ export default function KeyTrackDashboard({
 
       <div className="max-w-7xl  mx-auto mt-4 sm:mt-6 mb-6 sm:mb-8">
 
-        <div className="bg-[#FED8B1] text-[#20354a] rounded-xl sm:rounded-2xl shadow-lg shadow-[#F7E7CE] p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border border-purple-100">
+        <div className="bg-[#f8f7ff] text-[#20354a] rounded-xl sm:rounded-2xl shadow-lg shadow-[#ffd8be] p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border border-purple-100">
 
           <div className="flex items-center gap-3 sm:gap-4 w-full">
 
             {/* Avatar */}
 
-            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#f56416] flex items-center justify-center text-white text-lg sm:text-xl font-bold shadow-lg flex-shrink-0">
+            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white flex items-center justify-center text-white text-lg sm:text-xl font-bold shadow-lg flex-shrink-0">
 
-              {displayName
-                ? displayName
-                    .charAt(0)
-                    .toUpperCase()
-                : "H"}
+             <img class="w-10 h-full object-cover rounded-full"  src="https://img.icons8.com/?size=100&id=23309&format=png&color=000000" alt="" />
 
             </div>
 
@@ -1452,7 +1442,7 @@ export default function KeyTrackDashboard({
             LESSON LIST
         ================================================= */}
 
-        <div className="bg-[#FED8B1]  rounded-2xl sm:rounded-3xl shadow-xl shadow-[#F7E7CE] p-4 sm:p-6 border border-purple-50">
+        <div className="bg-white  rounded-2xl sm:rounded-3xl shadow-xl shadow-[#F7E7CE] p-4 sm:p-6 border border-purple-50">
 
           <div className="flex flex-col sm:flex-row   sm:items-center justify-between mb-4 sm:mb-6 gap-3">
 
@@ -1477,20 +1467,7 @@ export default function KeyTrackDashboard({
 
             </div>
 
-            <button
-              onClick={() =>
-                setIsModalOpen(
-                  true
-                )
-              }
-              className="w-full sm:w-auto bg-[#09bc8a] text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-200 transition-all duration-300 transform hover:-translate-y-0.5 text-sm sm:text-base"
-            >
-              {addPlanTranslations[
-                lang
-              ] ||
-                addPlanTranslations.en}
-            </button>
-
+            
           </div>
 
           {/* Lesson cards */}
@@ -1520,17 +1497,17 @@ export default function KeyTrackDashboard({
                 return (
                   <div
                     key={index}
-                    className={`group bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 border hover:shadow-lg transition-all duration-300`}
+                    className={`group bg-[#ffeedd] rounded-xl sm:rounded-2xl p-3 sm:p-4 border hover:shadow-lg transition-all duration-300`}
                   >
 
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
 
-                      <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                      <div className="flex  items-center gap-3 sm:gap-4 flex-1 min-w-0">
 
                         {/* Icon */}
 
                         <div
-                          className="w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold shadow-md group-hover:scale-110 transition-transform flex-shrink-0"
+                          className="w-10 h-10 bg-white sm:w-14 sm:h-14 rounded-lg sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold shadow-sm group-hover:scale-110 transition-transform flex-shrink-0"
                           style={{
                             background: `${lesson.color}20`,
                             color: lesson.color,
@@ -1728,12 +1705,12 @@ export default function KeyTrackDashboard({
               </h2>
 
               <span className="text-xl sm:text-2xl">
-                ⚡
+                <img src="https://img.icons8.com/?size=100&id=71329&format=png&color=000000" alt="" />
               </span>
 
             </div>
 
-            <div className="bg-[#00a6fb] rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4">
+            <div className="bg-[#57cc99] rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4">
 
               <div className="text-white text-xs sm:text-sm mb-0.5 sm:mb-1">
 
@@ -1743,7 +1720,7 @@ export default function KeyTrackDashboard({
 
               </div>
 
-              <div className="text-white text-2xl sm:text-3xl font-bold">
+              <div className="text-white  text-2xl sm:text-3xl font-bold">
 
                 {stats.wpm || 0}
 
@@ -1757,7 +1734,7 @@ export default function KeyTrackDashboard({
 
             <div className="space-y-2 sm:space-y-3">
 
-              <div className="flex items-center justify-between py-2 sm:py-3 border-b border-gray-100">
+              <div className="flex items-center bg-[#fcf3a8] justify-between py-2 sm:py-3 border-b rounded-xl p-2 border-gray-100">
 
                 <span className="text-xs sm:text-sm text-gray-600">
 
@@ -1773,7 +1750,7 @@ export default function KeyTrackDashboard({
 
               </div>
 
-              <div className="flex items-center justify-between py-2 sm:py-3">
+              <div className="flex items-center bg-[#fcf3a8] rounded-xl p-2 justify-between py-2 sm:py-3">
 
                 <span className="text-xs sm:text-sm text-gray-600">
 

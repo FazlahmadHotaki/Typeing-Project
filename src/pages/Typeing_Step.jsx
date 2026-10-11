@@ -2019,8 +2019,11 @@ export default function Typeing_Step() {
           {/* =================================================
               PASHTO KEYBOARD
           ================================================= */}
-
-          {isKeyboardVisible && (
+<img
+  src="https://img.icons8.com/?size=100&id=OnBytfBboC4m&format=png&color=000000"
+  alt="Car"
+  class="fixed bottom-6   left-24 z-50 w-96 sm:w-28 h-auto drop-shadow-lg motion-safe:animate-bounce"
+/>          {isKeyboardVisible && (
             <div
               className="
                 w-[90%]
