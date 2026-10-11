@@ -92,7 +92,7 @@ export default function Signup({ formData, setFormData, setFindingTure }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto text-stone-900 backdrop-blur-sm p-4 sm:p-6">
 
       <div
-        className="relative my-auto w-full max-w-md rounded-2xl border border-stone-200 bg-[#fdf4c7] p-6 shadow-2xl sm:p-8 lg:max-w-2xl lg:p-12"
+        className="relative my-auto w-full max-w-md rounded-2xl border border-stone-200 bg-[#d8b86e] p-6 shadow-2xl sm:p-8 lg:max-w-2xl lg:p-12"
         dir={isRTL ? 'rtl' : 'ltr'}
       >
 
