@@ -2023,11 +2023,38 @@ export default function Typeing_Step() {
   src="https://img.icons8.com/?size=100&id=OnBytfBboC4m&format=png&color=000000"
   alt="Car"
   class="fixed bottom-6   left-24 z-50 w-96 sm:w-28 h-auto drop-shadow-lg motion-safe:animate-bounce"
-/>          {isKeyboardVisible && (
+/>   
+ <div className="fixed bottom-6 right-24 z-50 flex flex-col-reverse gap-1">
+        {[0, 1, 2].map((delay, index) => (
+          <img
+            key={index}
+            src="https://img.icons8.com/?size=100&id=y6qWmvrJ5si7&format=png&color=000000"
+            className="wooden-box"
+            style={{ animationDelay: `${delay}s` }}
+            alt="wooden box"
+          />
+        ))}
+      </div>
+
+      <style>{`
+        .wooden-box {
+          width: 7rem;
+          height: auto;
+          filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.35));
+        }
+
+       
+        
+
+       
+        }
+      `}</style>
+       {isKeyboardVisible && (
             <div
-              className="
+                  className="
                 w-[90%]
                 max-w-[900px]
+            
                 bg-white/45
                 border
                 border-white/70
