@@ -364,3 +364,13 @@ body{
   pointer-events: none;
   user-select: none;
 }
+
+
+.figures{
+  --hairline-plate: #ffffff;
+  --hairline-hi: #232327;
+  --hairline-edge: #a4a4ac;
+  --hairline-mid: #c3c3c9;
+  --hairline-lo: #e0e0e4;
+  --hairline-stroke: 0.9;
+}

@@ -1,5 +1,6 @@
 // components/LessonPlans.js
 import React from 'react';
+import TerrainComponent from "./TerrainComponent";
 
 const LessonPlans = () => {
   return (
@@ -11,8 +12,12 @@ const LessonPlans = () => {
       <div className=" grid md:grid-cols-3 gap-6">
         <div className="rounded-2xl overflow-hidden border border-white/5 bg-[#fbfff1] shadow-md hover:-translate-y-1 hover:border-gold/40 transition"><div className="h-2 bg-gold"></div><div className="p-7"><h3 className="font-display font-semibold text-xl mb-2 text-[#e57c04]" data-i18n="lessons.en.title">English</h3><p className="text-slateink text-sm leading-relaxed mb-5" data-i18n="lessons.en.desc">The full QWERTY curriculum, from home row to full-speed prose, with games and progress tracking.</p><a href="#" className="text-gold text-sm font-semibold hover:underline" data-i18n="lessons.cta">Learn more →</a></div></div>
         <div className="rounded-2xl overflow-hidden border border-white/5 bg-[#fbfff1] shadow-md hover:-translate-y-1 hover:border-gold/40 transition"><div className="h-2 bg-sky"></div><div className="p-7"><h3 className="font-display font-semibold text-xl mb-2 font-arabic text-[#e57c04]" data-i18n="lessons.ps.title">Pashto</h3><p className="text-slateink text-sm leading-relaxed mb-5" data-i18n="lessons.ps.desc">A right-to-left lesson track built for the <strong>Pashto keyboard</strong>, from single letters to full sentences.</p><a href="#" className="text-gold text-sm font-semibold hover:underline" data-i18n="lessons.cta">Learn more →</a></div></div>
-        <div className="rounded-2xl overflow-hidden border border-white/5 bg-[#fbfff1] shadow-md hover:-translate-y-1 hover:border-gold/40 transition"><div className="h-2 bg-goldsoft"></div><div className="p-7"><h3 className="font-display font-semibold text-xl mb-2 font-arabic text-[#e57c04]" data-i18n="lessons.da.title">Dari</h3><p className="text-slateink text-sm leading-relaxed mb-5" data-i18n="lessons.da.desc">Right-to-left lessons for the Dari keyboard, paired with the same posture guide and games.</p><a href="#" className="text-gold text-sm font-semibold hover:underline" data-i18n="lessons.cta">Learn more →</a></div></div>
+ 
+        <div className="rounded-2xl overflow-hidden border w-full border-white/5 bg-[#fbfff1] shadow-md hover:-translate-y-1 hover:border-gold/40 transition"><div className="h-2 bg-goldsoft"></div><div className="p-7"><h3 className="font-display font-semibold text-xl mb-2 font-arabic text-[#e57c04]" data-i18n="lessons.da.title">Dari</h3><p className="text-slateink text-sm leading-relaxed mb-5" data-i18n="lessons.da.desc">Right-to-left lessons for the Dari keyboard, paired with the same posture guide and games.</p><a href="#" className="text-gold text-sm font-semibold hover:underline" data-i18n="lessons.cta">Learn more →</a></div></div>
       </div>
+   <div className="flex h-[300px] p-0 items-center justify-center relative w-full">
+  <TerrainComponent />
+</div>
     </section>
   );
 };

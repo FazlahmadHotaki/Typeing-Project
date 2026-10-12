@@ -1,7 +1,6 @@
 // components/Hero.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 const Hero = ({ onStartTyping, showGetStarted }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,6 +67,7 @@ const Hero = ({ onStartTyping, showGetStarted }) => {
           <p className="font-mono text-gold text-xs tracking-[0.3em] uppercase gap-2 mb-6 text-[#ccd5ae]" data-i18n="hero.eyebrow">spa · Interactive · Three Languages</p>
           <h1 className="font-display titleofthe-page font-semibold leading-24 text-4xl sm:text-5xl lg:text-6xl mb-6 tracking-tight " data-i18n="hero.title">Type with confidence, in your own language.</h1>
           <p className="text-slateink text-lg leading-20 max-w-xl mx-auto mb-10" data-i18n="hero.subtitle">Free, interactive touch-typing lessons in English, Pashto, and Dari. Practice a few minutes a day and watch your speed and accuracy grow.</p>
+
           <div className="flex flex-wrap items-center justify-center gap-4">
 
             <button
