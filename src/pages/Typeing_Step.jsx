@@ -1839,7 +1839,7 @@ export default function Typeing_Step() {
           >
             {isPaused ? " Start Typing" : "⏸ Typing..."}
           </button>
-{/* sd */}
+
           {/* =================================================
               TEXT  (auto-scroll + next-char highlight)
           ================================================= */}
@@ -2054,8 +2054,7 @@ export default function Typeing_Step() {
                   className="
                 w-[90%]
                 max-w-[900px]
-            
-                bg-white/45
+                  bg-white/45
                 border
                 border-white/70
                 rounded-xl
