@@ -1839,7 +1839,7 @@ export default function Typeing_Step() {
           >
             {isPaused ? " Start Typing" : "⏸ Typing..."}
           </button>
-
+{/* sd */}
           {/* =================================================
               TEXT  (auto-scroll + next-char highlight)
           ================================================= */}
