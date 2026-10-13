@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import { API_URL } from "../config";
 
 const translations = {
   en: {
@@ -91,7 +92,7 @@ const Login = ({ onClose, onSwitchToSignup, setUser, showGetStarted }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+     const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

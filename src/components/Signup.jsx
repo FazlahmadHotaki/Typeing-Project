@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import translations from '../data/translations';
 import { useNavigate } from 'react-router-dom';
-
+import { API_URL } from "../config";
 export default function Signup({ formData, setFormData, setFindingTure }) {
   const navigate = useNavigate();
   const { lang } = useLanguage();
@@ -48,7 +48,7 @@ export default function Signup({ formData, setFormData, setFindingTure }) {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/signup", {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,12 +63,11 @@ export default function Signup({ formData, setFormData, setFindingTure }) {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message);
-        return;
+alert("Could not connect to the server. Please try again.");
+return;
       }
 
-      alert(data.message);
-
+alert("Could not connect to the server. Please try again.");
       const userData = {
         name: formData.name,
         email: formData.email,
