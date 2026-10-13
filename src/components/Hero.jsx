@@ -52,7 +52,7 @@ const Hero = ({ onStartTyping, showGetStarted }) => {
           <svg viewBox="0 0 600 140" width="600" height="140" xmlns="http://www.w3.org/2000/svg"><path fill="#5A6B8C" d="M0,120 Q40,60 100,90 Q120,40 190,55 Q230,10 300,40 Q350,15 410,45 Q470,25 520,60 Q580,55 600,90 L600,140 L0,140 Z"/></svg>
           <svg viewBox="0 0 600 140" width="600" height="140" xmlns="http://www.w3.org/2000/svg"><path fill="#5A6B8C" d="M0,120 Q40,60 100,90 Q120,40 190,55 Q230,10 300,40 Q350,15 410,45 Q470,25 520,60 Q580,55 600,90 L600,140 L0,140 Z"/></svg>
         </div>
-        <div className="cloud-layer cloud-mid">
+        <div className="cloud-layer cloud-mid">zz
           <svg viewBox="0 0 700 160" width="700" height="160" xmlns="http://www.w3.org/2000/svg"><path fill="#7284A6" d="M0,140 Q50,70 120,100 Q150,45 220,60 Q260,15 340,45 Q400,15 470,50 Q530,25 590,65 Q660,55 700,100 L700,160 L0,160 Z"/></svg>
           <svg viewBox="0 0 700 160" width="700" height="160" xmlns="http://www.w3.org/2000/svg"><path fill="#7284A6" d="M0,140 Q50,70 120,100 Q150,45 220,60 Q260,15 340,45 Q400,15 470,50 Q530,25 590,65 Q660,55 700,100 L700,160 L0,160 Z"/></svg>
         </div>
