@@ -97,5 +97,16 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error." });
   }
 });
+const protect = require("../middleware/auth"); // if you have it
 
+// Temporary admin route — returns all users
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find({}, "name email createdAt");
+    res.json({ success: true, count: users.length, users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+});
 module.exports = router;
