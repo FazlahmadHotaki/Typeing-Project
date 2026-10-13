@@ -938,7 +938,7 @@ export default function Typeing_Step() {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#fdfcdc] z-50">
+      <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#fdf4c7] z-50">
         <div className="loader">
           <svg
             className="container"
