@@ -1,8 +1,8 @@
 // KeyTrackDashboard.jsx
-
+import useUserResults from "../hooks/useUserResults";
 import React, { useState, useEffect } from "react";
 import translations from "../data/translations";
-import { LESSONS } from "../data/lessons";
+import useCourses from "../hooks/useCourses";
 import { useNavigate } from "react-router-dom";
 import Nav from "./Nav";
 import ChartComponent from "../chart-JS/ChartComponent";
@@ -885,10 +885,11 @@ export default function KeyTrackDashboard({
   // USER NAME
   // ====================================================
 
-  const [displayName, setDisplayName] =
-    useState("");
+  const [displayName, setDisplayName] = useState("");
 
-  // ====================================================
+  const { courses, loading } = useCourses();
+
+  const { totalStars, totalScore, results: userResults } = useUserResults();  // ====================================================
   // LIVE STATS FROM localStorage
   // ====================================================
 
@@ -952,17 +953,14 @@ export default function KeyTrackDashboard({
         const practiceMinutes = Math.round(totalSeconds / 60);
 
         // 5. total lessons count
-        const totalLessons =
-          LESSONS?.length || completed || 1;
+        const totalLessons = courses?.length || completed || 1;
 
-        setStats({
+                setStats({
           completed,
           total: totalLessons,
-          progress: Math.round(
-            (completed / totalLessons) * 100
-          ),
-          stars: Math.floor(completed / 10),
-          score: completed * 10,
+          progress: Math.round((completed / totalLessons) * 100),
+          stars: totalStars,           // ← real stars from DB
+          score: totalScore,           // ← real score from DB
           accuracy,
           wpm,
           practiceMinutes,
@@ -981,7 +979,7 @@ export default function KeyTrackDashboard({
       window.removeEventListener("focus", loadStats);
       window.removeEventListener("storage", loadStats);
     };
-  }, []);
+  }, [totalStars, totalScore, courses]);
 
   // ====================================================
   // LOAD USER DATA
@@ -1161,39 +1159,7 @@ export default function KeyTrackDashboard({
   // LESSONS
   // ====================================================
 
-  const [lessons, setLessons] =
-    useState(() => {
-      const initialLessons = [];
-
-      if (
-        LESSONS &&
-        LESSONS.length > 0
-      ) {
-        initialLessons.push(
-          LESSONS[0]
-        );
-      }
-
-      if (
-        LESSONS &&
-        LESSONS.length > 1
-      ) {
-        initialLessons.push(
-          LESSONS[1]
-        );
-      }
-
-      if (
-        LESSONS &&
-        LESSONS.length > 2
-      ) {
-        initialLessons.push(
-          LESSONS[2]
-        );
-      }
-
-      return initialLessons;
-    });
+    const [lessons, setLessons] = useState([]);
 
   // ====================================================
   // ADD LESSON
@@ -1474,11 +1440,23 @@ export default function KeyTrackDashboard({
 
           <div className="space-y-2 sm:space-y-3 ">
 
-            {lessons.map(
+            {courses.map(
               (
                 lesson,
                 index
               ) => {
+                                const isPashto =
+                  (lesson.slug || "").includes("pashto") ||
+                  (lesson.title?.en || "").toLowerCase().includes("pashto");
+
+                const totalLessonsCount =
+                  parseInt(localStorage.getItem("totalLessonsCount") || "1") || 1;
+
+                const realStars = isPashto ? totalStars : lesson.stars || 0;
+                const realScore = isPashto ? totalScore : lesson.score || 0;
+                const realProgress = isPashto
+                  ? Math.min(100, Math.round((userResults.length / totalLessonsCount) * 100))
+                  : lesson.progress || 0;
 
                 const gradientColors =
                   [
@@ -1514,7 +1492,15 @@ export default function KeyTrackDashboard({
                             border: `2px solid ${lesson.color}40`,
                           }}
                         >
-                          {lesson.icon}
+                                                   {typeof lesson.icon === "string" && lesson.icon.startsWith("http") ? (
+                            <img
+                              src={lesson.icon}
+                              alt=""
+                              className="w-7 h-7 sm:w-10 sm:h-10 object-contain"
+                            />
+                          ) : (
+                            <span>{lesson.icon}</span>
+                          )}
                         </div>
 
                         {/* Lesson information */}
@@ -1535,9 +1521,7 @@ export default function KeyTrackDashboard({
 
                             <span className="text-[10px] sm:text-xs font-semibold text-gray-500 bg-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-gray-200 flex-shrink-0">
 
-                              {lesson.progress ||
-                                0}
-                              %
+                              {realProgress}%
 
                             </span>
 
@@ -1560,11 +1544,7 @@ export default function KeyTrackDashboard({
                             <div
                               className="h-full rounded-full transition-all duration-500"
                               style={{
-                                width: `${
-                                  lesson.progress ||
-                                  0
-                                }%`,
-
+                                width: `${realProgress}%`,
                                 background: `linear-gradient(90deg, ${lesson.color}, #EC4899)`,
                               }}
                             />
@@ -1592,8 +1572,7 @@ export default function KeyTrackDashboard({
 
                             <div className="font-bold text-gray-800 text-sm sm:text-base">
 
-                              {lesson.score ||
-                                0}
+                             {realScore}
 
                             </div>
 
@@ -1609,13 +1588,9 @@ export default function KeyTrackDashboard({
 
                             </div>
 
-                            <div className="font-bold text-yellow-500 text-sm sm:text-base">
-
+                                  <div className="font-bold text-yellow-500 text-sm sm:text-base">
                               ★{" "}
-
-                              {lesson.stars ||
-                                0}
-
+                              {realStars}
                             </div>
 
                           </div>

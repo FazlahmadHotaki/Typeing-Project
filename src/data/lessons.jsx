@@ -1,13 +1,13 @@
 // lessons.js
-export  const LESSONS = [
+export const LESSONS_FALLBACK = [
   {
-    icon: <img src="https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000" />,
+    icon: "https://img.icons8.com/?size=100&id=IW0A1Zpa3Q9E&format=png&color=000000",
     color: "#fff8f0",
     title: { en: "Pashto Typing", ps: "د پښتو ټایپ", fa: "تایپ پشتو" },
     sub: { en: "Pashto script", ps: "پښتو لیک", fa: "خط پشتو" },
-    score: "9,420",
-    stars: 12,
-    progress: 1,
+    score: "0",
+    stars: 0,
+    progress: 0,
   },
   {
     icon: "⌨",
@@ -15,8 +15,8 @@ export  const LESSONS = [
     title: { en: "Typing Jungle", ps: "د ټایپ ځنګل", fa: "جنگل تایپ" },
     sub: { en: "Adventure course", ps: "د ماجراجویۍ کورس", fa: "دوره ماجراجویی" },
     score: "634,115",
-    stars: 1636,
-    progress: 78,
+    stars: 0,
+    progress: 0,
   },
   {
     icon: "ف",
@@ -24,10 +24,9 @@ export  const LESSONS = [
     title: { en: "Dari / Farsi Typing", ps: "د دري ټایپ", fa: "تایپ فارسی" },
     sub: { en: "Persian script", ps: "فارسي لیک", fa: "فارسی" },
     score: "18,311",
-    stars: 35,
-    progress: 22,
+    stars: 0,
+    progress: 0,
   },
-  
   {
     icon: "V",
     color: "#E8615A",
@@ -35,7 +34,7 @@ export  const LESSONS = [
     sub: { en: "Vocabulary", ps: "لغتونه", fa: "واژگان" },
     score: "2,000",
     stars: 0,
-    progress: 10,
+    progress: 0,
   },
   {
     icon: "2",
@@ -43,8 +42,8 @@ export  const LESSONS = [
     title: { en: "Typing — Grade 2", ps: "ټایپ | دویمه ټولګی", fa: "تایپ | پایه دوم" },
     sub: { en: "Grade 2", ps: "دویمه ټولګی", fa: "پایه دوم" },
     score: "5,000",
-    stars: 5,
-    progress: 55,
+    stars: 0,
+    progress: 0,
   },
   {
     icon: "1",
@@ -53,6 +52,6 @@ export  const LESSONS = [
     sub: { en: "Grade 1", ps: "لومړۍ ټولګی", fa: "پایه اول" },
     score: "3,000",
     stars: 0,
-    progress: 5,
+    progress: 0,
   },
 ];

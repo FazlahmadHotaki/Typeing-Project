@@ -1103,7 +1103,7 @@ const hiddenInputRef = useRef(null);
   autoCapitalize="off"
   spellCheck={false}
   tabIndex={-1}
-  aria-hidden="true"
+  aria-hidden="false"
   className="absolute h-0 w-0 opacity-0 pointer-events-none"
 />
           <div className="flex items-center gap-4">
