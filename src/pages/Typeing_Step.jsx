@@ -140,6 +140,7 @@ export default function Typeing_Step() {
   /* =======================================================
      AUDIO
   ======================================================= */
+const hiddenInputRef = useRef(null);
 
   const initAudio = () => {
     if (!audioContextRef.current) {
@@ -877,9 +878,7 @@ export default function Typeing_Step() {
       textContainerRef.current.scrollTop = 0;
     }
 
-    setTimeout(() => {
-      typingAreaRef.current?.focus();
-    }, 100);
+   
   };
 
   /* =======================================================
@@ -938,7 +937,7 @@ export default function Typeing_Step() {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#fdf4c7] z-50">
+      <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#fdfcdc] z-50">
         <div className="loader">
           <svg
             className="container"
@@ -1087,6 +1086,17 @@ export default function Typeing_Step() {
       >
         {/* ================= TOP BAR ================= */}
         <div className="z-10 flex items-center justify-between px-6 py-5 text-white/90">
+        <input
+  ref={hiddenInputRef}
+  inputMode="none"
+  autoComplete="off"
+  autoCorrect="off"
+  autoCapitalize="off"
+  spellCheck={false}
+  tabIndex={-1}
+  aria-hidden="true"
+  className="absolute h-0 w-0 opacity-0 pointer-events-none"
+/>
           <div className="flex items-center gap-4">
             <button
               onClick={goBack}
@@ -1394,7 +1404,7 @@ export default function Typeing_Step() {
   return (
     <div
       ref={typingAreaRef}
-      tabIndex={0}
+      
       className="
         relative
         h-screen
@@ -1405,9 +1415,6 @@ export default function Typeing_Step() {
         outline-none
       "
     >
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
 
       <header
         className="
@@ -1619,7 +1626,6 @@ export default function Typeing_Step() {
                 setIsPaused(true);
               }
 
-              typingAreaRef.current?.focus();
             }}
             className="
               text-gray-500
@@ -1816,8 +1822,7 @@ export default function Typeing_Step() {
                 setIsPaused(true);
               }
 
-              typingAreaRef.current?.focus();
-            }}
+hiddenInputRef.current?.focus();            }}
             dir="rtl"
             className="
              mr-[7%]
@@ -1856,8 +1861,7 @@ export default function Typeing_Step() {
               cursor-text
             "
             onClick={() => {
-              typingAreaRef.current?.focus();
-            }}
+hiddenInputRef.current?.focus();            }}
           >
             <div
               ref={textContainerRef}
@@ -2022,14 +2026,14 @@ export default function Typeing_Step() {
 <img
   src="https://img.icons8.com/?size=100&id=OnBytfBboC4m&format=png&color=000000"
   alt="Car"
-  class="fixed bottom-6   left-24 z-50 w-96 sm:w-28 h-auto drop-shadow-lg motion-safe:animate-bounce"
+  class="fixed bottom-6  md:block hidden left-24 z-50 w-96 sm:w-28 h-auto drop-shadow-lg motion-safe:animate-bounce"
 />   
  <div className="fixed bottom-6 right-24 z-50 flex flex-col-reverse gap-1">
         {[0, 1, 2].map((delay, index) => (
           <img
             key={index}
             src="https://img.icons8.com/?size=100&id=y6qWmvrJ5si7&format=png&color=000000"
-            className="wooden-box"
+            className="wooden-box md:block hidden"
             style={{ animationDelay: `${delay}s` }}
             alt="wooden box"
           />
