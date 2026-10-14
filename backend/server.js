@@ -6,6 +6,7 @@ const connectDB = require("./config/database");
 
 const authRoutes = require("./routes/auth");
 const lessonRoutes = require("./routes/lessons");
+const resultRoutes = require("./routes/results");   // ← NEW
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", authRoutes);
 app.use("/api", lessonRoutes);
+app.use("/api", resultRoutes);                       // ← NEW
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found." });
