@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
    API
 ========================================================= */
 
-const API_BASE_URL = "https://the-typetone-api.onrender.com";
-
+const LESSONS_API_URL = "https://the-typetone-api-wzm4.onrender.com";
+const BACKEND_API_URL = "https://typeing-project.onrender.com";
 /* =========================================================
    PASHTO KEYBOARD
 ========================================================= */
@@ -364,8 +364,7 @@ const hiddenInputRef = useRef(null);
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/lessons`);
-
+const response = await fetch(`${LESSONS_API_URL}/api/lessons`);
       if (!response.ok) {
         throw new Error(`HTTP Error: ${response.status}`);
       }
@@ -416,9 +415,9 @@ const hiddenInputRef = useRef(null);
       try {
         const user = JSON.parse(localStorage.getItem("user") || "null");
         if (user?.id) {
-          const r = await fetch(
-            `${API_BASE_URL}/api/results/${user.id}/${selectedLesson.id}`
-          );
+         const r = await fetch(
+  `${BACKEND_API_URL}/api/results/${user.id}/${selectedLesson.id}`
+);
           const data = await r.json();
           setPreviousResult(data.success ? data.result : null);
         } else {
@@ -828,7 +827,7 @@ const hiddenInputRef = useRef(null);
         const user = JSON.parse(localStorage.getItem("user") || "null");
 
         if (user?.id) {
-          fetch(`${API_BASE_URL}/api/results`, {
+          fetch(`${BACKEND_API_URL}/api/results`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -906,8 +905,7 @@ const hiddenInputRef = useRef(null);
     if (!lesson) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/lessons`);
-
+const response = await fetch(`${LESSONS_API_URL}/api/lessons`);
       if (!response.ok) {
         throw new Error("Could not load lessons");
       }

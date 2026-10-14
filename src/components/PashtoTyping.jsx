@@ -4,9 +4,8 @@ import React, { useState, useEffect } from "react";
 // API CONFIGURATION
 // ==========================================
 
-const API_BASE_URL =
-  "https://the-typetone-api-wzm4.onrender.com";
-
+const LESSONS_API_URL = "https://the-typetone-api-wzm4.onrender.com";
+const BACKEND_API_URL = "https://typeing-project.onrender.com";
 // ==========================================
 // MAIN COMPONENT
 // ==========================================
@@ -188,10 +187,8 @@ export default function HomeRowSteps() {
     setApiError(null);
 
     try {
-      const response =
-        await fetch(
-          `${API_BASE_URL}/api/lessons`
-        );
+
+     const response = await fetch(`${LESSONS_API_URL}/api/lessons`);
 
       if (!response.ok) {
         throw new Error(
