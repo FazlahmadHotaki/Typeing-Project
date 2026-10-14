@@ -1369,7 +1369,7 @@ export default function KeyTrackDashboard({
 
       <div className="max-w-7xl  mx-auto mt-4 sm:mt-6 mb-6 sm:mb-8">
 
-        <div className="bg-[#f8f7ff] text-[#20354a] mt-16 sm:mt-auto rounded-xl sm:rounded-2xl shadow-lg shadow-[#ffd8be] p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border border-purple-100">
+        <div className="bg-[#f8f7ff] text-[#20354a] mt-16 sm:mt-10 rounded-xl sm:rounded-2xl shadow-lg shadow-[#ffd8be] p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border border-purple-100">
 
           <div className="flex items-center gap-3 sm:gap-4 w-full">
 

@@ -1097,7 +1097,7 @@ const hiddenInputRef = useRef(null);
         <div className="z-10 flex items-center justify-between px-6 py-5 text-white/90">
         <input
   ref={hiddenInputRef}
-  inputMode="none"
+  inputMode="on"
   autoComplete="off"
   autoCorrect="off"
   autoCapitalize="off"
