@@ -99,7 +99,7 @@ export default function Typeing_Step() {
   /* =======================================================
      TYPING
   ======================================================= */
-
+  const [previousResult, setPreviousResult] = useState(null);
   const [typedText, setTypedText] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -412,6 +412,22 @@ const hiddenInputRef = useRef(null);
       localStorage.setItem("selectedLessonId", String(selectedLesson.id));
 
       setLesson(selectedLesson);
+            // Load the user's previous best result for this lesson
+      try {
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+        if (user?.id) {
+          const r = await fetch(
+            `${API_BASE_URL}/api/results/${user.id}/${selectedLesson.id}`
+          );
+          const data = await r.json();
+          setPreviousResult(data.success ? data.result : null);
+        } else {
+          setPreviousResult(null);
+        }
+      } catch (e) {
+        console.error("Load previous result error:", e);
+        setPreviousResult(null);
+      }
 
       setTypedText("");
       setStartTime(null);
@@ -766,84 +782,77 @@ const hiddenInputRef = useRef(null);
          SAVE COMPLETED LESSON
       =================================== */
 
-      const lessonId = String(lesson.id);
+           const lessonId = String(lesson.id);
 
+      const finalScore = Math.max(
+        0,
+        Math.min(10, Math.round((finalAccuracy / 100) * 10))
+      );
+      const finalStars = Math.round(finalScore / 2);
+
+      /* -------- Save to localStorage -------- */
       try {
-        let completedLessons = [];
+        let completedLessons = JSON.parse(
+          localStorage.getItem("completedLessons") || "[]"
+        );
+        if (!Array.isArray(completedLessons)) completedLessons = [];
+        if (!completedLessons.includes(lessonId)) completedLessons.push(lessonId);
+        localStorage.setItem("completedLessons", JSON.stringify(completedLessons));
 
-        try {
-          completedLessons = JSON.parse(
-            localStorage.getItem("completedLessons") || "[]",
-          );
-        } catch {
-          completedLessons = [];
-        }
-
-        if (!Array.isArray(completedLessons)) {
-          completedLessons = [];
-        }
-
-        if (!completedLessons.includes(lessonId)) {
-          completedLessons.push(lessonId);
-        }
-
-        localStorage.setItem(
-          "completedLessons",
-          JSON.stringify(completedLessons),
+        let lessonResults = JSON.parse(
+          localStorage.getItem("lessonResults") || "{}"
         );
 
-        let lessonResults = {};
-
-        try {
-          lessonResults = JSON.parse(
-            localStorage.getItem("lessonResults") || "{}",
-          );
-        } catch {
-          lessonResults = {};
-        }
-
         const finalResult = {
-          lessonId: lesson.id,
-
+          lessonId,
           title: lesson.title || "",
-
-          level: lesson.level || "",
-
-          text: lesson.text || "",
-
           completed: true,
-
           progress: 100,
-
-          typedCharacters: newTypedText.length,
-
-          totalCharacters: targetText.length,
-
-          correctCharacters: newCorrectCount,
-
           accuracy: finalAccuracy,
-
           wpm: finalWpm,
-
+          stars: finalStars,
+          score: finalScore,
           elapsedTime: finalElapsedTime,
-
-          score: 10,
-
           completedAt: new Date().toISOString(),
         };
 
         lessonResults[lessonId] = finalResult;
-
         localStorage.setItem("lessonResults", JSON.stringify(lessonResults));
-
-        localStorage.setItem(
-          "lastCompletedLesson",
-          JSON.stringify(finalResult),
-        );
-      } catch (saveError) {
-        console.error("Could not save lesson:", saveError);
+        localStorage.setItem("lastCompletedLesson", JSON.stringify(finalResult));
+      } catch (e) {
+        console.error("Local save error:", e);
       }
-    }
+
+      /* -------- Save to backend -------- */
+      try {
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+
+        if (user?.id) {
+          fetch(`${API_BASE_URL}/api/results`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user_id: user.id,
+              lesson_id: lessonId,
+              lessonTitle: lesson.title || "",
+              stars: finalStars,
+              score: finalScore,
+              accuracy: finalAccuracy,
+              wpm: finalWpm,
+              elapsedTime: finalElapsedTime,
+              typedCharacters: newTypedText.length,
+              correctCharacters: newCorrectCount,
+              totalCharacters: targetText.length,
+            }),
+          })
+            .then((r) => r.json())
+            .then((data) => console.log("Saved to DB:", data))
+            .catch((err) => console.error("DB save error:", err));
+        }
+      }   catch (e) {
+        console.error("Backend save error:", e);
+      }
+    }        // ← ADD: closes  if (newTypedText.length...)
   };
 
   /* =======================================================
@@ -1126,28 +1135,37 @@ const hiddenInputRef = useRef(null);
         {/* ================= MAIN CONTENT ================= */}
         <div className="z-10 flex flex-1 flex-col items-center justify-center pb-56">
           {/* STARS */}
-          <div className="flex gap-2.5">
-            {[...Array(5)].map((_, i) => {
-              const filled = i < Math.round(scoreOutOfTen / 2);
-              return (
-                <svg
-                  key={i}
-                  className={`h-14 w-14 sm:h-16 sm:w-16 ${
-                    filled ? "text-yellow-400" : "text-[#4a6fa5]"
-                  }`}
-                  fill={filled ? "currentColor" : "none"}
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                  />
-                </svg>
-              );
-            })}
+                    {/* STARS */}
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex gap-2.5">
+              {[...Array(5)].map((_, i) => {
+                const filled = i < Math.round(scoreOutOfTen / 2);
+                return (
+                  <svg
+                    key={i}
+                    className={`h-14 w-14 sm:h-16 sm:w-16 ${
+                      filled ? "text-yellow-400" : "text-[#4a6fa5]"
+                    }`}
+                    fill={filled ? "currentColor" : "none"}
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.563 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                    />
+                  </svg>
+                );
+              })}
+            </div>
+
+            {previousResult && previousResult.stars > 0 && (
+              <span className="text-xs font-bold text-[#a3c2f0]">
+                ستاسو غوره: {previousResult.stars} ⭐ / {previousResult.score} نمرې
+              </span>
+            )}
           </div>
 
           {/* SCORE */}
